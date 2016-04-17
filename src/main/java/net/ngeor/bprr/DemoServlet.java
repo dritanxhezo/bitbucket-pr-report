@@ -8,6 +8,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +22,10 @@ public class DemoServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String accessToken = (String)req.getSession().getAttribute("accessToken");
+// move jsp to WEB-INF to hide it and then do MVC
+//        RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/WEB-INF/some.jsp");
+//        req.setAttribute("bean", bean);
+//        requestDispatcher.forward(req, resp);
         PrintWriter out = resp.getWriter();
         try {
             out.println(accessToken);
