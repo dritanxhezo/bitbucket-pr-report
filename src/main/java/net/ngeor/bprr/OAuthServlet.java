@@ -72,6 +72,10 @@ public class OAuthServlet extends HttpServlet {
                 InputStream content = httpResponse.getEntity().getContent();
                 InputStreamReader reader = new InputStreamReader(content);
                 JsonStreamParser p = new JsonStreamParser(reader);
+
+                /*
+                {"access_token":"lalala-nZSxalZj3wdG9WjE=","scopes":"snippet issue pullrequest project team account","expires_in":3600,"refresh_token":"bar","token_type":"bearer"}
+                 */
                 while (p.hasNext()) {
                     JsonElement jsonElement = p.next();
                     out.println(jsonElement);

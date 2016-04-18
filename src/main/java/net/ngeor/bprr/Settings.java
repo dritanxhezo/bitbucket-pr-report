@@ -1,5 +1,9 @@
 package net.ngeor.bprr;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
 public class Settings {
     private String user;
     private String clientId;
@@ -11,14 +15,25 @@ public class Settings {
         this.secret = secret;
     }
 
-    private static final Settings instance = new Settings(
-            // TODO move to properties file
-            "user",
-            "key",
-            "secret"
-    );
+    private static Settings load() throws IOException {
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        InputStream in = classLoader.getResourceAsStream("net/ngeor/bprr/bitbucket.properties");
+        Properties properties = new Properties();
+        properties.load(in);
+        in.close();
+        return new Settings(
+                properties.getProperty("user"),
+                properties.getProperty("key"),
+                properties.getProperty("secret"));
+    }
 
-    public static Settings getInstance() {
+    private static Settings instance;
+
+    public static Settings getInstance() throws IOException {
+        if (instance == null) {
+            instance = load();
+        }
+
         return instance;
     }
 

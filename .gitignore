@@ -21,3 +21,4 @@ target/
 # Mac
 .DS_Store
 
+bitbucket.properties
