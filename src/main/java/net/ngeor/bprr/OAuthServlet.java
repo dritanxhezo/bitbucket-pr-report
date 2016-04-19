@@ -71,26 +71,16 @@ public class OAuthServlet extends HttpServlet {
             try {
                 InputStream content = httpResponse.getEntity().getContent();
                 InputStreamReader reader = new InputStreamReader(content);
-                JsonStreamParser p = new JsonStreamParser(reader);
-
-                /*
-                {"access_token":"lalala-nZSxalZj3wdG9WjE=","scopes":"snippet issue pullrequest project team account","expires_in":3600,"refresh_token":"bar","token_type":"bearer"}
-                 */
-                while (p.hasNext()) {
-                    JsonElement jsonElement = p.next();
-                    out.println(jsonElement);
-                    String accessToken = jsonElement.getAsJsonObject().getAsJsonPrimitive("access_token").getAsString();
-                    out.println(accessToken);
-
-                    req.getSession().setAttribute("accessToken", accessToken);
-                }
+                AccessTokenResponse accessTokenResponse = AccessTokenResponse.parse(reader);
+                String accessToken = accessTokenResponse.getAccessToken();
+                out.println(accessToken);
+                req.getSession().setAttribute("accessToken", accessToken);
             } finally {
                 httpResponse.close();
             }
         } finally {
             httpClient.close();
         }
-
 
         out.flush();
         out.close();
