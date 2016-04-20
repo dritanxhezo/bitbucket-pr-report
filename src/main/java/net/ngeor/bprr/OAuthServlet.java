@@ -71,7 +71,8 @@ public class OAuthServlet extends HttpServlet {
             try {
                 InputStream content = httpResponse.getEntity().getContent();
                 InputStreamReader reader = new InputStreamReader(content);
-                AccessTokenResponse accessTokenResponse = AccessTokenResponse.parse(reader);
+                AccessTokenResponseFactory accessTokenResponseFactory = new AccessTokenResponseFactory();
+                AccessTokenResponse accessTokenResponse = accessTokenResponseFactory.parse(reader);
                 String accessToken = accessTokenResponse.getAccessToken();
                 out.println(accessToken);
                 req.getSession().setAttribute("accessToken", accessToken);

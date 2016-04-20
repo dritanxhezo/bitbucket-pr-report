@@ -14,16 +14,6 @@ public class AccessTokenResponse {
     private String refresh_token;
     private String token_type;
 
-    public static AccessTokenResponse parse(String json) {
-        Gson gson = new Gson();
-        return gson.fromJson(json, AccessTokenResponse.class);
-    }
-
-    public static AccessTokenResponse parse(Reader reader) {
-        Gson gson = new Gson();
-        return gson.fromJson(reader, AccessTokenResponse.class);
-    }
-
     public String getAccessToken() {
         return access_token;
     }
