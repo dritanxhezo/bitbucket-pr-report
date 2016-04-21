@@ -2,11 +2,33 @@ package net.ngeor.bprr;
 
 public class RepositoriesResponse {
     private Repository[] values;
+    private int page;
+    private int size;
+    private int pagelen;
+    private String next;
+
+    /**
+     * Gets the URL to the next page of the response.
+     */
+    public String getNext() {
+        return next;
+    }
 
     public Repository[] getValues() {
         return values;
     }
 
+    public int getPage() {
+        return page;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public int getPageLen() {
+        return pagelen;
+    }
 
     public class Repository {
         private String name;

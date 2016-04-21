@@ -31,21 +31,11 @@ public class DemoServlet extends HttpServlet {
         if (accessToken == null) {
             throw new IllegalStateException("No accessToken!");
         }
-        CloseableHttpClient httpClient = HttpClients.createDefault();
-        try {
-            HttpGet httpGet = new HttpGet("https://api.bitbucket.org/2.0/repositories/" + Settings.getInstance().getUser() + "?access_token=" + accessToken);
-            CloseableHttpResponse httpResponse = httpClient.execute(httpGet);
-            try {
-                InputStream content = httpResponse.getEntity().getContent();
-                InputStreamReader reader = new InputStreamReader(content);
-                RepositoriesResponseFactory repositoriesResponseFactory = new RepositoriesResponseFactory();
-                RepositoriesResponse repositoriesResponse = repositoriesResponseFactory.parse(reader);
-                return repositoriesResponse;
-            } finally {
-                httpResponse.close();
-            }
-        } finally {
-            httpClient.close();
-        }
+
+        RepositoriesRequest repositoriesRequest = new RepositoriesRequest();
+        return repositoriesRequest.execute(
+                Settings.getInstance().getUser(),
+                accessToken
+        );
     }
 }

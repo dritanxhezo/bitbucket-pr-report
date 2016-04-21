@@ -7,23 +7,33 @@
     <display-name>Archetype Created Web Application</display-name>
 
     <servlet>
-        <servlet-name>oauth</servlet-name>
+        <servlet-name>OAuth</servlet-name>
         <servlet-class>net.ngeor.bprr.OAuthServlet</servlet-class>
     </servlet>
 
     <servlet>
-        <servlet-name>demo</servlet-name>
+        <servlet-name>Demo</servlet-name>
         <servlet-class>net.ngeor.bprr.DemoServlet</servlet-class>
     </servlet>
 
+    <servlet>
+        <servlet-name>PullRequests</servlet-name>
+        <servlet-class>net.ngeor.bprr.PullRequestsServlet</servlet-class>
+    </servlet>
+
     <servlet-mapping>
-        <servlet-name>oauth</servlet-name>
+        <servlet-name>OAuth</servlet-name>
         <url-pattern>/oauth</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>
-        <servlet-name>demo</servlet-name>
+        <servlet-name>Demo</servlet-name>
         <url-pattern>/demo</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>PullRequests</servlet-name>
+        <url-pattern>/pull-requests</url-pattern>
     </servlet-mapping>
 
 </web-app>
