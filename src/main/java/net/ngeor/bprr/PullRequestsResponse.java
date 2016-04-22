@@ -5,7 +5,7 @@ public class PullRequestsResponse {
     private int size;
     private int pagelen;
     private String next;
-    private PullRequest[] values;
+    private PullRequestResponse[] values;
 
     /**
      * Gets the URL to the next page of the response.
@@ -14,8 +14,12 @@ public class PullRequestsResponse {
         return next;
     }
 
-    public PullRequest[] getValues() {
+    public PullRequestResponse[] getValues() {
         return values;
+    }
+
+    void setValues(PullRequestResponse[] values) {
+        this.values = values;
     }
 
     public int getPage() {
@@ -28,24 +32,6 @@ public class PullRequestsResponse {
 
     public int getPageLen() {
         return pagelen;
-    }
-
-    public class PullRequest {
-        private String description;
-        private Author author;
-        private String id;
-
-        public String getId() {
-            return id;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-
-        public Author getAuthor() {
-            return author;
-        }
     }
 
     public class Author {

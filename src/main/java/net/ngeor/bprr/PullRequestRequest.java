@@ -9,10 +9,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-public class PullRequestsRequest {
+public class PullRequestRequest {
     private String owner;
     private String repositorySlug;
     private String accessToken;
+    private String id;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getAccessToken() {
         return accessToken;
@@ -40,11 +49,12 @@ public class PullRequestsRequest {
 
     private String createUrl() {
         String url = "https://api.bitbucket.org/2.0/repositories/" + owner + "/" + repositorySlug + "/pullrequests";
+        url = url + "/" + id;
         url = url + "?access_token=" + accessToken;
         return url;
     }
 
-    public PullRequestsResponse execute() throws IOException {
+    public PullRequestResponse execute() throws IOException {
         if (accessToken == null) {
             throw new IllegalStateException("No accessToken!");
         }
@@ -57,9 +67,9 @@ public class PullRequestsRequest {
             try {
                 InputStream content = httpResponse.getEntity().getContent();
                 InputStreamReader reader = new InputStreamReader(content);
-                PullRequestsResponseFactory pullRequestsResponseFactory = new PullRequestsResponseFactory();
-                PullRequestsResponse pullRequestsResponse = pullRequestsResponseFactory.parse(reader);
-                return pullRequestsResponse;
+                PullRequestResponseFactory pullRequestResponseFactory = new PullRequestResponseFactory();
+                PullRequestResponse pullRequestResponse = pullRequestResponseFactory.parse(reader);
+                return pullRequestResponse;
             } finally {
                 httpResponse.close();
             }

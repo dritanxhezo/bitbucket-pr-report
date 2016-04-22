@@ -16,6 +16,7 @@ Next ${pullRequests.next}
     <th>Id</th>
     <th>Description</th>
     <th>Author</th>
+    <th>Participants</th>
     <th>Actions</th>
 </tr>
 <c:forEach var="pullRequest" items="${pullRequests.values}">
@@ -23,6 +24,11 @@ Next ${pullRequests.next}
         <td>${pullRequest.id}</td>
         <td>${pullRequest.description}</td>
         <td>${pullRequest.author.username} ${pullRequest.author.displayName}</td>
+        <td>
+            <c:forEach var="participant" items="${pullRequest.participants}">
+            - ${participant.user.displayName}
+            </c:forEach>
+        </td>
         <td></td>
     </tr>
 </c:forEach>
