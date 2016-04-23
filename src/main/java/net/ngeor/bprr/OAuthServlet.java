@@ -1,7 +1,6 @@
 package net.ngeor.bprr;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonStreamParser;
+import com.google.gson.Gson;
 import org.apache.http.HttpHost;
 import org.apache.http.NameValuePair;
 import org.apache.http.auth.AuthScope;
@@ -71,8 +70,8 @@ public class OAuthServlet extends HttpServlet {
             try {
                 InputStream content = httpResponse.getEntity().getContent();
                 InputStreamReader reader = new InputStreamReader(content);
-                AccessTokenResponseFactory accessTokenResponseFactory = new AccessTokenResponseFactory();
-                AccessTokenResponse accessTokenResponse = accessTokenResponseFactory.parse(reader);
+                Gson gson = new Gson();
+                AccessTokenResponse accessTokenResponse = gson.fromJson(reader, AccessTokenResponse.class);
                 String accessToken = accessTokenResponse.getAccessToken();
                 out.println(accessToken);
                 req.getSession().setAttribute("accessToken", accessToken);

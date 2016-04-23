@@ -3,10 +3,10 @@ package net.ngeor.bprr;
 public class PullRequestResponse {
     private String description;
     private PullRequestsResponse.Author author;
-    private String id;
+    private int id;
     private Participant[] participants;
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 

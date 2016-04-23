@@ -40,9 +40,12 @@ public class PullRequestsServlet extends HttpServlet {
         String[] parts = fullRepoName.split("\\/");
         pullRequestsRequest.setOwner(parts[0]);
         pullRequestsRequest.setRepositorySlug(parts[1]);
-        pullRequestsRequest.setAccessToken(accessToken);
 
-        return pullRequestsRequest.execute();
+        BitbucketClient bitbucketClient = new BitbucketClient();
+        bitbucketClient.setAccessToken(accessToken);
+        bitbucketClient.setResource(pullRequestsRequest);
+        bitbucketClient.setHttpClientFactory(new DefaultHttpClientFactory());
+        return bitbucketClient.execute(PullRequestsResponse.class);
     }
 
     private PullRequestResponse getSinglePullRequest(String fullRepoName, String accessToken, String id) throws IOException {
@@ -58,10 +61,13 @@ public class PullRequestsServlet extends HttpServlet {
         String[] parts = fullRepoName.split("\\/");
         pullRequestRequest.setOwner(parts[0]);
         pullRequestRequest.setRepositorySlug(parts[1]);
-        pullRequestRequest.setAccessToken(accessToken);
         pullRequestRequest.setId(id);
 
-        return pullRequestRequest.execute();
+        BitbucketClient bitbucketClient = new BitbucketClient();
+        bitbucketClient.setAccessToken(accessToken);
+        bitbucketClient.setResource(pullRequestRequest);
+        bitbucketClient.setHttpClientFactory(new DefaultHttpClientFactory());
+        return bitbucketClient.execute(PullRequestResponse.class);
     }
 
 }

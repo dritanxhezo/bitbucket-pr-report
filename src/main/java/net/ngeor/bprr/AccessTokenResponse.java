@@ -1,9 +1,5 @@
 package net.ngeor.bprr;
 
-import com.google.gson.Gson;
-
-import java.io.Reader;
-
 /**
  * The JSON response after requesting an OAuth access token.
  */
