@@ -8,26 +8,24 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class DemoServlet extends HttpServlet {
+    private final DemoController controller;
+
+    public DemoServlet()
+    {
+        this(new DefaultDemoController());
+    }
+
+    public DemoServlet(DemoController controller) {
+        super();
+        this.controller = controller;
+    }
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String accessToken = (String)req.getSession().getAttribute("accessToken");
+        this.controller.setAccessToken(accessToken);
         RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/WEB-INF/demo.jsp");
-        req.setAttribute("repositories", getRepositories(accessToken));
+        req.setAttribute("pullRequests", this.controller.loadPullRequests());
         requestDispatcher.forward(req, resp);
-    }
-
-    private RepositoriesResponse getRepositories(String accessToken) throws IOException {
-        if (accessToken == null) {
-            throw new IllegalStateException("No accessToken!");
-        }
-
-        RepositoriesRequest repositoriesRequest = new RepositoriesRequest();
-        repositoriesRequest.setUser(Settings.getInstance().getUser());
-
-        BitbucketClient bitbucketClient = new BitbucketClient();
-        bitbucketClient.setAccessToken(accessToken);
-        bitbucketClient.setResource(repositoriesRequest);
-        bitbucketClient.setHttpClientFactory(new DefaultHttpClientFactory());
-        return bitbucketClient.execute(RepositoriesResponse.class);
     }
 }
