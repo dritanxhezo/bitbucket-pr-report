@@ -1,32 +1,35 @@
 package net.ngeor.bprr;
 
 public class PullRequestRequest {
-    private String owner;
-    private String repositorySlug;
-    private String id;
+    private final String owner;
+    private final String repositorySlug;
+    private final int id;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
+    public PullRequestRequest(String owner, String repositorySlug, int id) {
+        this.owner = owner;
+        this.repositorySlug = repositorySlug;
         this.id = id;
     }
 
-    public String getOwner() {
-        return owner;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PullRequestRequest that = (PullRequestRequest) o;
+
+        if (id != that.id) return false;
+        if (!owner.equals(that.owner)) return false;
+        return repositorySlug.equals(that.repositorySlug);
+
     }
 
-    public void setOwner(String owner) {
-        this.owner = owner;
-    }
-
-    public String getRepositorySlug() {
-        return repositorySlug;
-    }
-
-    public void setRepositorySlug(String repositorySlug) {
-        this.repositorySlug = repositorySlug;
+    @Override
+    public int hashCode() {
+        int result = owner.hashCode();
+        result = 31 * result + repositorySlug.hashCode();
+        result = 31 * result + id;
+        return result;
     }
 
     @Override

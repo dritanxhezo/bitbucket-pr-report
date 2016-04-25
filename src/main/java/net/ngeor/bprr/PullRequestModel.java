@@ -46,4 +46,13 @@ public class PullRequestModel {
         result = 31 * result + Arrays.hashCode(reviewers);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "PullRequestModel{" +
+                "id=" + id +
+                ", author='" + author + '\'' +
+                ", reviewers=" + Arrays.toString(reviewers) +
+                '}';
+    }
 }

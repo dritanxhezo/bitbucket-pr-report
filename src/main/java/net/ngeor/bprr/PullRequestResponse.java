@@ -2,9 +2,20 @@ package net.ngeor.bprr;
 
 public class PullRequestResponse {
     private String description;
-    private PullRequestsResponse.Author author;
+    private Author author;
     private int id;
     private Participant[] participants;
+
+    public PullRequestResponse() {
+
+    }
+
+    public PullRequestResponse(int id, String description, Author author, Participant... participants) {
+        this.id = id;
+        this.description = description;
+        this.author = author;
+        this.participants = participants;
+    }
 
     public int getId() {
         return id;
@@ -14,7 +25,7 @@ public class PullRequestResponse {
         return description;
     }
 
-    public PullRequestsResponse.Author getAuthor() {
+    public Author getAuthor() {
         return author;
     }
 
@@ -22,21 +33,4 @@ public class PullRequestResponse {
         return participants;
     }
 
-    public class Participant {
-        private boolean approved;
-        private String role;
-        private PullRequestsResponse.Author user;
-
-        public boolean isApproved() {
-            return approved;
-        }
-
-        public String getRole() {
-            return role;
-        }
-
-        public PullRequestsResponse.Author getUser() {
-            return user;
-        }
-    }
 }

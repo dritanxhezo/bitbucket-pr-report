@@ -9,11 +9,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import java.io.IOException;
 
-import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.*;
 import static org.mockito.Mockito.*;
 
 public class DemoServletTest {
@@ -35,6 +32,7 @@ public class DemoServletTest {
         when(servletConfig.getServletContext()).thenReturn(servletContext);
         when(servletContext.getRequestDispatcher("/WEB-INF/demo.jsp")).thenReturn(requestDispatcher);
         when(req.getSession()).thenReturn(session);
+        when(req.getParameter("repo")).thenReturn("ngeor/myproject");
         when(session.getAttribute("accessToken")).thenReturn("pass");
         when(demoController.loadPullRequests()).thenReturn(pullRequests);
 
@@ -46,6 +44,10 @@ public class DemoServletTest {
         // assert
         verify(requestDispatcher).forward(req, resp);
         verify(req).setAttribute("pullRequests", pullRequests);
-        verify(demoController).setAccessToken("pass");
+        verify(demoController).setUsername("ngeor");
+        verify(demoController).setRepository("myproject");
+
+        // TODO verify setBitbucketClient
+        // verify(demoController).setAccessToken("pass");
     }
 }

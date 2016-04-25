@@ -12,9 +12,15 @@ public class PullRequestsServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String accessToken = (String)req.getSession().getAttribute("accessToken");
         RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/WEB-INF/pull-requests.jsp");
-        String id = req.getParameter("id");
+        int id;
+        try {
+            id = Integer.parseInt(req.getParameter("id"));
+        } catch (NumberFormatException ex) {
+            id = 0;
+        }
+
         PullRequestsResponse pullRequestsResponse;
-        if (id != null) {
+        if (id > 0) {
             PullRequestResponse pullRequestResponse = getSinglePullRequest(req.getParameter("repo"), accessToken, id);
             pullRequestsResponse = new PullRequestsResponse();
             pullRequestsResponse.setValues(new PullRequestResponse[] { pullRequestResponse });
@@ -36,19 +42,16 @@ public class PullRequestsServlet extends HttpServlet {
             throw new IllegalArgumentException("fullRepoName cannot be null");
         }
 
-        PullRequestsRequest pullRequestsRequest = new PullRequestsRequest();
         String[] parts = fullRepoName.split("\\/");
-        pullRequestsRequest.setOwner(parts[0]);
-        pullRequestsRequest.setRepositorySlug(parts[1]);
+        PullRequestsRequest pullRequestsRequest = new PullRequestsRequest(parts[0], parts[1]);
 
-        BitbucketClient bitbucketClient = new BitbucketClient();
+        DefaultBitbucketClient bitbucketClient = new DefaultBitbucketClient();
         bitbucketClient.setAccessToken(accessToken);
-        bitbucketClient.setResource(pullRequestsRequest);
         bitbucketClient.setHttpClientFactory(new DefaultHttpClientFactory());
-        return bitbucketClient.execute(PullRequestsResponse.class);
+        return bitbucketClient.execute(pullRequestsRequest, PullRequestsResponse.class);
     }
 
-    private PullRequestResponse getSinglePullRequest(String fullRepoName, String accessToken, String id) throws IOException {
+    private PullRequestResponse getSinglePullRequest(String fullRepoName, String accessToken, int id) throws IOException {
         if (accessToken == null) {
             throw new IllegalStateException("No accessToken!");
         }
@@ -57,17 +60,12 @@ public class PullRequestsServlet extends HttpServlet {
             throw new IllegalArgumentException("fullRepoName cannot be null");
         }
 
-        PullRequestRequest pullRequestRequest = new PullRequestRequest();
         String[] parts = fullRepoName.split("\\/");
-        pullRequestRequest.setOwner(parts[0]);
-        pullRequestRequest.setRepositorySlug(parts[1]);
-        pullRequestRequest.setId(id);
+        PullRequestRequest pullRequestRequest = new PullRequestRequest(parts[0], parts[1], id);
 
-        BitbucketClient bitbucketClient = new BitbucketClient();
+        DefaultBitbucketClient bitbucketClient = new DefaultBitbucketClient();
         bitbucketClient.setAccessToken(accessToken);
-        bitbucketClient.setResource(pullRequestRequest);
         bitbucketClient.setHttpClientFactory(new DefaultHttpClientFactory());
-        return bitbucketClient.execute(PullRequestResponse.class);
+        return bitbucketClient.execute(pullRequestRequest, PullRequestResponse.class);
     }
-
 }

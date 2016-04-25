@@ -23,7 +23,15 @@ public class DemoServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String accessToken = (String)req.getSession().getAttribute("accessToken");
-        this.controller.setAccessToken(accessToken);
+
+        // TODO: create BitbucketClient provider
+        BitbucketClient bitbucketClient = new DefaultBitbucketClient();
+        bitbucketClient.setAccessToken(accessToken);
+        this.controller.setBitbucketClient(bitbucketClient);
+        String fullRepoName = req.getParameter("repo");
+        String[] parts = fullRepoName.split("\\/");
+        this.controller.setUsername(parts[0]);
+        this.controller.setRepository(parts[1]);
         RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/WEB-INF/demo.jsp");
         req.setAttribute("pullRequests", this.controller.loadPullRequests());
         requestDispatcher.forward(req, resp);

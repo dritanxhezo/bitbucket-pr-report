@@ -7,6 +7,14 @@ public class PullRequestsResponse {
     private String next;
     private PullRequestResponse[] values;
 
+    public PullRequestsResponse() {
+
+    }
+
+    public PullRequestsResponse(PullRequestResponse... values) {
+        this.values = values;
+    }
+
     /**
      * Gets the URL to the next page of the response.
      */
@@ -34,16 +42,4 @@ public class PullRequestsResponse {
         return pagelen;
     }
 
-    public class Author {
-        private String username;
-        private String display_name;
-
-        public String getUsername() {
-            return username;
-        }
-
-        public String getDisplayName() {
-            return display_name;
-        }
-    }
 }

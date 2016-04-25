@@ -19,20 +19,21 @@ import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class BitbucketClientTest {
+public class DefaultBitbucketClientTest {
     @Test
     public void shouldGetPullRequests() throws IOException, URISyntaxException {
         // arrange
         InputStream responseStream = getClass().getResourceAsStream("pullRequests.json");
         URI expected = new URI("https://api.bitbucket.org/2.0/repositories/owner/repo_slug/pullrequests?access_token=123");
         HttpClientFactory httpClientFactory = setupHttpClientFactory(responseStream, expected);
-        BitbucketClient bitbucketClient = new BitbucketClient();
-        bitbucketClient.setResource("repositories/owner/repo_slug/pullrequests");
+        DefaultBitbucketClient bitbucketClient = new DefaultBitbucketClient();
         bitbucketClient.setAccessToken("123");
         bitbucketClient.setHttpClientFactory(httpClientFactory);
 
         // act
-        PullRequestsResponse response = bitbucketClient.execute(PullRequestsResponse.class);
+        PullRequestsResponse response = bitbucketClient.execute(
+                "repositories/owner/repo_slug/pullrequests",
+                PullRequestsResponse.class);
 
         // assert
         Assert.assertNotNull(response);
