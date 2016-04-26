@@ -12,16 +12,17 @@ import java.io.InputStreamReader;
 
 public class DefaultBitbucketClient implements BitbucketClient {
     private String accessToken;
-    private HttpClientFactory httpClientFactory;
+    private final HttpClientFactory httpClientFactory;
 
-    public HttpClientFactory getHttpClientFactory() {
-        return httpClientFactory;
-    }
-
-    public void setHttpClientFactory(HttpClientFactory httpClientFactory) {
+    public DefaultBitbucketClient(HttpClientFactory httpClientFactory) {
         this.httpClientFactory = httpClientFactory;
     }
 
+    public DefaultBitbucketClient() {
+        this(new DefaultHttpClientFactory());
+    }
+
+    @Override
     public String getAccessToken() {
         return accessToken;
     }
@@ -37,7 +38,7 @@ public class DefaultBitbucketClient implements BitbucketClient {
             throw new IllegalStateException("No accessToken!");
         }
 
-        HttpClient httpClient = getHttpClientFactory().create();
+        HttpClient httpClient = httpClientFactory.create();
         try {
             String url = createUrl(resource);
             HttpGet httpGet = new HttpGet(url);

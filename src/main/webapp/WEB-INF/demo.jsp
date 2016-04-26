@@ -7,22 +7,21 @@
 <body>
 Hello from the demo.jsp
 
-Page ${repositories.page}
-Size ${repositories.size}
-Page Len ${repositories.pageLen}
-Next ${repositories.next}
-
 <table>
 <tr>
-    <th>Name</th>
-    <th>Full name</th>
-    <th>Actions</th>
+    <th>Id</th>
+    <th>Author</th>
+    <th>Approved By</th>
 </tr>
-<c:forEach var="repo" items="${repositories.values}">
+<c:forEach var="pr" items="${pullRequests}">
     <tr>
-        <td>${repo.name}</td>
-        <td>${repo.fullName}</td>
-        <td><a href="pull-requests?repo=${repo.fullName}&link=${repo.links.pullRequests.href}">View Pull Requests</a></td>
+        <td>${pr.id}</td>
+        <td>${pr.author}</td>
+        <td>
+            <c:forEach var="reviewer" items="${pr.reviewers}">
+                ${reviewer}
+            </c:forEach>
+        </td>
     </tr>
 </c:forEach>
 </table>

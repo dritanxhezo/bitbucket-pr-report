@@ -26,9 +26,8 @@ public class DefaultBitbucketClientTest {
         InputStream responseStream = getClass().getResourceAsStream("pullRequests.json");
         URI expected = new URI("https://api.bitbucket.org/2.0/repositories/owner/repo_slug/pullrequests?access_token=123");
         HttpClientFactory httpClientFactory = setupHttpClientFactory(responseStream, expected);
-        DefaultBitbucketClient bitbucketClient = new DefaultBitbucketClient();
+        DefaultBitbucketClient bitbucketClient = new DefaultBitbucketClient(httpClientFactory);
         bitbucketClient.setAccessToken("123");
-        bitbucketClient.setHttpClientFactory(httpClientFactory);
 
         // act
         PullRequestsResponse response = bitbucketClient.execute(

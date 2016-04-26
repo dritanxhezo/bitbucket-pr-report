@@ -47,7 +47,6 @@ public class PullRequestsServlet extends HttpServlet {
 
         DefaultBitbucketClient bitbucketClient = new DefaultBitbucketClient();
         bitbucketClient.setAccessToken(accessToken);
-        bitbucketClient.setHttpClientFactory(new DefaultHttpClientFactory());
         return bitbucketClient.execute(pullRequestsRequest, PullRequestsResponse.class);
     }
 
@@ -65,7 +64,6 @@ public class PullRequestsServlet extends HttpServlet {
 
         DefaultBitbucketClient bitbucketClient = new DefaultBitbucketClient();
         bitbucketClient.setAccessToken(accessToken);
-        bitbucketClient.setHttpClientFactory(new DefaultHttpClientFactory());
         return bitbucketClient.execute(pullRequestRequest, PullRequestResponse.class);
     }
 }

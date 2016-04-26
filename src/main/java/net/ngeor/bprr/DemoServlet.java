@@ -9,24 +9,22 @@ import java.io.IOException;
 
 public class DemoServlet extends HttpServlet {
     private final DemoController controller;
+    private final BitbucketClientFactory bitbucketClientFactory;
 
     public DemoServlet()
     {
-        this(new DefaultDemoController());
+        this(new DefaultDemoController(), new DefaultBitbucketClientFactory());
     }
 
-    public DemoServlet(DemoController controller) {
+    public DemoServlet(DemoController controller, BitbucketClientFactory bitbucketClientFactory) {
         super();
         this.controller = controller;
+        this.bitbucketClientFactory = bitbucketClientFactory;
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String accessToken = (String)req.getSession().getAttribute("accessToken");
-
-        // TODO: create BitbucketClient provider
-        BitbucketClient bitbucketClient = new DefaultBitbucketClient();
-        bitbucketClient.setAccessToken(accessToken);
+        BitbucketClient bitbucketClient = bitbucketClientFactory.createClient(req);
         this.controller.setBitbucketClient(bitbucketClient);
         String fullRepoName = req.getParameter("repo");
         String[] parts = fullRepoName.split("\\/");
