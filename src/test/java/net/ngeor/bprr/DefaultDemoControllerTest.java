@@ -13,20 +13,20 @@ public class DefaultDemoControllerTest {
     public void shouldLoadPullRequests() throws IOException {
         // arrange
         PullRequestModel[] expectedPullRequestModels = new PullRequestModel[] {
-                new PullRequestModel(1, "ngeor"),
-                new PullRequestModel(2, "test", "reviewer1", "reviewer2")
+                new PullRequestModel(1, "description 1", "open", "ngeor"),
+                new PullRequestModel(2, "description 2", "rejected", "test", "reviewer1", "reviewer2")
         };
 
         BitbucketClient client = mock(BitbucketClient.class);
         when(client.execute(new PullRequestsRequest("currentUser", "repo"), PullRequestsResponse.class))
                 .thenReturn(new PullRequestsResponse(
-                        new PullRequestResponse(1, "description 1", new Author("ngeor", "Nikolaos")),
-                        new PullRequestResponse(2, "description 2", new Author("test", "Test User")) // participants not included
+                        new PullRequestResponse(1, "description 1", "open",  new Author("ngeor", "Nikolaos")),
+                        new PullRequestResponse(2, "description 2", "rejected", new Author("test", "Test User")) // participants not included
                 ));
         when(client.execute(new PullRequestRequest("currentUser", "repo", 1), PullRequestResponse.class))
-                .thenReturn(new PullRequestResponse(1, "description 1", new Author("ngeor", "Nikolaos")));
+                .thenReturn(new PullRequestResponse(1, "description 1", "open", new Author("ngeor", "Nikolaos")));
         when(client.execute(new PullRequestRequest("currentUser", "repo", 2), PullRequestResponse.class))
-                .thenReturn(new PullRequestResponse(2, "description 2", new Author("test", "Test User"),
+                .thenReturn(new PullRequestResponse(2, "description 2", "rejected", new Author("test", "Test User"),
                         new Participant(false, "role", new Author("x", "x")),
                         new Participant(true, "role", new Author("reviewer1", "Reviewer1")),
                         new Participant(true, "role", new Author("reviewer2", "Reviewer2"))));

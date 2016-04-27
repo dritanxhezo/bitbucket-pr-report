@@ -1,16 +1,17 @@
 package net.ngeor.bprr;
 
 public class PullRequestResponse {
-    private String description;
-    private Author author;
     private int id;
+    private String description;
+    private String state;
+    private Author author;
     private Participant[] participants;
 
     public PullRequestResponse() {
 
     }
 
-    public PullRequestResponse(int id, String description, Author author, Participant... participants) {
+    public PullRequestResponse(int id, String description, String state, Author author, Participant... participants) {
         this.id = id;
         this.description = description;
         this.author = author;
@@ -23,6 +24,10 @@ public class PullRequestResponse {
 
     public String getDescription() {
         return description;
+    }
+
+    public String getState() {
+        return state;
     }
 
     public Author getAuthor() {

@@ -40,9 +40,6 @@ public class OAuthServlet extends HttpServlet {
             throw new IllegalStateException("No code!");
         }
 
-        PrintWriter out = resp.getWriter();
-        out.println(code);
-
         HttpHost targetHost = new HttpHost("bitbucket.org", 443, "https");
         CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
         credentialsProvider.setCredentials(
@@ -73,16 +70,22 @@ public class OAuthServlet extends HttpServlet {
                 Gson gson = new Gson();
                 AccessTokenResponse accessTokenResponse = gson.fromJson(reader, AccessTokenResponse.class);
                 String accessToken = accessTokenResponse.getAccessToken();
-                out.println(accessToken);
                 req.getSession().setAttribute("accessToken", accessToken);
+
+                String redirectUrl = getRedirectUrl(req);
+                resp.sendRedirect(redirectUrl);
             } finally {
                 httpResponse.close();
             }
         } finally {
             httpClient.close();
         }
+    }
 
-        out.flush();
-        out.close();
+    private String getRedirectUrl(HttpServletRequest req) {
+        String requestUri = req.getRequestURI(); // /bprr/oauth
+        String servletPath = req.getServletPath(); // /oauth
+        String result = requestUri.substring(0, requestUri.length() - servletPath.length());
+        return result;
     }
 }

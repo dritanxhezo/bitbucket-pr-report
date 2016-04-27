@@ -1,6 +1,10 @@
 <html>
+<head>
+<title>Welcome</title>
+<link href="app.css" type="text/css" rel="stylesheet" />
+</head>
 <body>
-<h2>Hello World!</h2>
+<h1>Welcome</h1>
 <%
 String url = "https://bitbucket.org/site/oauth2/authorize?client_id=" + net.ngeor.bprr.Settings.getInstance().getClientId() + "&response_type=code";
 %>
@@ -8,8 +12,5 @@ String url = "https://bitbucket.org/site/oauth2/authorize?client_id=" + net.ngeo
     Authorize me
 </a>
 
-<p>Code:
-<%= session.getAttribute("code") %>
-</p>
 </body>
 </html>
