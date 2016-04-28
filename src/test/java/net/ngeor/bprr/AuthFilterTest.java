@@ -2,10 +2,7 @@ package net.ngeor.bprr;
 
 import org.junit.Test;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
+import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -48,12 +45,21 @@ public class AuthFilterTest {
     public void shouldInterceptHttpRequestWithSession() throws IOException, ServletException {
         AuthFilter authFilter = new AuthFilter();
         HttpServletRequest servletRequest = mock(HttpServletRequest.class);
-        HttpSession session = mock(HttpSession.class);
-        when(servletRequest.getSession()).thenReturn(session);
         ServletResponse servletResponse = mock(ServletResponse.class);
+        HttpSession session = mock(HttpSession.class);
+        ServletContext servletContext = mock(ServletContext.class);
+        RequestDispatcher requestDispatcher = mock(RequestDispatcher.class);
         FilterChain filterChain = mock(FilterChain.class);
+        when(servletRequest.getSession()).thenReturn(session);
+        when(servletRequest.getServletContext()).thenReturn(servletContext);
+        when(servletContext.getRequestDispatcher("/index.jsp")).thenReturn(requestDispatcher);
+
+        // act
         authFilter.doFilter(servletRequest, servletResponse, filterChain);
+
+        // assert
         verify(filterChain, never()).doFilter(servletRequest, servletResponse);
+        verify(requestDispatcher).forward(servletRequest, servletResponse);
     }
 
     @Test

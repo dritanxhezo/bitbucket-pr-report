@@ -1,20 +1,25 @@
 package net.ngeor.bprr;
 
+import java.util.Date;
+
 public class PullRequestResponse {
     private int id;
     private String description;
     private String state;
     private Author author;
     private Participant[] participants;
+    private Date created_on;
 
     public PullRequestResponse() {
 
     }
 
-    public PullRequestResponse(int id, String description, String state, Author author, Participant... participants) {
+    public PullRequestResponse(int id, String description, String state, Date createdOn, Author author, Participant... participants) {
         this.id = id;
         this.description = description;
         this.author = author;
+        this.state = state;
+        this.created_on = createdOn;
         this.participants = participants;
     }
 
@@ -38,4 +43,7 @@ public class PullRequestResponse {
         return participants;
     }
 
+    public Date getCreatedOn() {
+        return created_on;
+    }
 }

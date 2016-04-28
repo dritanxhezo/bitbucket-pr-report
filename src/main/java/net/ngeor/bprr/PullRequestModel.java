@@ -1,6 +1,7 @@
 package net.ngeor.bprr;
 
 import java.util.Arrays;
+import java.util.Date;
 
 public class PullRequestModel {
     private final int id;
@@ -8,13 +9,15 @@ public class PullRequestModel {
     private final String state;
     private final String author;
     private final String[] reviewers;
+    private final Date createdOn;
 
-    // TODO add created_on, updated_on, closed_by
+    // TODO add updated_on, closed_by
 
-    public PullRequestModel(int id, String description, String state, String author, String... reviewers) {
+    public PullRequestModel(int id, String description, String state, Date createdOn, String author, String... reviewers) {
         this.id = id;
         this.description = description;
         this.state = state;
+        this.createdOn = createdOn;
         this.author = author;
         this.reviewers = reviewers;
     }
@@ -39,6 +42,10 @@ public class PullRequestModel {
         return reviewers;
     }
 
+    public Date getCreatedOn() {
+        return createdOn;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -53,6 +60,9 @@ public class PullRequestModel {
         if (!state.equals(that.state)) {
             return false;
         }
+        if (!createdOn.equals(that.createdOn)) {
+            return false;
+        }
         if (author != null ? !author.equals(that.author) : that.author != null) return false;
         // Probably incorrect - comparing Object[] arrays with Arrays.equals
         return Arrays.equals(reviewers, that.reviewers);
@@ -64,6 +74,7 @@ public class PullRequestModel {
         int result = id;
         result = 11 * result + description.hashCode();
         result = 13 * result + state.hashCode();
+        result = 17 * result + createdOn.hashCode();
         result = 31 * result + (author != null ? author.hashCode() : 0);
         result = 31 * result + Arrays.hashCode(reviewers);
         return result;
@@ -75,6 +86,7 @@ public class PullRequestModel {
                 "id=" + id +
                 ", description=" + description +
                 ", state=" + state +
+                ", createdOn=" + createdOn +
                 ", author='" + author + '\'' +
                 ", reviewers=" + Arrays.toString(reviewers) +
                 '}';

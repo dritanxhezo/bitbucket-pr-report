@@ -36,8 +36,8 @@ class DefaultDemoController implements DemoController {
                 pullRequestResponse.getId(),
                 pullRequestResponse.getDescription(),
                 pullRequestResponse.getState(),
-                pullRequestResponse.getAuthor().getUsername(),
-                convertReviewers(pullRequestResponse.getParticipants()));
+                pullRequestResponse.getCreatedOn(),
+                pullRequestResponse.getAuthor().getUsername(), convertReviewers(pullRequestResponse.getParticipants()));
     }
 
     private String[] convertReviewers(Participant[] participants) {

@@ -9,6 +9,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Date;
 
 import static org.mockito.Mockito.*;
 
@@ -17,7 +18,7 @@ public class DemoServletTest {
     public void shouldUseController() throws ServletException, IOException {
         // arrange
         PullRequestModel pullRequests[] = new PullRequestModel[] {
-            new PullRequestModel(123, "author", "reviewer1", "reviewer2")
+            new PullRequestModel(123, "description", "open", new Date(), "author", "reviewer1", "reviewer2")
         };
 
         HttpServletRequest req = mock(HttpServletRequest.class);
