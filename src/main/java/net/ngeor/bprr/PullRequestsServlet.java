@@ -43,7 +43,10 @@ public class PullRequestsServlet extends HttpServlet {
         }
 
         String[] parts = fullRepoName.split("\\/");
-        PullRequestsRequest pullRequestsRequest = new PullRequestsRequest(parts[0], parts[1]);
+        PullRequestsRequest pullRequestsRequest = new PullRequestsRequest(
+                parts[0],
+                parts[1],
+                PullRequestsRequest.State.Open);
 
         DefaultBitbucketClient bitbucketClient = new DefaultBitbucketClient();
         bitbucketClient.setAccessToken(accessToken);

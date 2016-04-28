@@ -9,17 +9,19 @@ public class PullRequestResponse {
     private Author author;
     private Participant[] participants;
     private Date created_on;
+    private Date updated_on;
 
     public PullRequestResponse() {
 
     }
 
-    public PullRequestResponse(int id, String description, String state, Date createdOn, Author author, Participant... participants) {
+    public PullRequestResponse(int id, String description, String state, Date createdOn, Date updatedOn, Author author, Participant... participants) {
         this.id = id;
         this.description = description;
         this.author = author;
         this.state = state;
         this.created_on = createdOn;
+        this.updated_on = updatedOn;
         this.participants = participants;
     }
 
@@ -46,4 +48,6 @@ public class PullRequestResponse {
     public Date getCreatedOn() {
         return created_on;
     }
+
+    public Date getUpdatedOn() { return updated_on; }
 }

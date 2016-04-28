@@ -14,6 +14,7 @@
     <th>Description</th>
     <th>State</th>
     <th>Created On</th>
+    <th>Updated On</th>
     <th>Author</th>
     <th>Approved By</th>
 </tr>
@@ -23,6 +24,7 @@
         <td>${pr.description}</td>
         <td>${pr.state}</td>
         <td>${pr.createdOn}</td>
+        <td>${pr.updatedOn}</td>
         <td>${pr.author}</td>
         <td>
             <c:forEach var="reviewer" items="${pr.reviewers}">

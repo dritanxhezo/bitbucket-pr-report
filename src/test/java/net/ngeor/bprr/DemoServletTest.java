@@ -18,7 +18,7 @@ public class DemoServletTest {
     public void shouldUseController() throws ServletException, IOException {
         // arrange
         PullRequestModel pullRequests[] = new PullRequestModel[] {
-            new PullRequestModel(123, "description", "open", new Date(), "author", "reviewer1", "reviewer2")
+            new PullRequestModel(123, "description", "open", new Date(), new Date(), "author", "reviewer1", "reviewer2")
         };
 
         HttpServletRequest req = mock(HttpServletRequest.class);

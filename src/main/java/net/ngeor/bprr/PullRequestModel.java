@@ -10,14 +10,16 @@ public class PullRequestModel {
     private final String author;
     private final String[] reviewers;
     private final Date createdOn;
+    private final Date updatedOn;
 
     // TODO add updated_on, closed_by
 
-    public PullRequestModel(int id, String description, String state, Date createdOn, String author, String... reviewers) {
+    public PullRequestModel(int id, String description, String state, Date createdOn, Date updatedOn, String author, String... reviewers) {
         this.id = id;
         this.description = description;
         this.state = state;
         this.createdOn = createdOn;
+        this.updatedOn = updatedOn;
         this.author = author;
         this.reviewers = reviewers;
     }
@@ -46,6 +48,10 @@ public class PullRequestModel {
         return createdOn;
     }
 
+    public Date getUpdatedOn() {
+        return updatedOn;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -63,6 +69,9 @@ public class PullRequestModel {
         if (!createdOn.equals(that.createdOn)) {
             return false;
         }
+        if (!updatedOn.equals(that.updatedOn)) {
+            return false;
+        }
         if (author != null ? !author.equals(that.author) : that.author != null) return false;
         // Probably incorrect - comparing Object[] arrays with Arrays.equals
         return Arrays.equals(reviewers, that.reviewers);
@@ -75,6 +84,7 @@ public class PullRequestModel {
         result = 11 * result + description.hashCode();
         result = 13 * result + state.hashCode();
         result = 17 * result + createdOn.hashCode();
+        result = 17 * result + updatedOn.hashCode();
         result = 31 * result + (author != null ? author.hashCode() : 0);
         result = 31 * result + Arrays.hashCode(reviewers);
         return result;
@@ -87,6 +97,7 @@ public class PullRequestModel {
                 ", description=" + description +
                 ", state=" + state +
                 ", createdOn=" + createdOn +
+                ", updatedOn=" + updatedOn +
                 ", author='" + author + '\'' +
                 ", reviewers=" + Arrays.toString(reviewers) +
                 '}';

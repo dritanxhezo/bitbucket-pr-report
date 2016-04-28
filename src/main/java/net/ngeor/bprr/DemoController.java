@@ -20,7 +20,7 @@ class DefaultDemoController implements DemoController {
     @Override
     public PullRequestModel[] loadPullRequests() throws IOException {
         // TODO fetch more pages from the paginated response
-        PullRequestsResponse pullRequestsResponse = bitbucketClient.execute(new PullRequestsRequest(username, repository), PullRequestsResponse.class);
+        PullRequestsResponse pullRequestsResponse = bitbucketClient.execute(new PullRequestsRequest(username, repository, PullRequestsRequest.State.Merged), PullRequestsResponse.class);
         int[] ids = Arrays.stream(pullRequestsResponse.getValues()).mapToInt(v -> v.getId()).toArray();
         List<PullRequestModel> result = new ArrayList<>();
         for (int id : ids) {
@@ -37,7 +37,9 @@ class DefaultDemoController implements DemoController {
                 pullRequestResponse.getDescription(),
                 pullRequestResponse.getState(),
                 pullRequestResponse.getCreatedOn(),
-                pullRequestResponse.getAuthor().getUsername(), convertReviewers(pullRequestResponse.getParticipants()));
+                pullRequestResponse.getUpdatedOn(),
+                pullRequestResponse.getAuthor().getUsername(),
+                convertReviewers(pullRequestResponse.getParticipants()));
     }
 
     private String[] convertReviewers(Participant[] participants) {

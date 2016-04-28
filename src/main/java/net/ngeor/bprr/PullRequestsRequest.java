@@ -3,15 +3,17 @@ package net.ngeor.bprr;
 public class PullRequestsRequest {
     private final String owner;
     private final String repositorySlug;
+    private final State state;
 
-    public PullRequestsRequest(String owner, String repositorySlug) {
+    public PullRequestsRequest(String owner, String repositorySlug, State state) {
         this.owner = owner;
         this.repositorySlug = repositorySlug;
+        this.state = state;
     }
 
     @Override
     public String toString() {
-        return "repositories/" + owner + "/" + repositorySlug + "/pullrequests";
+        return "repositories/" + owner + "/" + repositorySlug + "/pullrequests?state=" + state.toString().toUpperCase();
     }
 
     @Override
@@ -22,6 +24,7 @@ public class PullRequestsRequest {
         PullRequestsRequest that = (PullRequestsRequest) o;
 
         if (!owner.equals(that.owner)) return false;
+        if (!state.equals(that.state)) return false;
         return repositorySlug.equals(that.repositorySlug);
 
     }
@@ -29,7 +32,14 @@ public class PullRequestsRequest {
     @Override
     public int hashCode() {
         int result = owner.hashCode();
+        result = 11 * result + state.hashCode();
         result = 31 * result + repositorySlug.hashCode();
         return result;
+    }
+
+    public enum State {
+        Open,
+        Merged,
+        Declined
     }
 }
