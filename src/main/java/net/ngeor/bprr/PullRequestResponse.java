@@ -25,6 +25,10 @@ public class PullRequestResponse {
         this.participants = participants;
     }
 
+    PullRequestResponse(PullRequestResponseBuilder builder) {
+        this.id = builder.id;
+    }
+
     public int getId() {
         return id;
     }
