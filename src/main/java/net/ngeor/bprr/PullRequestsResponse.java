@@ -11,7 +11,12 @@ public class PullRequestsResponse {
 
     }
 
-    public PullRequestsResponse(PullRequestResponse... values) {
+    PullRequestsResponse(PullRequestResponse... values) {
+        this(null, values);
+    }
+
+    PullRequestsResponse(String next, PullRequestResponse... values) {
+        this.next = next;
         this.values = values;
     }
 

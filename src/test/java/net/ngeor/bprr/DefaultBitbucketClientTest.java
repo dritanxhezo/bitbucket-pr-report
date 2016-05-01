@@ -1,16 +1,14 @@
 package net.ngeor.bprr;
 
+import net.ngeor.testutils.HttpGetMatcher;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpUriRequest;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentMatcher;
 import org.mockito.Matchers;
 
 import java.io.IOException;
@@ -21,11 +19,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
-import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(Enclosed.class)
 public class DefaultBitbucketClientTest {
@@ -85,6 +81,46 @@ public class DefaultBitbucketClientTest {
         }
     }
 
+    public static class URLHandling {
+        @Test
+        public void shouldUseRequestInTheURI() throws URISyntaxException, IOException {
+            // arrange
+            InputStream responseStream = getClass().getResourceAsStream("pullRequests.json");
+            URI expected = new URI("https://api.bitbucket.org/2.0/repositories/owner/repo_slug/pullrequests?access_token=123");
+            HttpClientFactory httpClientFactory = setupHttpClientFactory(responseStream, expected);
+            DefaultBitbucketClient bitbucketClient = new DefaultBitbucketClient(httpClientFactory);
+            bitbucketClient.setAccessToken("123");
+
+            // act
+            bitbucketClient.execute(
+                    "repositories/owner/repo_slug/pullrequests",
+                    PullRequestsResponse.class);
+
+            // assert
+            HttpClient httpClient = httpClientFactory.create();
+            verify(httpClient).execute(matchHttpGet(expected));
+        }
+
+        @Test
+        public void shouldUseRequestAsIsIfItIsBitbucketUrl() throws URISyntaxException, IOException {
+            // arrange
+            InputStream responseStream = getClass().getResourceAsStream("pullRequests.json");
+            URI expected = new URI("https://api.bitbucket.org/2.0/whatever");
+            HttpClientFactory httpClientFactory = setupHttpClientFactory(responseStream, expected);
+            DefaultBitbucketClient bitbucketClient = new DefaultBitbucketClient(httpClientFactory);
+            bitbucketClient.setAccessToken("123");
+
+            // act
+            bitbucketClient.execute(
+                    "https://api.bitbucket.org/2.0/whatever",
+                    PullRequestsResponse.class);
+
+            // assert
+            HttpClient httpClient = httpClientFactory.create();
+            verify(httpClient).execute(matchHttpGet(expected));
+        }
+    }
+
     private static HttpClientFactory setupHttpClientFactory(InputStream responseStream, URI expectedURI) throws IOException {
         assertNotNull("null response stream!", responseStream);
         HttpEntity httpEntity = mock(HttpEntity.class);
@@ -92,17 +128,13 @@ public class DefaultBitbucketClientTest {
         HttpResponse httpResponse = mock(HttpResponse.class);
         when(httpResponse.getEntity()).thenReturn(httpEntity);
         when(httpEntity.getContent()).thenReturn(responseStream);
-        when(httpClient.execute(Matchers.argThat(new ArgumentMatcher<HttpUriRequest>() {
-
-            @Override
-            public boolean matches(Object o) {
-                Assert.assertThat(o, instanceOf(HttpGet.class));
-                HttpGet httpGet = (HttpGet) o;
-                assertEquals(expectedURI, httpGet.getURI());
-                return true;
-            }
-        }))).thenReturn(httpResponse);
+        when(httpClient.execute(matchHttpGet(expectedURI))).thenReturn(httpResponse);
         HttpClientFactory httpClientFactory = () -> httpClient;
         return httpClientFactory;
     }
+
+    private static HttpUriRequest matchHttpGet(URI expectedURI) {
+        return Matchers.argThat(new HttpGetMatcher(expectedURI));
+    }
+
 }

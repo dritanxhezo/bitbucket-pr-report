@@ -1,11 +1,13 @@
 package net.ngeor.bprr;
 
+import org.jetbrains.annotations.NotNull;
+
 public class PullRequestsRequest {
     private final String owner;
     private final String repositorySlug;
     private final State state;
 
-    public PullRequestsRequest(String owner, String repositorySlug, State state) {
+    public PullRequestsRequest(@NotNull String owner, @NotNull String repositorySlug, @NotNull State state) {
         this.owner = owner;
         this.repositorySlug = repositorySlug;
         this.state = state;

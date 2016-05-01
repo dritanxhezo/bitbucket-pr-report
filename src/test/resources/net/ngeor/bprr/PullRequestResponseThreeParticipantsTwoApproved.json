@@ -1,0 +1,37 @@
+{
+  "description": "description 2",
+  "author": {
+    "username": "ngeor",
+    "display_name": "Nikolaos Georgiou"
+  },
+  "state": "OPEN",
+  "created_on": "2011-07-02T00:00:00.000000+00:00",
+  "updated_on": "2011-07-02T00:00:00.000000+00:00",
+  "id": 2,
+  "participants": [
+    {
+      "approved": true,
+      "role": "role",
+      "user": {
+        "username": "ngeor",
+        "display_name": "Nikolaos Georgiou"
+      }
+    },
+    {
+      "approved": false,
+      "role": "role",
+      "user": {
+        "username": "test",
+        "display_name": "Test Test"
+      }
+    },
+    {
+      "approved": true,
+      "role": "role",
+      "user": {
+        "username": "reviewer 1",
+        "display_name": "Reviewer 1"
+      }
+    }
+  ]
+}

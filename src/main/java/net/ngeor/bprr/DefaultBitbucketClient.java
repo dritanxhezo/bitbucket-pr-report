@@ -43,6 +43,10 @@ public class DefaultBitbucketClient implements BitbucketClient {
             String url = createUrl(resource);
             HttpGet httpGet = new HttpGet(url);
             HttpResponse httpResponse = httpClient.execute(httpGet);
+            if (httpResponse == null) {
+                throw new NullPointerException("Null HTTP response");
+            }
+
             try {
                 InputStream content = httpResponse.getEntity().getContent();
                 InputStreamReader reader = new InputStreamReader(content);
@@ -57,6 +61,10 @@ public class DefaultBitbucketClient implements BitbucketClient {
     }
 
     private String createUrl(Object resource) {
+        if (isBitbucketUrl(resource)) {
+            return (String)resource;
+        }
+
         StringBuilder result = new StringBuilder();
         result.append("https://api.bitbucket.org/2.0/");
         result.append(resource);
@@ -64,6 +72,15 @@ public class DefaultBitbucketClient implements BitbucketClient {
         result.append("access_token=");
         result.append(getAccessToken());
         return result.toString();
+    }
+
+    private boolean isBitbucketUrl(Object resource) {
+        if (!(resource instanceof  String)) {
+            return false;
+        }
+
+        String url = (String)resource;
+        return url.startsWith("https://api.bitbucket.org/2.0/");
     }
 
     private void safeClose(Object x) {

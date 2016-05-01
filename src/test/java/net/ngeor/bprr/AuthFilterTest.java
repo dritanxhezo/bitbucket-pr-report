@@ -5,7 +5,6 @@ import org.junit.Test;
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
 import java.io.IOException;
 
 import static org.mockito.Mockito.*;
