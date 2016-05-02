@@ -1,4 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <html>
 <head>
@@ -21,7 +22,7 @@
 <c:forEach var="pr" items="${pullRequests}">
     <tr>
         <td>${pr.id}</td>
-        <td>${pr.description}</td>
+        <td>${fn:escapeXml(pr.description)}</td>
         <td>${pr.state}</td>
         <td>${pr.createdOn}</td>
         <td>${pr.updatedOn}</td>

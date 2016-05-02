@@ -18,17 +18,58 @@ class DefaultDemoController implements DemoController {
     private BitbucketClient bitbucketClient;
 
     @Override
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    @Override
+    public void setRepository(String repository) {
+        this.repository = repository;
+    }
+
+    @Override
+    public void setBitbucketClient(BitbucketClient bitbucketClient) {
+        this.bitbucketClient = bitbucketClient;
+    }
+
+    @Override
     public PullRequestModel[] loadPullRequests() throws IOException {
-        // TODO fetch more pages from the paginated response
-        PullRequestsResponse pullRequestsResponse = bitbucketClient.execute(new PullRequestsRequest(username, repository, PullRequestsRequest.State.Merged), PullRequestsResponse.class);
-        int[] ids = Arrays.stream(pullRequestsResponse.getValues()).mapToInt(v -> v.getId()).toArray();
+        // collect models here
         List<PullRequestModel> result = new ArrayList<>();
-        for (int id : ids) {
-            PullRequestResponse pullRequestResponse = bitbucketClient.execute(new PullRequestRequest(username, repository, id), PullRequestResponse.class);
-            result.add(convertToModel(pullRequestResponse));
-        }
+
+        // continue fetching pages?
+        boolean fetchMorePages;
+
+        // fetch first page
+        PullRequestsResponse pullRequestsResponse = bitbucketClient.execute(new PullRequestsRequest(username, repository, PullRequestsRequest.State.Merged), PullRequestsResponse.class);
+
+        int pages = 0;
+
+        do {
+            // store the results as models
+            collectPullRequestModels(pullRequestsResponse, result);
+
+            // get the URL to the next page
+            String next = pullRequestsResponse.getNext();
+
+            // TODO: stop if target date is reached otherwise it will fetch a lot of data
+            fetchMorePages = next != null && !next.isEmpty() && pages < 6;
+
+            if (fetchMorePages) {
+                pullRequestsResponse = bitbucketClient.execute(next, PullRequestsResponse.class);
+                pages++;
+            }
+        } while (fetchMorePages);
 
         return result.toArray(new PullRequestModel[result.size()]);
+    }
+
+    private void collectPullRequestModels(PullRequestsResponse pullRequestsResponse, List<PullRequestModel> models) throws IOException {
+        int[] ids = Arrays.stream(pullRequestsResponse.getValues()).mapToInt(v -> v.getId()).toArray();
+        for (int id : ids) {
+            PullRequestResponse pullRequestResponse = bitbucketClient.execute(new PullRequestRequest(username, repository, id), PullRequestResponse.class);
+            models.add(convertToModel(pullRequestResponse));
+        }
     }
 
     private PullRequestModel convertToModel(PullRequestResponse pullRequestResponse) {
@@ -47,20 +88,5 @@ class DefaultDemoController implements DemoController {
                 .filter(p -> p.isApproved())
                 .map(p -> p.getUser().getUsername())
                 .toArray(String[]::new);
-    }
-
-    @Override
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    @Override
-    public void setRepository(String repository) {
-        this.repository = repository;
-    }
-
-    @Override
-    public void setBitbucketClient(BitbucketClient bitbucketClient) {
-        this.bitbucketClient = bitbucketClient;
     }
 }
