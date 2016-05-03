@@ -2,6 +2,9 @@ package net.ngeor.bprr;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 public class PullRequestsRequest {
     private final String owner;
     private final String repositorySlug;
@@ -15,7 +18,16 @@ public class PullRequestsRequest {
 
     @Override
     public String toString() {
-        return "repositories/" + owner + "/" + repositorySlug + "/pullrequests?state=" + state.toString().toUpperCase();
+        // TODO: configure date
+        String q = "state = \"" + state.toString().toUpperCase() + "\" AND updated_on >= 2016-04-25";
+        try {
+            q = URLEncoder.encode(q, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return "repositories/" + owner + "/" + repositorySlug
+                + "/pullrequests?"
+                + "q=" + q;
     }
 
     @Override
