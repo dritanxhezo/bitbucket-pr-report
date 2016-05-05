@@ -26,7 +26,7 @@ public class DefaultDemoControllerTest {
         };
 
         BitbucketClient client = mock(BitbucketClient.class);
-        when(client.execute(new PullRequestsRequest("currentUser", "repo", PullRequestsRequest.State.Merged), PullRequestsResponse.class))
+        when(client.execute(new PullRequestsRequest("currentUser", "repo", PullRequestsRequest.State.Merged, DateHelper.utcDate(2016, 5, 5)), PullRequestsResponse.class))
                 .thenReturn(pullRequestsResponse);
         when(client.execute(new PullRequestRequest("currentUser", "repo", 1), PullRequestResponse.class))
                 .thenReturn(firstWithParticipants);
@@ -36,6 +36,7 @@ public class DefaultDemoControllerTest {
         DefaultDemoController controller = new DefaultDemoController();
         controller.setUsername("currentUser");
         controller.setRepository("repo");
+        controller.setUpdatedOn(DateHelper.utcDate(2016, 5, 5));
         controller.setBitbucketClient(client);
 
         // act
@@ -63,7 +64,7 @@ public class DefaultDemoControllerTest {
         };
 
         BitbucketClient client = mock(BitbucketClient.class);
-        when(client.execute(new PullRequestsRequest("currentUser", "repo", PullRequestsRequest.State.Merged), PullRequestsResponse.class))
+        when(client.execute(new PullRequestsRequest("currentUser", "repo", PullRequestsRequest.State.Merged, DateHelper.utcDate(2016, 5, 4)), PullRequestsResponse.class))
                 .thenReturn(firstPullRequestsResponse);
         when(client.execute("https://api.bitbucket.org/2.0/pullrequests/2", PullRequestsResponse.class))
                 .thenReturn(secondPullRequestsResponse);
@@ -75,6 +76,7 @@ public class DefaultDemoControllerTest {
         DefaultDemoController controller = new DefaultDemoController();
         controller.setUsername("currentUser");
         controller.setRepository("repo");
+        controller.setUpdatedOn(DateHelper.utcDate(2016, 5, 4));
         controller.setBitbucketClient(client);
 
         // act

@@ -31,8 +31,6 @@ public class PullRequestsRequest {
         this(owner, repositorySlug, null, updatedOn);
     }
 
-
-
     private static String formatDate(Date date) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         return simpleDateFormat.format(date);

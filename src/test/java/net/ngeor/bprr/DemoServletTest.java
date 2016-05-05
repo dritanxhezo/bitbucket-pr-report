@@ -1,5 +1,7 @@
 package net.ngeor.bprr;
 
+import net.ngeor.dates.DateHelper;
+import org.junit.Before;
 import org.junit.Test;
 
 import javax.servlet.RequestDispatcher;
@@ -14,6 +16,31 @@ import java.util.Date;
 import static org.mockito.Mockito.*;
 
 public class DemoServletTest {
+    private HttpServletRequest req;
+    private HttpServletResponse resp;
+    private ServletConfig servletConfig;
+    private ServletContext servletContext;
+    private RequestDispatcher requestDispatcher;
+    private DemoController demoController;
+    private BitbucketClientFactory bitbucketClientFactory;
+    private BitbucketClient bitbucketClient;
+
+    @Before
+    public void before() {
+        req = mock(HttpServletRequest.class);
+        resp = mock(HttpServletResponse.class);
+        servletConfig = mock(ServletConfig.class);
+        servletContext = mock(ServletContext.class);
+        requestDispatcher = mock(RequestDispatcher.class);
+        demoController = mock(DemoController.class);
+        bitbucketClientFactory = mock(BitbucketClientFactory.class);
+        bitbucketClient = mock(BitbucketClient.class);
+
+        when(servletConfig.getServletContext()).thenReturn(servletContext);
+        when(servletContext.getRequestDispatcher("/WEB-INF/demo.jsp")).thenReturn(requestDispatcher);
+        when(bitbucketClientFactory.createClient(req)).thenReturn(bitbucketClient);
+    }
+
     @Test
     public void shouldUseController() throws ServletException, IOException {
         // arrange
@@ -21,19 +48,8 @@ public class DemoServletTest {
             new PullRequestModel(123, "description", "open", new Date(), new Date(), "author", "reviewer1", "reviewer2")
         };
 
-        HttpServletRequest req = mock(HttpServletRequest.class);
-        HttpServletResponse resp = mock(HttpServletResponse.class);
-        ServletConfig servletConfig = mock(ServletConfig.class);
-        ServletContext servletContext = mock(ServletContext.class);
-        RequestDispatcher requestDispatcher = mock(RequestDispatcher.class);
-        DemoController demoController = mock(DemoController.class);
-        BitbucketClientFactory bitbucketClientFactory = mock(BitbucketClientFactory.class);
-        BitbucketClient bitbucketClient = mock(BitbucketClient.class);
-
-        when(servletConfig.getServletContext()).thenReturn(servletContext);
-        when(servletContext.getRequestDispatcher("/WEB-INF/demo.jsp")).thenReturn(requestDispatcher);
         when(req.getParameter("repo")).thenReturn("ngeor/myproject");
-        when(bitbucketClientFactory.createClient(req)).thenReturn(bitbucketClient);
+        when(req.getParameter("updatedOn")).thenReturn("2016-05-05");
         when(demoController.loadPullRequests()).thenReturn(pullRequests);
 
         // act
@@ -46,6 +62,27 @@ public class DemoServletTest {
         verify(req).setAttribute("pullRequests", pullRequests);
         verify(demoController).setUsername("ngeor");
         verify(demoController).setRepository("myproject");
+        verify(demoController).setUpdatedOn(DateHelper.utcDate(2016, 5, 5));
         verify(demoController).setBitbucketClient(bitbucketClient);
+    }
+
+    @Test
+    public void shouldUseCurrentDateWhenUpdatedOnParameterIsMissing() throws ServletException, IOException {
+        // arrange
+        PullRequestModel pullRequests[] = new PullRequestModel[] {
+                new PullRequestModel(123, "description", "open", new Date(), new Date(), "author", "reviewer1", "reviewer2")
+        };
+
+        when(req.getParameter("repo")).thenReturn("ngeor/myproject");
+        when(req.getParameter("updatedOn")).thenReturn("");
+        when(demoController.loadPullRequests()).thenReturn(pullRequests);
+
+        // act
+        DemoServlet servlet = new DemoServlet(demoController, bitbucketClientFactory);
+        servlet.init(servletConfig);
+        servlet.doGet(req, resp);
+
+        // assert
+        verify(demoController).setUpdatedOn(DateHelper.utcToday());
     }
 }
