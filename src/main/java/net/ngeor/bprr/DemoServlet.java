@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.Date;
 
 public class DemoServlet extends HttpServlet {
     private final DemoController controller;
@@ -30,16 +31,30 @@ public class DemoServlet extends HttpServlet {
         BitbucketClient bitbucketClient = bitbucketClientFactory.createClient(req);
         this.controller.setBitbucketClient(bitbucketClient);
         String fullRepoName = req.getParameter("repo");
-        String[] parts = fullRepoName.split("\\/");
-        this.controller.setUsername(parts[0]);
-        this.controller.setRepository(parts[1]);
-        try {
-            this.controller.setUpdatedOn(DateHelper.parseUtcDate(req.getParameter("updatedOn")));
-        } catch (ParseException e) {
-            this.controller.setUpdatedOn(DateHelper.utcToday());
+        if (fullRepoName != null) {
+            String[] parts = fullRepoName.split("\\/");
+            this.controller.setUsername(parts[0]);
+            this.controller.setRepository(parts[1]);
         }
+
+        Date updatedOn;
+        try {
+            updatedOn = DateHelper.parseUtcDate(req.getParameter("updatedOn"));
+        } catch (ParseException e) {
+            updatedOn = DateHelper.utcToday();
+        }
+
+        this.controller.setUpdatedOn(updatedOn);
+
         RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/WEB-INF/demo.jsp");
         req.setAttribute("pullRequests", this.controller.loadPullRequests());
+        req.setAttribute("formurl", req.getRequestURI());
+        req.setAttribute("repo", fullRepoName);
         requestDispatcher.forward(req, resp);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doGet(req, resp);
     }
 }

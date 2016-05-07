@@ -69,13 +69,7 @@ public class DemoServletTest {
     @Test
     public void shouldUseCurrentDateWhenUpdatedOnParameterIsMissing() throws ServletException, IOException {
         // arrange
-        PullRequestModel pullRequests[] = new PullRequestModel[] {
-                new PullRequestModel(123, "description", "open", new Date(), new Date(), "author", "reviewer1", "reviewer2")
-        };
-
-        when(req.getParameter("repo")).thenReturn("ngeor/myproject");
         when(req.getParameter("updatedOn")).thenReturn("");
-        when(demoController.loadPullRequests()).thenReturn(pullRequests);
 
         // act
         DemoServlet servlet = new DemoServlet(demoController, bitbucketClientFactory);
@@ -84,5 +78,33 @@ public class DemoServletTest {
 
         // assert
         verify(demoController).setUpdatedOn(DateHelper.utcToday());
+    }
+
+    @Test
+    public void shouldSetFormUrlAttribute() throws ServletException, IOException {
+        // arrange
+        when(req.getRequestURI()).thenReturn("hello");
+
+        // act
+        DemoServlet servlet = new DemoServlet(demoController, bitbucketClientFactory);
+        servlet.init(servletConfig);
+        servlet.doGet(req, resp);
+
+        // assert
+        verify(req).setAttribute("formurl", "hello");
+    }
+
+    @Test
+    public void shouldSetRepoAttribute() throws ServletException, IOException {
+        // arrange
+        when(req.getParameter("repo")).thenReturn("hello/abc");
+
+        // act
+        DemoServlet servlet = new DemoServlet(demoController, bitbucketClientFactory);
+        servlet.init(servletConfig);
+        servlet.doGet(req, resp);
+
+        // assert
+        verify(req).setAttribute("repo", "hello/abc");
     }
 }

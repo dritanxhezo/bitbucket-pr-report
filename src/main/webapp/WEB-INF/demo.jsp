@@ -9,6 +9,16 @@
 <body>
 <h1>Pull Requests Overview</h1>
 
+<form method="POST" action="${formurl}">
+    <label for="repo">Repository</label>
+    <input id="repo" name="repo" value="${repo}" />
+
+    <label for="updatedOn">Updated On</label>
+    <input id="updatedOn" name="updatedOn" />
+
+    <input type="submit" />
+</form>
+
 <table>
 <tr>
     <th>Id</th>
