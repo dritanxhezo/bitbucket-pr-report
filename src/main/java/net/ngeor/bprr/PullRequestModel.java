@@ -12,7 +12,7 @@ public class PullRequestModel {
     private final Date createdOn;
     private final Date updatedOn;
 
-    // TODO add updated_on, closed_by
+    // TODO add closed_by
 
     public PullRequestModel(int id, String description, String state, Date createdOn, Date updatedOn, String author, String... reviewers) {
         this.id = id;

@@ -107,4 +107,32 @@ public class DemoServletTest {
         // assert
         verify(req).setAttribute("repo", "hello/abc");
     }
+
+    @Test
+    public void shouldSetUpdatedOnAttribute() throws ServletException, IOException {
+        // arrange
+        when(req.getParameter("updatedOn")).thenReturn("2016-05-01");
+
+        // act
+        DemoServlet servlet = new DemoServlet(demoController, bitbucketClientFactory);
+        servlet.init(servletConfig);
+        servlet.doGet(req, resp);
+
+        // assert
+        verify(req).setAttribute("updatedOn", "2016-05-01");
+    }
+
+    @Test
+    public void shouldSetUpdatedOnAttributeWhenParameterIsMissing() throws ServletException, IOException {
+        // arrange
+        when(req.getParameter("updatedOn")).thenReturn(null);
+
+        // act
+        DemoServlet servlet = new DemoServlet(demoController, bitbucketClientFactory);
+        servlet.init(servletConfig);
+        servlet.doGet(req, resp);
+
+        // assert
+        verify(req).setAttribute("updatedOn", DateHelper.formatDate(DateHelper.utcToday()));
+    }
 }

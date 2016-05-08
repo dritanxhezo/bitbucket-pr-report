@@ -50,6 +50,7 @@ public class DemoServlet extends HttpServlet {
         req.setAttribute("pullRequests", this.controller.loadPullRequests());
         req.setAttribute("formurl", req.getRequestURI());
         req.setAttribute("repo", fullRepoName);
+        req.setAttribute("updatedOn", DateHelper.formatDate(updatedOn));
         requestDispatcher.forward(req, resp);
     }
 

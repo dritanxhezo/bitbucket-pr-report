@@ -14,7 +14,7 @@
     <input id="repo" name="repo" value="${repo}" />
 
     <label for="updatedOn">Updated On</label>
-    <input id="updatedOn" name="updatedOn" />
+    <input id="updatedOn" name="updatedOn" value="${updatedOn}" />
 
     <input type="submit" />
 </form>
