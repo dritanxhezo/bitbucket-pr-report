@@ -1,4 +1,4 @@
-package net.ngeor.bprr;
+package net.ngeor.bprr.requests;
 
 public class PullRequestRequest {
     private final String owner;

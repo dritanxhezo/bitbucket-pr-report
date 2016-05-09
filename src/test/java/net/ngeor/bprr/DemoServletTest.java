@@ -1,6 +1,6 @@
 package net.ngeor.bprr;
 
-import net.ngeor.dates.DateHelper;
+import net.ngeor.util.DateHelper;
 import org.junit.Before;
 import org.junit.Test;
 

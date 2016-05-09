@@ -1,4 +1,4 @@
-package net.ngeor.bprr;
+package net.ngeor.bprr.serialization;
 
 /**
  * The JSON response after requesting an OAuth access token.

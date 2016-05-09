@@ -1,6 +1,7 @@
-package net.ngeor.bprr;
+package net.ngeor.bprr.requests;
 
-import net.ngeor.utils.URLStringBuilder;
+import net.ngeor.util.URLQueryWriter;
+import net.ngeor.util.URLStringBuilder;
 import org.jetbrains.annotations.NotNull;
 
 import java.text.SimpleDateFormat;
@@ -85,26 +86,4 @@ public class PullRequestsRequest {
         Merged,
         Declined
     }
-}
-
-class URLQueryWriter {
-    private final URLStringBuilder stringBuilder;
-    private boolean needsAnd;
-
-    public URLQueryWriter(URLStringBuilder stringBuilder) {
-        this.stringBuilder = stringBuilder;
-    }
-
-    void write(String key, String operand, String value) {
-        if (needsAnd) {
-            stringBuilder.appendEncoded(" AND ");
-        } else {
-            needsAnd = true;
-        }
-
-        stringBuilder.appendEncoded(key).appendEncoded(" ")
-                .appendEncoded(operand).appendEncoded(" ")
-                .appendEncoded(value);
-    }
-
 }

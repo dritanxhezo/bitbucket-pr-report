@@ -1,6 +1,7 @@
 package net.ngeor.bprr;
 
 import com.google.gson.Gson;
+import net.ngeor.bprr.serialization.AccessTokenResponse;
 import org.apache.http.HttpHost;
 import org.apache.http.NameValuePair;
 import org.apache.http.auth.AuthScope;

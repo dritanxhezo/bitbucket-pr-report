@@ -1,6 +1,11 @@
 package net.ngeor.bprr;
 
-import net.ngeor.dates.DateHelper;
+import net.ngeor.bprr.requests.PullRequestRequest;
+import net.ngeor.bprr.requests.PullRequestsRequest;
+import net.ngeor.bprr.serialization.PullRequestResponse;
+import net.ngeor.bprr.serialization.PullRequestsResponse;
+import net.ngeor.testutil.TestData;
+import net.ngeor.util.DateHelper;
 import org.junit.Test;
 
 import java.io.IOException;

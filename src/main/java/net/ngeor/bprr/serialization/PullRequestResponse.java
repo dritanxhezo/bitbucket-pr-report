@@ -1,4 +1,4 @@
-package net.ngeor.bprr;
+package net.ngeor.bprr.serialization;
 
 import java.util.Date;
 
@@ -13,17 +13,6 @@ public class PullRequestResponse {
 
 
     public PullRequestResponse() {
-
-    }
-
-    PullRequestResponse(PullRequestResponseBuilder builder) {
-        this.id = builder.id;
-        this.description = builder.description;
-        this.state = builder.state;
-        this.created_on = builder.createdOn;
-        this.updated_on = builder.updatedOn;
-        this.author = builder.author;
-        this.participants = builder.participants;
     }
 
     public int getId() {

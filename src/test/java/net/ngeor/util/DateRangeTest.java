@@ -1,4 +1,4 @@
-package net.ngeor.dates;
+package net.ngeor.util;
 
 import org.junit.Test;
 

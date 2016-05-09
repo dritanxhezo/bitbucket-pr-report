@@ -1,6 +1,6 @@
-package net.ngeor.bprr;
+package net.ngeor.bprr.requests;
 
-import net.ngeor.dates.DateHelper;
+import net.ngeor.util.DateHelper;
 import org.junit.Test;
 
 import java.util.Date;

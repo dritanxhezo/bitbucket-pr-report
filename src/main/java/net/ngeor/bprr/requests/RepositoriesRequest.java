@@ -1,4 +1,4 @@
-package net.ngeor.bprr;
+package net.ngeor.bprr.requests;
 
 public class RepositoriesRequest {
     private String user;

@@ -1,4 +1,4 @@
-package net.ngeor.utils;
+package net.ngeor.util;
 
 import org.jetbrains.annotations.NotNull;
 

@@ -1,5 +1,11 @@
 package net.ngeor.bprr;
 
+import net.ngeor.bprr.requests.PullRequestRequest;
+import net.ngeor.bprr.requests.PullRequestsRequest;
+import net.ngeor.bprr.serialization.Participant;
+import net.ngeor.bprr.serialization.PullRequestResponse;
+import net.ngeor.bprr.serialization.PullRequestsResponse;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -1,4 +1,4 @@
-package net.ngeor.bprr;
+package net.ngeor.bprr.serialization;
 
 public class Author {
     private String username;

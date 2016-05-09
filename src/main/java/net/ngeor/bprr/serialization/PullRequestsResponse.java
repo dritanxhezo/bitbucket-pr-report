@@ -1,4 +1,4 @@
-package net.ngeor.bprr;
+package net.ngeor.bprr.serialization;
 
 public class PullRequestsResponse {
     private int page;
@@ -11,7 +11,7 @@ public class PullRequestsResponse {
 
     }
 
-    PullRequestsResponse(PullRequestResponse... values) {
+    public PullRequestsResponse(PullRequestResponse... values) {
         this(null, values);
     }
 

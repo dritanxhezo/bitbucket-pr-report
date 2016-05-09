@@ -1,6 +1,8 @@
 package net.ngeor.bprr;
 
-import net.ngeor.testutils.HttpGetMatcher;
+import net.ngeor.bprr.serialization.PullRequestResponse;
+import net.ngeor.bprr.serialization.PullRequestsResponse;
+import net.ngeor.testutil.HttpGetMatcher;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -31,7 +33,7 @@ public class DefaultBitbucketClientTest {
         @Before
         public void before() throws URISyntaxException, IOException {
             // arrange
-            InputStream responseStream = getClass().getResourceAsStream("pullRequests.json");
+            InputStream responseStream = getClass().getResourceAsStream("serialization/pullRequests.json");
             URI expected = new URI("https://api.bitbucket.org/2.0/repositories/owner/repo_slug/pullrequests?access_token=123");
             HttpClientFactory httpClientFactory = setupHttpClientFactory(responseStream, expected);
             DefaultBitbucketClient bitbucketClient = new DefaultBitbucketClient(httpClientFactory);
@@ -85,7 +87,7 @@ public class DefaultBitbucketClientTest {
         @Test
         public void shouldUseRequestInTheURI() throws URISyntaxException, IOException {
             // arrange
-            InputStream responseStream = getClass().getResourceAsStream("pullRequests.json");
+            InputStream responseStream = getClass().getResourceAsStream("serialization/pullRequests.json");
             URI expected = new URI("https://api.bitbucket.org/2.0/repositories/owner/repo_slug/pullrequests?access_token=123");
             HttpClientFactory httpClientFactory = setupHttpClientFactory(responseStream, expected);
             DefaultBitbucketClient bitbucketClient = new DefaultBitbucketClient(httpClientFactory);
@@ -104,7 +106,7 @@ public class DefaultBitbucketClientTest {
         @Test
         public void shouldUseRequestAsIsIfItIsBitbucketUrl() throws URISyntaxException, IOException {
             // arrange
-            InputStream responseStream = getClass().getResourceAsStream("pullRequests.json");
+            InputStream responseStream = getClass().getResourceAsStream("serialization/pullRequests.json");
             URI expected = new URI("https://api.bitbucket.org/2.0/whatever");
             HttpClientFactory httpClientFactory = setupHttpClientFactory(responseStream, expected);
             DefaultBitbucketClient bitbucketClient = new DefaultBitbucketClient(httpClientFactory);

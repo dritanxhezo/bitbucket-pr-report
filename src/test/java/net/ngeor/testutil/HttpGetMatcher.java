@@ -1,4 +1,4 @@
-package net.ngeor.testutils;
+package net.ngeor.testutil;
 
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpUriRequest;

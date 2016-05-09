@@ -1,5 +1,10 @@
 package net.ngeor.bprr;
 
+import net.ngeor.bprr.requests.PullRequestRequest;
+import net.ngeor.bprr.requests.PullRequestsRequest;
+import net.ngeor.bprr.serialization.PullRequestResponse;
+import net.ngeor.bprr.serialization.PullRequestsResponse;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -22,8 +27,7 @@ public class PullRequestsServlet extends HttpServlet {
         PullRequestsResponse pullRequestsResponse;
         if (id > 0) {
             PullRequestResponse pullRequestResponse = getSinglePullRequest(req.getParameter("repo"), accessToken, id);
-            pullRequestsResponse = new PullRequestsResponse();
-            pullRequestsResponse.setValues(new PullRequestResponse[] { pullRequestResponse });
+            pullRequestsResponse = new PullRequestsResponse(pullRequestResponse);
         } else {
             pullRequestsResponse = getPullRequests(
                     req.getParameter("repo"),
