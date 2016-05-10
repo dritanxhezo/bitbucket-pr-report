@@ -1,8 +1,12 @@
 package net.ngeor.bprr;
 
+import net.ngeor.bprr.views.PullRequestsView;
 import net.ngeor.util.DateHelper;
+import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Matchers;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
@@ -13,6 +17,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Date;
 
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 public class DemoServletTest {
@@ -59,11 +65,15 @@ public class DemoServletTest {
 
         // assert
         verify(requestDispatcher).forward(req, resp);
-        verify(req).setAttribute("pullRequests", pullRequests);
         verify(demoController).setUsername("ngeor");
         verify(demoController).setRepository("myproject");
         verify(demoController).setUpdatedOn(DateHelper.utcDate(2016, 5, 5));
         verify(demoController).setBitbucketClient(bitbucketClient);
+
+        ArgumentCaptor<PullRequestsView> argument = ArgumentCaptor.forClass(PullRequestsView.class);
+        verify(req).setAttribute(eq("view"), argument.capture());
+        PullRequestsView view = argument.getValue();
+        assertArrayEquals(pullRequests, view.getPullRequests());
     }
 
     @Test
@@ -91,7 +101,10 @@ public class DemoServletTest {
         servlet.doGet(req, resp);
 
         // assert
-        verify(req).setAttribute("formurl", "hello");
+        ArgumentCaptor<PullRequestsView> argument = ArgumentCaptor.forClass(PullRequestsView.class);
+        verify(req).setAttribute(eq("view"), argument.capture());
+        PullRequestsView view = argument.getValue();
+        assertEquals("hello", view.getFormUrl());
     }
 
     @Test
@@ -105,7 +118,10 @@ public class DemoServletTest {
         servlet.doGet(req, resp);
 
         // assert
-        verify(req).setAttribute("repo", "hello/abc");
+        ArgumentCaptor<PullRequestsView> argument = ArgumentCaptor.forClass(PullRequestsView.class);
+        verify(req).setAttribute(eq("view"), argument.capture());
+        PullRequestsView view = argument.getValue();
+        assertEquals("hello/abc", view.getRepo());
     }
 
     @Test
@@ -119,7 +135,10 @@ public class DemoServletTest {
         servlet.doGet(req, resp);
 
         // assert
-        verify(req).setAttribute("updatedOn", "2016-05-01");
+        ArgumentCaptor<PullRequestsView> argument = ArgumentCaptor.forClass(PullRequestsView.class);
+        verify(req).setAttribute(eq("view"), argument.capture());
+        PullRequestsView view = argument.getValue();
+        assertEquals("2016-05-01", view.getUpdatedOn());
     }
 
     @Test
@@ -133,6 +152,9 @@ public class DemoServletTest {
         servlet.doGet(req, resp);
 
         // assert
-        verify(req).setAttribute("updatedOn", DateHelper.formatDate(DateHelper.utcToday()));
+        ArgumentCaptor<PullRequestsView> argument = ArgumentCaptor.forClass(PullRequestsView.class);
+        verify(req).setAttribute(eq("view"), argument.capture());
+        PullRequestsView view = argument.getValue();
+        assertEquals(DateHelper.formatDate(DateHelper.utcToday()), view.getUpdatedOn());
     }
 }

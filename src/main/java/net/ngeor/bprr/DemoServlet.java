@@ -1,5 +1,6 @@
 package net.ngeor.bprr;
 
+import net.ngeor.bprr.views.PullRequestsView;
 import net.ngeor.util.DateHelper;
 
 import javax.servlet.RequestDispatcher;
@@ -47,10 +48,13 @@ public class DemoServlet extends HttpServlet {
         this.controller.setUpdatedOn(updatedOn);
 
         RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/WEB-INF/demo.jsp");
-        req.setAttribute("pullRequests", this.controller.loadPullRequests());
-        req.setAttribute("formurl", req.getRequestURI());
-        req.setAttribute("repo", fullRepoName);
-        req.setAttribute("updatedOn", DateHelper.formatDate(updatedOn));
+
+        PullRequestsView view = new PullRequestsView();
+        view.setFormUrl(req.getRequestURI());
+        view.setRepo(fullRepoName);
+        view.setPullRequests(this.controller.loadPullRequests());
+        view.setUpdatedOn(DateHelper.formatDate(updatedOn));
+        req.setAttribute("view", view);
         requestDispatcher.forward(req, resp);
     }
 

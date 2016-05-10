@@ -9,12 +9,12 @@
 <body>
 <h1>Pull Requests Overview</h1>
 
-<form method="POST" action="${formurl}">
+<form method="POST" action="${view.formUrl}">
     <label for="repo">Repository</label>
-    <input id="repo" name="repo" value="${repo}" />
+    <input id="repo" name="repo" value="${view.repo}" />
 
     <label for="updatedOn">Updated On</label>
-    <input id="updatedOn" name="updatedOn" value="${updatedOn}" />
+    <input id="updatedOn" name="updatedOn" value="${view.updatedOn}" />
 
     <input type="submit" />
 </form>
@@ -27,9 +27,11 @@
     <th>Created On</th>
     <th>Updated On</th>
     <th>Author</th>
-    <th>Approved By</th>
+    <c:forEach var="number" begin="1" end="${view.maxReviewerCount}">
+        <th>Approved By ${number}</th>
+    </c:forEach>
 </tr>
-<c:forEach var="pr" items="${pullRequests}">
+<c:forEach var="pr" items="${view.pullRequests}">
     <tr>
         <td>${pr.id}</td>
         <td>${fn:escapeXml(pr.description)}</td>
@@ -37,11 +39,11 @@
         <td>${pr.createdOn}</td>
         <td>${pr.updatedOn}</td>
         <td>${pr.author}</td>
-        <td>
-            <c:forEach var="reviewer" items="${pr.reviewers}">
+        <c:forEach var="reviewer" items="${pr.reviewers}">
+            <td>
                 ${reviewer}
-            </c:forEach>
-        </td>
+            </td>
+        </c:forEach>
     </tr>
 </c:forEach>
 </table>
