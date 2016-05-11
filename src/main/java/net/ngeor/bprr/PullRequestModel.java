@@ -2,17 +2,28 @@ package net.ngeor.bprr;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.function.Function;
 
 public class PullRequestModel {
-    private final int id;
-    private final String description;
-    private final String state;
-    private final String author;
-    private final String[] reviewers;
-    private final Date createdOn;
-    private final Date updatedOn;
+    private int id;
+    private String description;
+    private String state;
+    private String author;
+    private String authorTeam;
+    private String[] reviewers;
+    private String[] reviewerTeams;
+    private Date createdOn;
+    private Date updatedOn;
 
     // TODO add closed_by
+
+    public PullRequestModel() {
+
+    }
+
+    public PullRequestModel(int id) {
+        this.id = id;
+    }
 
     public PullRequestModel(int id, String description, String state, Date createdOn, Date updatedOn, String author, String... reviewers) {
         this.id = id;
@@ -28,28 +39,72 @@ public class PullRequestModel {
         return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getDescription() {
         return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getState() {
         return state;
     }
 
+    public void setState(String state) {
+        this.state = state;
+    }
+
     public String getAuthor() {
         return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public String getAuthorTeam() {
+        return authorTeam;
+    }
+
+    public void setAuthorTeam(String authorTeam) {
+        this.authorTeam = authorTeam;
     }
 
     public String[] getReviewers() {
         return reviewers;
     }
 
+    public void setReviewers(String[] reviewers) {
+        this.reviewers = reviewers;
+    }
+
+    public String[] getReviewerTeams() {
+        return reviewerTeams;
+    }
+
+    public void setReviewerTeams(String[] reviewerTeams) {
+        this.reviewerTeams = reviewerTeams;
+    }
+
     public Date getCreatedOn() {
         return createdOn;
     }
 
+    public void setCreatedOn(Date createdOn) {
+        this.createdOn = createdOn;
+    }
+
     public Date getUpdatedOn() {
         return updatedOn;
+    }
+
+    public void setUpdatedOn(Date updatedOn) {
+        this.updatedOn = updatedOn;
     }
 
     @Override
@@ -60,33 +115,30 @@ public class PullRequestModel {
         PullRequestModel that = (PullRequestModel) o;
 
         if (id != that.id) return false;
-        if (!description.equals(that.description)) {
-            return false;
-        }
-        if (!state.equals(that.state)) {
-            return false;
-        }
-        if (!createdOn.equals(that.createdOn)) {
-            return false;
-        }
-        if (!updatedOn.equals(that.updatedOn)) {
-            return false;
-        }
+        if (description != null ? !description.equals(that.description) : that.description != null) return false;
+        if (state != null ? !state.equals(that.state) : that.state != null) return false;
         if (author != null ? !author.equals(that.author) : that.author != null) return false;
+        if (authorTeam != null ? !authorTeam.equals(that.authorTeam) : that.authorTeam != null) return false;
         // Probably incorrect - comparing Object[] arrays with Arrays.equals
-        return Arrays.equals(reviewers, that.reviewers);
+        if (!Arrays.equals(reviewers, that.reviewers)) return false;
+        // Probably incorrect - comparing Object[] arrays with Arrays.equals
+        if (!Arrays.equals(reviewerTeams, that.reviewerTeams)) return false;
+        if (createdOn != null ? !createdOn.equals(that.createdOn) : that.createdOn != null) return false;
+        return updatedOn != null ? updatedOn.equals(that.updatedOn) : that.updatedOn == null;
 
     }
 
     @Override
     public int hashCode() {
         int result = id;
-        result = 11 * result + description.hashCode();
-        result = 13 * result + state.hashCode();
-        result = 17 * result + createdOn.hashCode();
-        result = 17 * result + updatedOn.hashCode();
+        result = 31 * result + (description != null ? description.hashCode() : 0);
+        result = 31 * result + (state != null ? state.hashCode() : 0);
         result = 31 * result + (author != null ? author.hashCode() : 0);
+        result = 31 * result + (authorTeam != null ? authorTeam.hashCode() : 0);
         result = 31 * result + Arrays.hashCode(reviewers);
+        result = 31 * result + Arrays.hashCode(reviewerTeams);
+        result = 31 * result + (createdOn != null ? createdOn.hashCode() : 0);
+        result = 31 * result + (updatedOn != null ? updatedOn.hashCode() : 0);
         return result;
     }
 
@@ -94,12 +146,14 @@ public class PullRequestModel {
     public String toString() {
         return "PullRequestModel{" +
                 "id=" + id +
-                ", description=" + description +
-                ", state=" + state +
+                ", description='" + description + '\'' +
+                ", state='" + state + '\'' +
+                ", author='" + author + '\'' +
+                ", authorTeam='" + authorTeam + '\'' +
+                ", reviewers=" + Arrays.toString(reviewers) +
+                ", reviewerTeams=" + Arrays.toString(reviewerTeams) +
                 ", createdOn=" + createdOn +
                 ", updatedOn=" + updatedOn +
-                ", author='" + author + '\'' +
-                ", reviewers=" + Arrays.toString(reviewers) +
                 '}';
     }
 }

@@ -13,6 +13,35 @@ public class PullRequestsView {
 
     public void setPullRequests(PullRequestModel[] pullRequests) {
         this.pullRequests = pullRequests;
+        normalize();
+    }
+
+    private void normalize() {
+        if (pullRequests == null) {
+            return;
+        }
+
+        int maxReviewerCount = getMaxReviewerCount();
+        for (PullRequestModel model : pullRequests) {
+            normalize(model, maxReviewerCount);
+        }
+    }
+
+    private void normalize(PullRequestModel model, int maxReviewerCount) {
+        if (maxReviewerCount <= 0) {
+            return;
+        }
+
+        String[] reviewers = model.getReviewers();
+        if (reviewers.length > maxReviewerCount) {
+            throw new IllegalStateException();
+        }
+
+        if (reviewers.length == maxReviewerCount) {
+            return;
+        }
+
+        model.setReviewers(Arrays.copyOf(reviewers, maxReviewerCount));
     }
 
     public PullRequestModel[] getPullRequests() {
@@ -23,7 +52,10 @@ public class PullRequestsView {
         int result = 0;
         if (pullRequests != null) {
             for (PullRequestModel model : pullRequests) {
-                result = Math.max(result, model.getReviewers().length);
+                String[] reviewers = model.getReviewers();
+                if (reviewers != null) {
+                    result = Math.max(result, reviewers.length);
+                }
             }
         }
 

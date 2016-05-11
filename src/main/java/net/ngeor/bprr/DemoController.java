@@ -97,14 +97,15 @@ class DefaultDemoController implements DemoController {
     }
 
     private PullRequestModel convertToModel(PullRequestResponse pullRequestResponse) {
-        return new PullRequestModel(
-                pullRequestResponse.getId(),
-                pullRequestResponse.getDescription(),
-                pullRequestResponse.getState(),
-                pullRequestResponse.getCreatedOn(),
-                pullRequestResponse.getUpdatedOn(),
-                pullRequestResponse.getAuthor().getUsername(),
-                convertReviewers(pullRequestResponse.getParticipants()));
+        PullRequestModel model = new PullRequestModel();
+        model.setId(pullRequestResponse.getId());
+        model.setDescription(pullRequestResponse.getDescription());
+        model.setState(pullRequestResponse.getState());
+        model.setCreatedOn(pullRequestResponse.getCreatedOn());
+        model.setUpdatedOn(pullRequestResponse.getUpdatedOn());
+        model.setAuthor(pullRequestResponse.getAuthor().getUsername());
+        model.setReviewers(convertReviewers(pullRequestResponse.getParticipants()));
+        return model;
     }
 
     private String[] convertReviewers(Participant[] participants) {

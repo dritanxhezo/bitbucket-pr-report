@@ -22,26 +22,24 @@
 <table>
 <tr>
     <th>Id</th>
-    <th>Description</th>
-    <th>State</th>
-    <th>Created On</th>
-    <th>Updated On</th>
     <th>Author</th>
+    <th>Author Team</th>
     <c:forEach var="number" begin="1" end="${view.maxReviewerCount}">
         <th>Approved By ${number}</th>
+        <th>Approved By Team ${number}</th>
     </c:forEach>
 </tr>
 <c:forEach var="pr" items="${view.pullRequests}">
     <tr>
         <td>${pr.id}</td>
-        <td>${fn:escapeXml(pr.description)}</td>
-        <td>${pr.state}</td>
-        <td>${pr.createdOn}</td>
-        <td>${pr.updatedOn}</td>
         <td>${pr.author}</td>
-        <c:forEach var="reviewer" items="${pr.reviewers}">
+        <td>${pr.authorTeam}</td>
+        <c:forEach var="number" begin="0" end="${view.maxReviewerCount - 1}">
             <td>
-                ${reviewer}
+                ${pr.reviewers[number]}
+            </td>
+            <td>
+                ${pr.reviewerTeams[number]}
             </td>
         </c:forEach>
     </tr>

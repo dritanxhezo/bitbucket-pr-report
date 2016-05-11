@@ -30,6 +30,7 @@ public class DemoServletTest {
     private DemoController demoController;
     private BitbucketClientFactory bitbucketClientFactory;
     private BitbucketClient bitbucketClient;
+    private TeamMapper teamMapper;
 
     @Before
     public void before() {
@@ -41,6 +42,7 @@ public class DemoServletTest {
         demoController = mock(DemoController.class);
         bitbucketClientFactory = mock(BitbucketClientFactory.class);
         bitbucketClient = mock(BitbucketClient.class);
+        teamMapper = mock(TeamMapper.class);
 
         when(servletConfig.getServletContext()).thenReturn(servletContext);
         when(servletContext.getRequestDispatcher("/WEB-INF/demo.jsp")).thenReturn(requestDispatcher);
@@ -51,7 +53,7 @@ public class DemoServletTest {
     public void shouldUseController() throws ServletException, IOException {
         // arrange
         PullRequestModel pullRequests[] = new PullRequestModel[] {
-            new PullRequestModel(123, "description", "open", new Date(), new Date(), "author", "reviewer1", "reviewer2")
+            new PullRequestModel(123)
         };
 
         when(req.getParameter("repo")).thenReturn("ngeor/myproject");
@@ -59,7 +61,7 @@ public class DemoServletTest {
         when(demoController.loadPullRequests()).thenReturn(pullRequests);
 
         // act
-        DemoServlet servlet = new DemoServlet(demoController, bitbucketClientFactory);
+        DemoServlet servlet = new DemoServlet(demoController, bitbucketClientFactory, teamMapper);
         servlet.init(servletConfig);
         servlet.doGet(req, resp);
 
@@ -77,12 +79,34 @@ public class DemoServletTest {
     }
 
     @Test
+    public void shouldUseTeamMapper() throws ServletException, IOException {
+        // arrange
+        PullRequestModel pullRequests[] = new PullRequestModel[] {
+                new PullRequestModel(123)
+        };
+
+        pullRequests[0].setAuthor("ngeor");
+
+        when(req.getParameter("repo")).thenReturn("ngeor/myproject");
+        when(req.getParameter("updatedOn")).thenReturn("2016-05-05");
+        when(demoController.loadPullRequests()).thenReturn(pullRequests);
+
+        // act
+        DemoServlet servlet = new DemoServlet(demoController, bitbucketClientFactory, teamMapper);
+        servlet.init(servletConfig);
+        servlet.doGet(req, resp);
+
+        // assert
+        verify(teamMapper).assignTeams(pullRequests[0]);
+    }
+
+    @Test
     public void shouldUseCurrentDateWhenUpdatedOnParameterIsMissing() throws ServletException, IOException {
         // arrange
         when(req.getParameter("updatedOn")).thenReturn("");
 
         // act
-        DemoServlet servlet = new DemoServlet(demoController, bitbucketClientFactory);
+        DemoServlet servlet = new DemoServlet(demoController, bitbucketClientFactory, teamMapper);
         servlet.init(servletConfig);
         servlet.doGet(req, resp);
 
@@ -96,7 +120,7 @@ public class DemoServletTest {
         when(req.getRequestURI()).thenReturn("hello");
 
         // act
-        DemoServlet servlet = new DemoServlet(demoController, bitbucketClientFactory);
+        DemoServlet servlet = new DemoServlet(demoController, bitbucketClientFactory, teamMapper);
         servlet.init(servletConfig);
         servlet.doGet(req, resp);
 
@@ -113,7 +137,7 @@ public class DemoServletTest {
         when(req.getParameter("repo")).thenReturn("hello/abc");
 
         // act
-        DemoServlet servlet = new DemoServlet(demoController, bitbucketClientFactory);
+        DemoServlet servlet = new DemoServlet(demoController, bitbucketClientFactory, teamMapper);
         servlet.init(servletConfig);
         servlet.doGet(req, resp);
 
@@ -130,7 +154,7 @@ public class DemoServletTest {
         when(req.getParameter("updatedOn")).thenReturn("2016-05-01");
 
         // act
-        DemoServlet servlet = new DemoServlet(demoController, bitbucketClientFactory);
+        DemoServlet servlet = new DemoServlet(demoController, bitbucketClientFactory, teamMapper);
         servlet.init(servletConfig);
         servlet.doGet(req, resp);
 
@@ -147,7 +171,7 @@ public class DemoServletTest {
         when(req.getParameter("updatedOn")).thenReturn(null);
 
         // act
-        DemoServlet servlet = new DemoServlet(demoController, bitbucketClientFactory);
+        DemoServlet servlet = new DemoServlet(demoController, bitbucketClientFactory, teamMapper);
         servlet.init(servletConfig);
         servlet.doGet(req, resp);
 

@@ -15,16 +15,18 @@ import java.util.Date;
 public class DemoServlet extends HttpServlet {
     private final DemoController controller;
     private final BitbucketClientFactory bitbucketClientFactory;
+    private final TeamMapper teamMapper;
 
     public DemoServlet()
     {
-        this(new DefaultDemoController(), new DefaultBitbucketClientFactory());
+        this(new DefaultDemoController(), new DefaultBitbucketClientFactory(), new DefaultTeamMapper());
     }
 
-    public DemoServlet(DemoController controller, BitbucketClientFactory bitbucketClientFactory) {
+    public DemoServlet(DemoController controller, BitbucketClientFactory bitbucketClientFactory, TeamMapper teamMapper) {
         super();
         this.controller = controller;
         this.bitbucketClientFactory = bitbucketClientFactory;
+        this.teamMapper = teamMapper;
     }
 
     @Override
@@ -47,14 +49,21 @@ public class DemoServlet extends HttpServlet {
 
         this.controller.setUpdatedOn(updatedOn);
 
-        RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/WEB-INF/demo.jsp");
+        PullRequestModel[] pullRequests = this.controller.loadPullRequests();
+        if (pullRequests != null) {
+            for (PullRequestModel pullRequestModel : pullRequests) {
+                this.teamMapper.assignTeams(pullRequestModel);
+            }
+        }
 
         PullRequestsView view = new PullRequestsView();
         view.setFormUrl(req.getRequestURI());
         view.setRepo(fullRepoName);
-        view.setPullRequests(this.controller.loadPullRequests());
+        view.setPullRequests(pullRequests);
         view.setUpdatedOn(DateHelper.formatDate(updatedOn));
         req.setAttribute("view", view);
+
+        RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/WEB-INF/demo.jsp");
         requestDispatcher.forward(req, resp);
     }
 
