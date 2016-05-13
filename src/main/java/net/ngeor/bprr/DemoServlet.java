@@ -51,6 +51,8 @@ public class DemoServlet extends HttpServlet {
 
         PullRequestModel[] pullRequests = this.controller.loadPullRequests();
         if (pullRequests != null) {
+            this.teamMapper.loadFromProperties();
+
             for (PullRequestModel pullRequestModel : pullRequests) {
                 this.teamMapper.assignTeams(pullRequestModel);
             }

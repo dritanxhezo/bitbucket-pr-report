@@ -46,5 +46,24 @@
 </c:forEach>
 </table>
 
+<h2>Pull Requests Per Team</h2>
+<table>
+    <tr>
+        <th>Team</th>
+        <th>Pull Requests Created</th>
+        <th>Pull Requests Reviewed</th>
+    </tr>
+
+    <c:forEach var="stat" items="${view.statistics}">
+
+        <tr>
+            <td>${stat.name}</td>
+            <td>${stat.created}</td>
+            <td>${stat.reviewed}</td>
+        </tr>
+
+    </c:forEach>
+</table>
+
 </body>
 </html>

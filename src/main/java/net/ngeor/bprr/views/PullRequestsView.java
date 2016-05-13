@@ -2,8 +2,10 @@ package net.ngeor.bprr.views;
 
 import net.ngeor.bprr.PullRequestModel;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 public class PullRequestsView {
     private PullRequestModel[] pullRequests;
@@ -46,6 +48,51 @@ public class PullRequestsView {
 
     public PullRequestModel[] getPullRequests() {
         return pullRequests;
+    }
+
+    public Statistics[] getStatistics() {
+        List<Statistics> result = new ArrayList<>();
+
+        if (pullRequests != null) {
+            for (PullRequestModel model : pullRequests) {
+                String authorTeam = model.getAuthorTeam();
+                increaseAuthors(result, authorTeam);
+
+                for (String reviewerTeam : model.getReviewerTeams()) {
+                    increaseReviewers(result, reviewerTeam);
+                }
+            }
+        }
+
+        return result.toArray(new Statistics[result.size()]);
+    }
+
+    private void increaseReviewers(List<Statistics> result, String reviewerTeam) {
+        Statistics statistic = findOrCreate(result, reviewerTeam);
+        statistic.setReviewed(1 + statistic.getReviewed());
+    }
+
+    private void increaseAuthors(List<Statistics> result, String authorTeam) {
+        Statistics statistic = findOrCreate(result, authorTeam);
+        statistic.setCreated(1 + statistic.getCreated());
+    }
+
+    private Statistics findOrCreate(List<Statistics> items, String team) {
+        Statistics result = null;
+        for (int i = 0; i < items.size(); i++) {
+            if (items.get(i).getName().equals(team)) {
+                result = items.get(i);
+                break;
+            }
+        }
+
+        if (result == null) {
+            result = new Statistics();
+            result.setName(team);
+            items.add(result);
+        }
+
+        return result;
     }
 
     public int getMaxReviewerCount() {
@@ -108,5 +155,35 @@ public class PullRequestsView {
         result = 31 * result + (repo != null ? repo.hashCode() : 0);
         result = 31 * result + (updatedOn != null ? updatedOn.hashCode() : 0);
         return result;
+    }
+
+    public static class Statistics {
+        private String name;
+        private int created;
+        private int reviewed;
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public int getCreated() {
+            return created;
+        }
+
+        public void setCreated(int created) {
+            this.created = created;
+        }
+
+        public int getReviewed() {
+            return reviewed;
+        }
+
+        public void setReviewed(int reviewed) {
+            this.reviewed = reviewed;
+        }
     }
 }
