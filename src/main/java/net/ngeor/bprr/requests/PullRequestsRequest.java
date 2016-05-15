@@ -1,5 +1,6 @@
 package net.ngeor.bprr.requests;
 
+import net.ngeor.util.DateRange;
 import net.ngeor.util.URLQueryWriter;
 import net.ngeor.util.URLStringBuilder;
 import org.jetbrains.annotations.NotNull;
@@ -11,9 +12,9 @@ public class PullRequestsRequest {
     private final String owner;
     private final String repositorySlug;
     private final State state;
-    private final Date updatedOn;
+    private final DateRange updatedOn;
 
-    public PullRequestsRequest(@NotNull String owner, @NotNull String repositorySlug, State state, Date updatedOn) {
+    public PullRequestsRequest(@NotNull String owner, @NotNull String repositorySlug, State state, DateRange updatedOn) {
         this.owner = owner;
         this.repositorySlug = repositorySlug;
         this.state = state;
@@ -28,7 +29,7 @@ public class PullRequestsRequest {
         this(owner, repositorySlug, state, null);
     }
 
-    public PullRequestsRequest(@NotNull String owner, @NotNull String repositorySlug, Date updatedOn) {
+    public PullRequestsRequest(@NotNull String owner, @NotNull String repositorySlug, DateRange updatedOn) {
         this(owner, repositorySlug, null, updatedOn);
     }
 
@@ -51,7 +52,13 @@ public class PullRequestsRequest {
             }
 
             if (updatedOn != null) {
-                urlQueryWriter.write("updated_on", ">=", formatDate(updatedOn));
+                if (updatedOn.getFrom() != null) {
+                    urlQueryWriter.write("updated_on", ">=", formatDate(updatedOn.getFrom()));
+                }
+
+                if (updatedOn.getUntil() != null) {
+                    urlQueryWriter.write("updated_on", "<", formatDate(updatedOn.getUntil()));
+                }
             }
         }
 

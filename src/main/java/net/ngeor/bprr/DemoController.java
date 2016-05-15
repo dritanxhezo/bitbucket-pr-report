@@ -5,6 +5,7 @@ import net.ngeor.bprr.requests.PullRequestsRequest;
 import net.ngeor.bprr.serialization.Participant;
 import net.ngeor.bprr.serialization.PullRequestResponse;
 import net.ngeor.bprr.serialization.PullRequestsResponse;
+import net.ngeor.util.DateRange;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,14 +18,14 @@ public interface DemoController {
     void setBitbucketClient(BitbucketClient bitbucketClient);
     void setUsername(String username);
     void setRepository(String repository);
-    void setUpdatedOn(Date updatedOn);
+    void setUpdatedOn(DateRange updatedOn);
 }
 
 class DefaultDemoController implements DemoController {
     private String username;
     private String repository;
     private BitbucketClient bitbucketClient;
-    private Date updatedOn;
+    private DateRange updatedOn;
 
     @Override
     public void setUsername(String username) {
@@ -42,7 +43,7 @@ class DefaultDemoController implements DemoController {
     }
 
     @Override
-    public void setUpdatedOn(Date updatedOn) {
+    public void setUpdatedOn(DateRange updatedOn) {
         this.updatedOn = updatedOn;
     }
 

@@ -13,8 +13,11 @@
     <label for="repo">Repository</label>
     <input id="repo" name="repo" value="${view.repo}" />
 
-    <label for="updatedOn">Updated On</label>
-    <input id="updatedOn" name="updatedOn" value="${view.updatedOn}" />
+    <label for="updatedOnFrom">Updated On From</label>
+    <input id="updatedOnFrom" name="updatedOnFrom" value="${view.updatedOnFrom}" />
+
+    <label for="updatedOnUntil">Updated On Until</label>
+    <input id="updatedOnUntil" name="updatedOnUntil" value="${view.updatedOnUntil}" />
 
     <input type="submit" />
 </form>

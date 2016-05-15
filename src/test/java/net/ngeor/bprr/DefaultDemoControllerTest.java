@@ -6,6 +6,7 @@ import net.ngeor.bprr.serialization.PullRequestResponse;
 import net.ngeor.bprr.serialization.PullRequestsResponse;
 import net.ngeor.testutil.TestData;
 import net.ngeor.util.DateHelper;
+import net.ngeor.util.DateRange;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -31,7 +32,7 @@ public class DefaultDemoControllerTest {
         };
 
         BitbucketClient client = mock(BitbucketClient.class);
-        when(client.execute(new PullRequestsRequest("currentUser", "repo", PullRequestsRequest.State.Merged, DateHelper.utcDate(2016, 5, 5)), PullRequestsResponse.class))
+        when(client.execute(new PullRequestsRequest("currentUser", "repo", PullRequestsRequest.State.Merged, new DateRange(DateHelper.utcDate(2016, 5, 5), null)), PullRequestsResponse.class))
                 .thenReturn(pullRequestsResponse);
         when(client.execute(new PullRequestRequest("currentUser", "repo", 1), PullRequestResponse.class))
                 .thenReturn(firstWithParticipants);
@@ -41,7 +42,7 @@ public class DefaultDemoControllerTest {
         DefaultDemoController controller = new DefaultDemoController();
         controller.setUsername("currentUser");
         controller.setRepository("repo");
-        controller.setUpdatedOn(DateHelper.utcDate(2016, 5, 5));
+        controller.setUpdatedOn(new DateRange(DateHelper.utcDate(2016, 5, 5), null));
         controller.setBitbucketClient(client);
 
         // act
@@ -69,7 +70,7 @@ public class DefaultDemoControllerTest {
         };
 
         BitbucketClient client = mock(BitbucketClient.class);
-        when(client.execute(new PullRequestsRequest("currentUser", "repo", PullRequestsRequest.State.Merged, DateHelper.utcDate(2016, 5, 4)), PullRequestsResponse.class))
+        when(client.execute(new PullRequestsRequest("currentUser", "repo", PullRequestsRequest.State.Merged, new DateRange(null, DateHelper.utcDate(2016, 5, 4))), PullRequestsResponse.class))
                 .thenReturn(firstPullRequestsResponse);
         when(client.execute("https://api.bitbucket.org/2.0/pullrequests/2", PullRequestsResponse.class))
                 .thenReturn(secondPullRequestsResponse);
@@ -81,7 +82,7 @@ public class DefaultDemoControllerTest {
         DefaultDemoController controller = new DefaultDemoController();
         controller.setUsername("currentUser");
         controller.setRepository("repo");
-        controller.setUpdatedOn(DateHelper.utcDate(2016, 5, 4));
+        controller.setUpdatedOn(new DateRange(null, DateHelper.utcDate(2016, 5, 4)));
         controller.setBitbucketClient(client);
 
         // act

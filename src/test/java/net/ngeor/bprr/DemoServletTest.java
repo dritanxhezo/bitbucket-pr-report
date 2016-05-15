@@ -2,11 +2,10 @@ package net.ngeor.bprr;
 
 import net.ngeor.bprr.views.PullRequestsView;
 import net.ngeor.util.DateHelper;
-import org.hamcrest.Matcher;
+import net.ngeor.util.DateRange;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Matchers;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
@@ -15,7 +14,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Date;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -57,7 +55,7 @@ public class DemoServletTest {
         };
 
         when(req.getParameter("repo")).thenReturn("ngeor/myproject");
-        when(req.getParameter("updatedOn")).thenReturn("2016-05-05");
+        when(req.getParameter("updatedOnFrom")).thenReturn("2016-05-05");
         when(demoController.loadPullRequests()).thenReturn(pullRequests);
 
         // act
@@ -69,7 +67,7 @@ public class DemoServletTest {
         verify(requestDispatcher).forward(req, resp);
         verify(demoController).setUsername("ngeor");
         verify(demoController).setRepository("myproject");
-        verify(demoController).setUpdatedOn(DateHelper.utcDate(2016, 5, 5));
+        verify(demoController).setUpdatedOn(new DateRange(DateHelper.utcDate(2016, 5, 5), DateHelper.utcToday()));
         verify(demoController).setBitbucketClient(bitbucketClient);
 
         ArgumentCaptor<PullRequestsView> argument = ArgumentCaptor.forClass(PullRequestsView.class);
@@ -88,7 +86,7 @@ public class DemoServletTest {
         pullRequests[0].setAuthor("ngeor");
 
         when(req.getParameter("repo")).thenReturn("ngeor/myproject");
-        when(req.getParameter("updatedOn")).thenReturn("2016-05-05");
+        when(req.getParameter("updatedOnFrom")).thenReturn("2016-05-05");
         when(demoController.loadPullRequests()).thenReturn(pullRequests);
 
         // act
@@ -103,7 +101,7 @@ public class DemoServletTest {
     @Test
     public void shouldUseCurrentDateWhenUpdatedOnParameterIsMissing() throws ServletException, IOException {
         // arrange
-        when(req.getParameter("updatedOn")).thenReturn("");
+        when(req.getParameter("updatedOnFrom")).thenReturn("");
 
         // act
         DemoServlet servlet = new DemoServlet(demoController, bitbucketClientFactory, teamMapper);
@@ -111,7 +109,22 @@ public class DemoServletTest {
         servlet.doGet(req, resp);
 
         // assert
-        verify(demoController).setUpdatedOn(DateHelper.utcToday());
+        verify(demoController).setUpdatedOn(new DateRange(DateHelper.utcToday(), DateHelper.utcToday()));
+    }
+
+    @Test
+    public void shouldUseUpdatedOnUtil() throws ServletException, IOException {
+        // arrange
+        when(req.getParameter("updatedOnFrom")).thenReturn("2016-05-01");
+        when(req.getParameter("updatedOnUntil")).thenReturn("2016-05-14");
+
+        // act
+        DemoServlet servlet = new DemoServlet(demoController, bitbucketClientFactory, teamMapper);
+        servlet.init(servletConfig);
+        servlet.doGet(req, resp);
+
+        // assert
+        verify(demoController).setUpdatedOn(new DateRange(DateHelper.utcDate(2016, 5, 1), DateHelper.utcDate(2016, 5, 14)));
     }
 
     @Test
@@ -151,7 +164,7 @@ public class DemoServletTest {
     @Test
     public void shouldSetUpdatedOnAttribute() throws ServletException, IOException {
         // arrange
-        when(req.getParameter("updatedOn")).thenReturn("2016-05-01");
+        when(req.getParameter("updatedOnFrom")).thenReturn("2016-05-01");
 
         // act
         DemoServlet servlet = new DemoServlet(demoController, bitbucketClientFactory, teamMapper);
@@ -162,13 +175,13 @@ public class DemoServletTest {
         ArgumentCaptor<PullRequestsView> argument = ArgumentCaptor.forClass(PullRequestsView.class);
         verify(req).setAttribute(eq("view"), argument.capture());
         PullRequestsView view = argument.getValue();
-        assertEquals("2016-05-01", view.getUpdatedOn());
+        assertEquals("2016-05-01", view.getUpdatedOnFrom());
     }
 
     @Test
     public void shouldSetUpdatedOnAttributeWhenParameterIsMissing() throws ServletException, IOException {
         // arrange
-        when(req.getParameter("updatedOn")).thenReturn(null);
+        when(req.getParameter("updatedOnFrom")).thenReturn(null);
 
         // act
         DemoServlet servlet = new DemoServlet(demoController, bitbucketClientFactory, teamMapper);
@@ -179,6 +192,6 @@ public class DemoServletTest {
         ArgumentCaptor<PullRequestsView> argument = ArgumentCaptor.forClass(PullRequestsView.class);
         verify(req).setAttribute(eq("view"), argument.capture());
         PullRequestsView view = argument.getValue();
-        assertEquals(DateHelper.formatDate(DateHelper.utcToday()), view.getUpdatedOn());
+        assertEquals(DateHelper.formatDate(DateHelper.utcToday()), view.getUpdatedOnFrom());
     }
 }

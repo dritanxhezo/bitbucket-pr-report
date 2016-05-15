@@ -4,14 +4,14 @@ import net.ngeor.bprr.PullRequestModel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 public class PullRequestsView {
     private PullRequestModel[] pullRequests;
     private String formUrl;
     private String repo;
-    private String updatedOn;
+    private String updatedOnFrom;
+    private String updatedOnUntil;
 
     public void setPullRequests(PullRequestModel[] pullRequests) {
         this.pullRequests = pullRequests;
@@ -125,12 +125,20 @@ public class PullRequestsView {
         this.repo = repo;
     }
 
-    public String getUpdatedOn() {
-        return updatedOn;
+    public String getUpdatedOnFrom() {
+        return updatedOnFrom;
     }
 
-    public void setUpdatedOn(String updatedOn) {
-        this.updatedOn = updatedOn;
+    public void setUpdatedOnFrom(String updatedOnFrom) {
+        this.updatedOnFrom = updatedOnFrom;
+    }
+
+    public String getUpdatedOnUntil() {
+        return updatedOnUntil;
+    }
+
+    public void setUpdatedOnUntil(String updatedOnUntil) {
+        this.updatedOnUntil = updatedOnUntil;
     }
 
     @Override
@@ -144,7 +152,9 @@ public class PullRequestsView {
         if (!Arrays.equals(pullRequests, that.pullRequests)) return false;
         if (formUrl != null ? !formUrl.equals(that.formUrl) : that.formUrl != null) return false;
         if (repo != null ? !repo.equals(that.repo) : that.repo != null) return false;
-        return updatedOn != null ? updatedOn.equals(that.updatedOn) : that.updatedOn == null;
+        if (updatedOnFrom != null ? !updatedOnFrom.equals(that.updatedOnFrom) : that.updatedOnFrom != null)
+            return false;
+        return updatedOnUntil != null ? updatedOnUntil.equals(that.updatedOnUntil) : that.updatedOnUntil == null;
 
     }
 
@@ -153,7 +163,8 @@ public class PullRequestsView {
         int result = Arrays.hashCode(pullRequests);
         result = 31 * result + (formUrl != null ? formUrl.hashCode() : 0);
         result = 31 * result + (repo != null ? repo.hashCode() : 0);
-        result = 31 * result + (updatedOn != null ? updatedOn.hashCode() : 0);
+        result = 31 * result + (updatedOnFrom != null ? updatedOnFrom.hashCode() : 0);
+        result = 31 * result + (updatedOnUntil != null ? updatedOnUntil.hashCode() : 0);
         return result;
     }
 

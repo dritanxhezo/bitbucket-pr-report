@@ -1,6 +1,7 @@
 package net.ngeor.bprr.requests;
 
 import net.ngeor.util.DateHelper;
+import net.ngeor.util.DateRange;
 import org.junit.Test;
 
 import java.util.Date;
@@ -24,15 +25,31 @@ public class PullRequestsRequestTest {
 
     @Test
     public void shouldFormatUpdatedOn() {
-        Date updatedOn = DateHelper.utcDate(2016, 5, 4);
+        DateRange updatedOn = new DateRange(DateHelper.utcDate(2016, 5, 4), null);
         PullRequestsRequest request = new PullRequestsRequest("ngeor", "bprr", updatedOn);
         String url = request.toString();
         assertEquals("repositories/ngeor/bprr/pullrequests?q=updated_on+%3E%3D+2016-05-04", url);
     }
 
     @Test
+    public void shouldFormatUpdatedOnWithOnlyUntil() {
+        DateRange updatedOn = new DateRange(null, DateHelper.utcDate(2016, 5, 4));
+        PullRequestsRequest request = new PullRequestsRequest("ngeor", "bprr", updatedOn);
+        String url = request.toString();
+        assertEquals("repositories/ngeor/bprr/pullrequests?q=updated_on+%3C+2016-05-04", url);
+    }
+
+    @Test
+    public void shouldFormatUpdatedOnWithBothFromAndUntil() {
+        DateRange updatedOn = new DateRange(DateHelper.utcDate(2016, 5, 1), DateHelper.utcDate(2016, 5, 4));
+        PullRequestsRequest request = new PullRequestsRequest("ngeor", "bprr", updatedOn);
+        String url = request.toString();
+        assertEquals("repositories/ngeor/bprr/pullrequests?q=updated_on+%3E%3D+2016-05-01+AND+updated_on+%3C+2016-05-04", url);
+    }
+
+    @Test
     public void shouldFormatStateAndUpdatedOn() {
-        Date updatedOn = DateHelper.utcDate(2016, 5, 3);
+        DateRange updatedOn = new DateRange(DateHelper.utcDate(2016, 5, 3), null);
         PullRequestsRequest request = new PullRequestsRequest("ngeor", "bprr", PullRequestsRequest.State.Merged, updatedOn);
         String url = request.toString();
         assertEquals("repositories/ngeor/bprr/pullrequests?q=state+%3D+%22MERGED%22+AND+updated_on+%3E%3D+2016-05-03", url);

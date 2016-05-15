@@ -2,6 +2,7 @@ package net.ngeor.bprr;
 
 import net.ngeor.bprr.views.PullRequestsView;
 import net.ngeor.util.DateHelper;
+import net.ngeor.util.DateRange;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -40,14 +41,21 @@ public class DemoServlet extends HttpServlet {
             this.controller.setRepository(parts[1]);
         }
 
-        Date updatedOn;
+        Date updatedOnFrom;
         try {
-            updatedOn = DateHelper.parseUtcDate(req.getParameter("updatedOn"));
+            updatedOnFrom = DateHelper.parseUtcDate(req.getParameter("updatedOnFrom"));
         } catch (ParseException e) {
-            updatedOn = DateHelper.utcToday();
+            updatedOnFrom = DateHelper.utcToday();
         }
 
-        this.controller.setUpdatedOn(updatedOn);
+        Date updatedOnUntil;
+        try {
+            updatedOnUntil = DateHelper.parseUtcDate(req.getParameter("updatedOnUntil"));
+        } catch (ParseException e) {
+            updatedOnUntil = DateHelper.utcToday();
+        }
+
+        this.controller.setUpdatedOn(new DateRange(updatedOnFrom, updatedOnUntil));
 
         PullRequestModel[] pullRequests = this.controller.loadPullRequests();
         if (pullRequests != null) {
@@ -62,7 +70,8 @@ public class DemoServlet extends HttpServlet {
         view.setFormUrl(req.getRequestURI());
         view.setRepo(fullRepoName);
         view.setPullRequests(pullRequests);
-        view.setUpdatedOn(DateHelper.formatDate(updatedOn));
+        view.setUpdatedOnFrom(DateHelper.formatDate(updatedOnFrom));
+        view.setUpdatedOnUntil(DateHelper.formatDate(updatedOnUntil));
         req.setAttribute("view", view);
 
         RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/WEB-INF/demo.jsp");
