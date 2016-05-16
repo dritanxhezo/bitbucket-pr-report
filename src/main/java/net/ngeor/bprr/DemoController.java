@@ -5,20 +5,20 @@ import net.ngeor.bprr.requests.PullRequestsRequest;
 import net.ngeor.bprr.serialization.Participant;
 import net.ngeor.bprr.serialization.PullRequestResponse;
 import net.ngeor.bprr.serialization.PullRequestsResponse;
+import net.ngeor.bprr.views.PullRequestsView;
+import net.ngeor.util.DateHelper;
 import net.ngeor.util.DateRange;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 public interface DemoController {
-    PullRequestModel[] loadPullRequests() throws IOException;
-    void setBitbucketClient(BitbucketClient bitbucketClient);
-    void setUsername(String username);
-    void setRepository(String repository);
-    void setUpdatedOn(DateRange updatedOn);
+    PullRequestsView createView(HttpServletRequest req) throws IOException;
 }
 
 class DefaultDemoController implements DemoController {
@@ -26,29 +26,72 @@ class DefaultDemoController implements DemoController {
     private String repository;
     private BitbucketClient bitbucketClient;
     private DateRange updatedOn;
+    private final BitbucketClientFactory bitbucketClientFactory;
+    private final TeamMapper teamMapper;
+
+    public DefaultDemoController(BitbucketClientFactory bitbucketClientFactory, TeamMapper teamMapper) {
+        this.bitbucketClientFactory = bitbucketClientFactory;
+        this.teamMapper = teamMapper;
+    }
 
     @Override
-    public void setUsername(String username) {
+    public PullRequestsView createView(HttpServletRequest req) throws IOException {
+        BitbucketClient bitbucketClient = bitbucketClientFactory.createClient(req);
+        this.bitbucketClient = bitbucketClient;
+        String fullRepoName = req.getParameter("repo");
+        if (fullRepoName != null) {
+            String[] parts = fullRepoName.split("\\/");
+            this.setUsername(parts[0]);
+            this.setRepository(parts[1]);
+        }
+
+        Date updatedOnFrom;
+        try {
+            updatedOnFrom = DateHelper.parseUtcDate(req.getParameter("updatedOnFrom"));
+        } catch (ParseException e) {
+            updatedOnFrom = DateHelper.utcToday();
+        }
+
+        Date updatedOnUntil;
+        try {
+            updatedOnUntil = DateHelper.parseUtcDate(req.getParameter("updatedOnUntil"));
+        } catch (ParseException e) {
+            updatedOnUntil = DateHelper.utcToday();
+        }
+
+        this.setUpdatedOn(new DateRange(updatedOnFrom, updatedOnUntil));
+
+        PullRequestModel[] pullRequests = this.loadPullRequests();
+        if (pullRequests != null) {
+            this.teamMapper.loadFromProperties();
+
+            for (PullRequestModel pullRequestModel : pullRequests) {
+                this.teamMapper.assignTeams(pullRequestModel);
+            }
+        }
+
+        PullRequestsView view = new PullRequestsView();
+        view.setFormUrl(req.getRequestURI());
+        view.setRepo(fullRepoName);
+        view.setPullRequests(pullRequests);
+        view.setUpdatedOnFrom(DateHelper.formatDate(updatedOnFrom));
+        view.setUpdatedOnUntil(DateHelper.formatDate(updatedOnUntil));
+        return view;
+    }
+
+    private void setUsername(String username) {
         this.username = username;
     }
 
-    @Override
-    public void setRepository(String repository) {
+    private void setRepository(String repository) {
         this.repository = repository;
     }
 
-    @Override
-    public void setBitbucketClient(BitbucketClient bitbucketClient) {
-        this.bitbucketClient = bitbucketClient;
-    }
-
-    @Override
-    public void setUpdatedOn(DateRange updatedOn) {
+    private void setUpdatedOn(DateRange updatedOn) {
         this.updatedOn = updatedOn;
     }
 
-    @Override
-    public PullRequestModel[] loadPullRequests() throws IOException {
+    private PullRequestModel[] loadPullRequests() throws IOException {
         // collect models here
         List<PullRequestModel> result = new ArrayList<>();
 

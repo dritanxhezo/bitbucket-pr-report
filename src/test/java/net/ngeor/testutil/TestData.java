@@ -1,7 +1,6 @@
 package net.ngeor.testutil;
 
 import com.google.gson.Gson;
-import org.mockito.internal.matchers.Null;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;

@@ -4,8 +4,6 @@ import net.ngeor.util.DateHelper;
 import net.ngeor.util.DateRange;
 import org.junit.Test;
 
-import java.util.Date;
-
 import static org.junit.Assert.assertEquals;
 
 public class PullRequestsRequestTest {

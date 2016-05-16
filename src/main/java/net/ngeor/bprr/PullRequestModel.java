@@ -2,7 +2,6 @@ package net.ngeor.bprr;
 
 import java.util.Arrays;
 import java.util.Date;
-import java.util.function.Function;
 
 public class PullRequestModel {
     private int id;

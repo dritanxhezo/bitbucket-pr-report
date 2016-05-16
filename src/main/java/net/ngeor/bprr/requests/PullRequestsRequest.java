@@ -15,6 +15,14 @@ public class PullRequestsRequest {
     private final DateRange updatedOn;
 
     public PullRequestsRequest(@NotNull String owner, @NotNull String repositorySlug, State state, DateRange updatedOn) {
+        if (owner == null || owner.isEmpty()) {
+            throw new IllegalArgumentException("owner cannot be null");
+        }
+
+        if (repositorySlug == null || repositorySlug.isEmpty()) {
+            throw new IllegalArgumentException("repositorySlug cannot be null");
+        }
+
         this.owner = owner;
         this.repositorySlug = repositorySlug;
         this.state = state;
