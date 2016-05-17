@@ -8,7 +8,9 @@ import java.util.Properties;
 
 public interface TeamMapper {
     void assignTeams(PullRequestModel model);
+
     void put(String user, String team);
+
     void loadFromProperties() throws IOException;
 }
 
@@ -21,9 +23,9 @@ class DefaultTeamMapper implements TeamMapper {
         String[] reviewers = model.getReviewers();
         if (reviewers != null) {
             model.setReviewerTeams(
-                Arrays.stream(reviewers)
-                        .map(u -> mapAuthor(u))
-                        .toArray(String[]::new));
+                    Arrays.stream(reviewers)
+                            .map(u -> mapAuthor(u))
+                            .toArray(String[]::new));
         }
     }
 

@@ -39,5 +39,7 @@ public class PullRequestResponse {
         return created_on;
     }
 
-    public Date getUpdatedOn() { return updated_on; }
+    public Date getUpdatedOn() {
+        return updated_on;
+    }
 }

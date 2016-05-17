@@ -1,14 +1,15 @@
 {
   "pagelen": 1,
-  "values": [{
-    "description": "description 1",
-    "author": {
-      "username": "mfrauenholtz",
-      "display_name": "Michael Frauenholtz"
+  "values": [
+    {
+      "description": "description 1",
+      "author": {
+        "username": "mfrauenholtz",
+        "display_name": "Michael Frauenholtz"
+      },
+      "state": "OPEN",
+      "id": 1
     },
-    "state": "OPEN",
-    "id": 1
-  },
     {
       "description": "description 2",
       "author": {

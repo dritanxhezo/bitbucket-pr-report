@@ -62,7 +62,7 @@ public class DefaultBitbucketClient implements BitbucketClient {
 
     private String createUrl(Object resource) {
         if (isBitbucketUrl(resource)) {
-            return (String)resource;
+            return (String) resource;
         }
 
         StringBuilder result = new StringBuilder();
@@ -75,18 +75,18 @@ public class DefaultBitbucketClient implements BitbucketClient {
     }
 
     private boolean isBitbucketUrl(Object resource) {
-        if (!(resource instanceof  String)) {
+        if (!(resource instanceof String)) {
             return false;
         }
 
-        String url = (String)resource;
+        String url = (String) resource;
         return url.startsWith("https://api.bitbucket.org/2.0/");
     }
 
     private void safeClose(Object x) {
         if (x instanceof Closeable) {
             try {
-                ((Closeable)x).close();
+                ((Closeable) x).close();
             } catch (IOException e) {
             }
         }

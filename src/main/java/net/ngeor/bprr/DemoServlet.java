@@ -10,8 +10,7 @@ import java.io.IOException;
 public class DemoServlet extends HttpServlet {
     private final DemoController controller;
 
-    public DemoServlet()
-    {
+    public DemoServlet() {
         this(Factory.Instance.demoController());
     }
 

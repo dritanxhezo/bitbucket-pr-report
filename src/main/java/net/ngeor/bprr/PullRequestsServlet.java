@@ -15,7 +15,7 @@ import java.io.IOException;
 public class PullRequestsServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String accessToken = (String)req.getSession().getAttribute("accessToken");
+        String accessToken = (String) req.getSession().getAttribute("accessToken");
         RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/WEB-INF/pull-requests.jsp");
         int id;
         try {

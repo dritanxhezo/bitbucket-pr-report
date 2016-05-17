@@ -10,6 +10,6 @@ public class OAuthHelper {
     }
 
     public String getAccessToken() {
-        return (String)this.request.getSession().getAttribute("accessToken");
+        return (String) this.request.getSession().getAttribute("accessToken");
     }
 }

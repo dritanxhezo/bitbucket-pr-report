@@ -71,7 +71,7 @@ public class DefaultDemoControllerTest {
 
         Date dt1 = DateHelper.utcDate(2010, 6, 1);
         Date dt2 = DateHelper.utcDate(2011, 7, 2);
-        PullRequestModel[] expectedPullRequestModels = new PullRequestModel[] {
+        PullRequestModel[] expectedPullRequestModels = new PullRequestModel[]{
                 new PullRequestModel(1, "description 1", "OPEN", dt1, dt1, "mfrauenholtz", null, null),
                 new PullRequestModel(2, "description 2", "OPEN", dt2, dt2, "ngeor", "ngeor", "reviewer 1")
         };
@@ -100,7 +100,7 @@ public class DefaultDemoControllerTest {
 
         Date dt1 = DateHelper.utcDate(2010, 6, 1);
         Date dt2 = DateHelper.utcDate(2011, 7, 2);
-        PullRequestModel[] expectedPullRequestModels = new PullRequestModel[] {
+        PullRequestModel[] expectedPullRequestModels = new PullRequestModel[]{
                 new PullRequestModel(1, "description 1", "OPEN", dt1, dt1, "mfrauenholtz", null, null),
                 new PullRequestModel(2, "description 2", "OPEN", dt2, dt2, "ngeor", "ngeor", "reviewer 1"),
                 new PullRequestModel(1, "description 1", "OPEN", dt1, dt1, "mfrauenholtz", null, null),

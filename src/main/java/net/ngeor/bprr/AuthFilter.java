@@ -35,13 +35,13 @@ public class AuthFilter implements Filter {
             return false;
         }
 
-        HttpServletRequest request = (HttpServletRequest)servletRequest;
+        HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpSession session = request.getSession();
         if (session == null) {
             return false;
         }
 
-        String accessToken = (String)session.getAttribute("accessToken");
+        String accessToken = (String) session.getAttribute("accessToken");
         if (accessToken != null && !accessToken.isEmpty()) {
             return false;
         }
