@@ -22,11 +22,17 @@ class DefaultTeamMapper implements TeamMapper {
         model.setAuthorTeam(mapAuthor(model.getAuthor()));
         String[] reviewers = model.getReviewers();
         if (reviewers != null) {
-            model.setReviewerTeams(
-                    Arrays.stream(reviewers)
-                            .map(u -> mapAuthor(u))
-                            .toArray(String[]::new));
+            model.setReviewerTeams(mapAuthors(reviewers));
         }
+    }
+
+    private String[] mapAuthors(String... reviewers) {
+        String[] result = new String[reviewers.length];
+        for (int i = 0; i < result.length; i++) {
+            result[i] = mapAuthor(reviewers[i]);
+        }
+
+        return result;
     }
 
     @Override

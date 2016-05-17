@@ -76,7 +76,7 @@ public class DefaultBitbucketClientTest {
             Date createdOn = response.getValues()[0].getCreatedOn();
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
-            calendar.set(2013, 10 /* zero based month index */, 05, 23, 59, 26);
+            calendar.set(2013, Calendar.NOVEMBER, 05, 23, 59, 26);
             calendar.set(Calendar.MILLISECOND, 480);
             Date expected = calendar.getTime();
             assertEquals(expected, createdOn);
@@ -126,12 +126,17 @@ public class DefaultBitbucketClientTest {
     private static HttpClientFactory setupHttpClientFactory(InputStream responseStream, URI expectedURI) throws IOException {
         assertNotNull("null response stream!", responseStream);
         HttpEntity httpEntity = mock(HttpEntity.class);
-        HttpClient httpClient = mock(HttpClient.class);
+        final HttpClient httpClient = mock(HttpClient.class);
         HttpResponse httpResponse = mock(HttpResponse.class);
         when(httpResponse.getEntity()).thenReturn(httpEntity);
         when(httpEntity.getContent()).thenReturn(responseStream);
         when(httpClient.execute(matchHttpGet(expectedURI))).thenReturn(httpResponse);
-        HttpClientFactory httpClientFactory = () -> httpClient;
+        HttpClientFactory httpClientFactory = new HttpClientFactory() {
+            @Override
+            public HttpClient create() {
+                return httpClient;
+            }
+        };
         return httpClientFactory;
     }
 

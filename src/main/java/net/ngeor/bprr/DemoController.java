@@ -133,11 +133,20 @@ class DefaultDemoController implements DemoController {
             throw new IllegalArgumentException("pullRequestsResponse.values cannot be null");
         }
 
-        int[] ids = Arrays.stream(values).mapToInt(v -> v.getId()).toArray();
+        int[] ids = getPullRequestIds(values);
         for (int id : ids) {
             PullRequestResponse pullRequestResponse = bitbucketClient.execute(new PullRequestRequest(username, repository, id), PullRequestResponse.class);
             models.add(convertToModel(pullRequestResponse));
         }
+    }
+
+    private static int[] getPullRequestIds(PullRequestResponse... values) {
+        int[] result = new int[values.length];
+        for (int i = 0; i < result.length; i++) {
+            result[i] = values[i].getId();
+        }
+
+        return result;
     }
 
     private PullRequestModel convertToModel(PullRequestResponse pullRequestResponse) {
@@ -153,9 +162,14 @@ class DefaultDemoController implements DemoController {
     }
 
     private String[] convertReviewers(Participant[] participants) {
-        return Arrays.stream(participants)
-                .filter(p -> p.isApproved())
-                .map(p -> p.getUser().getUsername())
-                .toArray(String[]::new);
+        List<String> result = new ArrayList<>();
+        for (int i = 0; i < participants.length; i++) {
+            Participant p = participants[i];
+            if (p.isApproved()) {
+                result.add(p.getUser().getUsername());
+            }
+        }
+
+        return result.toArray(new String[result.size()]);
     }
 }
