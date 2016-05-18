@@ -8,28 +8,24 @@ import net.ngeor.bprr.serialization.PullRequestsResponse;
 import net.ngeor.bprr.views.PullRequestsView;
 import net.ngeor.util.DateHelper;
 import net.ngeor.util.DateRange;
+import org.jetbrains.annotations.NotNull;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-public interface DemoController {
+interface DemoController {
     PullRequestsView createView(HttpServletRequest req) throws IOException;
 }
 
 class DefaultDemoController implements DemoController {
-    private String username;
-    private String repository;
-    private BitbucketClient bitbucketClient;
-    private DateRange updatedOn;
     private final BitbucketClientFactory bitbucketClientFactory;
     private final TeamMapper teamMapper;
 
-    public DefaultDemoController(BitbucketClientFactory bitbucketClientFactory, TeamMapper teamMapper) {
+    DefaultDemoController(BitbucketClientFactory bitbucketClientFactory, TeamMapper teamMapper) {
         this.bitbucketClientFactory = bitbucketClientFactory;
         this.teamMapper = teamMapper;
     }
@@ -37,12 +33,13 @@ class DefaultDemoController implements DemoController {
     @Override
     public PullRequestsView createView(HttpServletRequest req) throws IOException {
         BitbucketClient bitbucketClient = bitbucketClientFactory.createClient(req);
-        this.bitbucketClient = bitbucketClient;
         String fullRepoName = req.getParameter("repo");
+        String username = null;
+        String repository = null;
         if (fullRepoName != null) {
-            String[] parts = fullRepoName.split("\\/");
-            this.setUsername(parts[0]);
-            this.setRepository(parts[1]);
+            String[] parts = fullRepoName.split("/");
+            username = parts[0];
+            repository = parts[1];
         }
 
         Date updatedOnFrom;
@@ -59,15 +56,13 @@ class DefaultDemoController implements DemoController {
             updatedOnUntil = DateHelper.utcToday();
         }
 
-        this.setUpdatedOn(new DateRange(updatedOnFrom, updatedOnUntil));
+        DateRange updatedOn = new DateRange(updatedOnFrom, updatedOnUntil);
 
-        PullRequestModel[] pullRequests = this.loadPullRequests();
-        if (pullRequests != null) {
-            this.teamMapper.loadFromProperties();
+        PullRequestModel[] pullRequests = this.loadPullRequests(bitbucketClient, username, repository, updatedOn);
+        this.teamMapper.loadFromProperties();
 
-            for (PullRequestModel pullRequestModel : pullRequests) {
-                this.teamMapper.assignTeams(pullRequestModel);
-            }
+        for (PullRequestModel pullRequestModel : pullRequests) {
+            this.teamMapper.assignTeams(pullRequestModel);
         }
 
         PullRequestsView view = new PullRequestsView();
@@ -79,19 +74,8 @@ class DefaultDemoController implements DemoController {
         return view;
     }
 
-    private void setUsername(String username) {
-        this.username = username;
-    }
-
-    private void setRepository(String repository) {
-        this.repository = repository;
-    }
-
-    private void setUpdatedOn(DateRange updatedOn) {
-        this.updatedOn = updatedOn;
-    }
-
-    private PullRequestModel[] loadPullRequests() throws IOException {
+    @NotNull
+    private PullRequestModel[] loadPullRequests(BitbucketClient bitbucketClient, String username, String repository, DateRange updatedOn) throws IOException {
         // collect models here
         List<PullRequestModel> result = new ArrayList<>();
 
@@ -102,28 +86,24 @@ class DefaultDemoController implements DemoController {
         PullRequestsRequest request = new PullRequestsRequest(username, repository, PullRequestsRequest.State.Merged, updatedOn);
         PullRequestsResponse pullRequestsResponse = bitbucketClient.execute(request, PullRequestsResponse.class);
 
-        int pages = 0;
-
         do {
             // store the results as models
-            collectPullRequestModels(pullRequestsResponse, result);
+            collectPullRequestModels(bitbucketClient, username, repository, pullRequestsResponse, result);
 
             // get the URL to the next page
             String next = pullRequestsResponse.getNext();
 
-            // TODO: stop if target date is reached otherwise it will fetch a lot of data
-            fetchMorePages = next != null && !next.isEmpty() && pages < 6;
+            fetchMorePages = next != null && !next.isEmpty();
 
             if (fetchMorePages) {
                 pullRequestsResponse = bitbucketClient.execute(next, PullRequestsResponse.class);
-                pages++;
             }
         } while (fetchMorePages);
 
         return result.toArray(new PullRequestModel[result.size()]);
     }
 
-    private void collectPullRequestModels(PullRequestsResponse pullRequestsResponse, List<PullRequestModel> models) throws IOException {
+    private void collectPullRequestModels(BitbucketClient bitbucketClient, String username, String repository, PullRequestsResponse pullRequestsResponse, List<PullRequestModel> models) throws IOException {
         if (pullRequestsResponse == null) {
             throw new IllegalArgumentException("pullRequestsResponse cannot be null");
         }
@@ -163,8 +143,7 @@ class DefaultDemoController implements DemoController {
 
     private String[] convertReviewers(Participant[] participants) {
         List<String> result = new ArrayList<>();
-        for (int i = 0; i < participants.length; i++) {
-            Participant p = participants[i];
+        for (Participant p : participants) {
             if (p.isApproved()) {
                 result.add(p.getUser().getUsername());
             }

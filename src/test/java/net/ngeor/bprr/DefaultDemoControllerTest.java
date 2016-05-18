@@ -8,6 +8,7 @@ import net.ngeor.bprr.views.PullRequestsView;
 import net.ngeor.testutil.TestData;
 import net.ngeor.util.DateHelper;
 import net.ngeor.util.DateRange;
+import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -24,6 +25,7 @@ public class DefaultDemoControllerTest {
     private TeamMapper teamMapper;
     private BitbucketClient bitbucketClient;
     private HttpServletRequest req;
+    private PullRequestsResponse emptyResponse;
 
     @Before
     public void before() throws IOException {
@@ -37,6 +39,7 @@ public class DefaultDemoControllerTest {
         when(bitbucketClientFactory.createClient(req)).thenReturn(bitbucketClient);
 
         // arrange - common data for all tests
+        when(req.getRequestURI()).thenReturn("/form");
         when(req.getParameter("repo")).thenReturn("currentUser/repo");
         PullRequestResponse firstWithParticipants = TestData.load(PullRequestResponse.class, "OneParticipantNotApproved");
         PullRequestResponse secondWithParticipants = TestData.load(PullRequestResponse.class, "ThreeParticipantsTwoApproved");
@@ -44,22 +47,74 @@ public class DefaultDemoControllerTest {
                 .thenReturn(firstWithParticipants);
         when(bitbucketClient.execute(new PullRequestRequest("currentUser", "repo", 2), PullRequestResponse.class))
                 .thenReturn(secondWithParticipants);
+
+        emptyResponse = new PullRequestsResponse();
+        when(bitbucketClient.execute(new PullRequestsRequest("currentUser", "repo", PullRequestsRequest.State.Merged, new DateRange(DateHelper.utcToday(), DateHelper.utcToday())), PullRequestsResponse.class))
+                .thenReturn(emptyResponse);
     }
 
     @Test
-    public void shouldSetFormUrlOnView() throws IOException {
-        // arrange
-        when(req.getRequestURI()).thenReturn("/form");
-        PullRequestsResponse pullRequestsResponse = TestData.load(PullRequestsResponse.class, "NoPagination");
-        when(bitbucketClient.execute(new PullRequestsRequest("currentUser", "repo", PullRequestsRequest.State.Merged, new DateRange(DateHelper.utcToday(), DateHelper.utcToday())), PullRequestsResponse.class))
-                .thenReturn(pullRequestsResponse);
-
+    public void shouldSetFormUrl() throws IOException {
         // act
-        DefaultDemoController controller = new DefaultDemoController(bitbucketClientFactory, teamMapper);
-        PullRequestsView view = controller.createView(req);
+        PullRequestsView view = createView();
 
         // assert
         assertEquals("/form", view.getFormUrl());
+    }
+
+    @Test
+    public void shouldSetFullRepo() throws IOException {
+        // act
+        PullRequestsView view = createView();
+
+        // assert
+        assertEquals("currentUser/repo", view.getRepo());
+    }
+
+    @Test
+    public void shouldSetUpdatedOnFrom() throws IOException {
+        // arrange
+        when(req.getParameter("updatedOnFrom")).thenReturn("2016-05-05");
+        when(bitbucketClient.execute(new PullRequestsRequest("currentUser", "repo", PullRequestsRequest.State.Merged, new DateRange(DateHelper.utcDate(2016, 5, 5), DateHelper.utcToday())), PullRequestsResponse.class))
+                .thenReturn(emptyResponse);
+
+        // act
+        PullRequestsView view = createView();
+
+        // assert
+        assertEquals("2016-05-05", view.getUpdatedOnFrom());
+    }
+
+    @Test
+    public void shouldSetUpdatedOnFromFromCurrentDate() throws IOException {
+        // act
+        PullRequestsView view = createView();
+
+        // assert
+        assertEquals(DateHelper.formatDate(DateHelper.utcToday()), view.getUpdatedOnFrom());
+    }
+
+    @Test
+    public void shouldSetUpdatedOnUntil() throws IOException {
+        // arrange
+        when(req.getParameter("updatedOnUntil")).thenReturn("2016-05-07");
+        when(bitbucketClient.execute(new PullRequestsRequest("currentUser", "repo", PullRequestsRequest.State.Merged, new DateRange(DateHelper.utcToday(), DateHelper.utcDate(2016, 5, 7))), PullRequestsResponse.class))
+                .thenReturn(emptyResponse);
+
+        // act
+        PullRequestsView view = createView();
+
+        // assert
+        assertEquals("2016-05-07", view.getUpdatedOnUntil());
+    }
+
+    @Test
+    public void shouldSetUpdatedOnUntilFromCurrentDate() throws IOException {
+        // act
+        PullRequestsView view = createView();
+
+        // assert
+        assertEquals(DateHelper.formatDate(DateHelper.utcToday()), view.getUpdatedOnUntil());
     }
 
     @Test
@@ -80,12 +135,11 @@ public class DefaultDemoControllerTest {
                 .thenReturn(pullRequestsResponse);
 
 
-        DefaultDemoController controller = new DefaultDemoController(bitbucketClientFactory, teamMapper);
-
         // act
-        PullRequestModel[] pullRequestModels = controller.createView(req).getPullRequests();
+        PullRequestsView view = createView();
 
         // assert
+        PullRequestModel[] pullRequestModels = view.getPullRequests();
         assertArrayEquals(expectedPullRequestModels, pullRequestModels);
     }
 
@@ -112,12 +166,22 @@ public class DefaultDemoControllerTest {
         when(bitbucketClient.execute("https://api.bitbucket.org/2.0/pullrequests/2", PullRequestsResponse.class))
                 .thenReturn(secondPullRequestsResponse);
 
-        DefaultDemoController controller = new DefaultDemoController(bitbucketClientFactory, teamMapper);
-
         // act
-        PullRequestModel[] pullRequestModels = controller.createView(req).getPullRequests();
+        PullRequestsView view = createView();
 
         // assert
+        PullRequestModel[] pullRequestModels = view.getPullRequests();
         assertArrayEquals(expectedPullRequestModels, pullRequestModels);
     }
+
+    @NotNull
+    private DefaultDemoController createDefaultDemoController() {
+        return new DefaultDemoController(bitbucketClientFactory, teamMapper);
+    }
+
+    @NotNull
+    private PullRequestsView createView() throws IOException {
+        return createDefaultDemoController().createView(req);
+    }
+
 }

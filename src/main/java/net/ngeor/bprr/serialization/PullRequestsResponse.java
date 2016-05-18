@@ -8,15 +8,10 @@ public class PullRequestsResponse {
     private PullRequestResponse[] values;
 
     public PullRequestsResponse() {
-
+        this(new PullRequestResponse[0]);
     }
 
     public PullRequestsResponse(PullRequestResponse... values) {
-        this(null, values);
-    }
-
-    PullRequestsResponse(String next, PullRequestResponse... values) {
-        this.next = next;
         this.values = values;
     }
 
@@ -31,10 +26,6 @@ public class PullRequestsResponse {
         return values;
     }
 
-    void setValues(PullRequestResponse[] values) {
-        this.values = values;
-    }
-
     public int getPage() {
         return page;
     }
@@ -46,5 +37,4 @@ public class PullRequestsResponse {
     public int getPageLen() {
         return pagelen;
     }
-
 }
