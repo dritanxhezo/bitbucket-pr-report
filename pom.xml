@@ -28,20 +28,6 @@
                 <version>2.2</version>
             </plugin>
             <plugin>
-                <groupId>org.eluder.coveralls</groupId>
-                <artifactId>coveralls-maven-plugin</artifactId>
-                <version>4.1.0</version>
-                <configuration>
-                    <repoToken>${env.COVERALLS_TOKEN}</repoToken>
-                </configuration>
-            </plugin>
-        </plugins>
-        <finalName>bprr</finalName>
-    </build>
-
-    <reporting>
-        <plugins>
-            <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>cobertura-maven-plugin</artifactId>
                 <version>2.7</version>
@@ -52,8 +38,17 @@
                     <aggregate>true</aggregate>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.eluder.coveralls</groupId>
+                <artifactId>coveralls-maven-plugin</artifactId>
+                <version>4.1.0</version>
+                <configuration>
+                    <repoToken>${env.COVERALLS_TOKEN}</repoToken>
+                </configuration>
+            </plugin>
         </plugins>
-    </reporting>
+        <finalName>bprr</finalName>
+    </build>
 
     <dependencies>
         <dependency>
