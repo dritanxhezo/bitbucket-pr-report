@@ -134,13 +134,38 @@ public class DefaultDemoControllerTest {
         when(bitbucketClient.execute(new PullRequestsRequest("currentUser", "repo", PullRequestsRequest.State.Merged, new DateRange(DateHelper.utcDate(2016, 5, 5), DateHelper.utcToday())), PullRequestsResponse.class))
                 .thenReturn(pullRequestsResponse);
 
-
         // act
         PullRequestsView view = createView();
 
         // assert
         PullRequestModel[] pullRequestModels = view.getPullRequests();
         assertArrayEquals(expectedPullRequestModels, pullRequestModels);
+    }
+
+    @Test
+    public void shouldUseTeamMapperToAssignTeams() throws IOException {
+        // arrange
+        when(req.getParameter("updatedOnFrom")).thenReturn("2016-05-05");
+
+        PullRequestsResponse pullRequestsResponse = TestData.load(PullRequestsResponse.class, "NoPagination");
+
+        Date dt1 = DateHelper.utcDate(2010, 6, 1);
+        Date dt2 = DateHelper.utcDate(2011, 7, 2);
+        PullRequestModel[] expectedPullRequestModels = new PullRequestModel[]{
+                new PullRequestModel(1, "description 1", "OPEN", dt1, dt1, "mfrauenholtz", null, null),
+                new PullRequestModel(2, "description 2", "OPEN", dt2, dt2, "ngeor", "ngeor", "reviewer 1")
+        };
+
+        when(bitbucketClient.execute(new PullRequestsRequest("currentUser", "repo", PullRequestsRequest.State.Merged, new DateRange(DateHelper.utcDate(2016, 5, 5), DateHelper.utcToday())), PullRequestsResponse.class))
+                .thenReturn(pullRequestsResponse);
+
+        // act
+        PullRequestsView view = createView();
+
+        // assert
+        PullRequestModel[] pullRequestModels = view.getPullRequests();
+        verify(teamMapper).assignTeams(expectedPullRequestModels[0]);
+        verify(teamMapper).assignTeams(expectedPullRequestModels[1]);
     }
 
     @Test
@@ -183,5 +208,4 @@ public class DefaultDemoControllerTest {
     private PullRequestsView createView() throws IOException {
         return createDefaultDemoController().createView(req);
     }
-
 }

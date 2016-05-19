@@ -19,6 +19,8 @@ class Factory {
     }
 
     public TeamMapper teamMapper() {
-        return new DefaultTeamMapper();
+        DefaultTeamMapper result = new DefaultTeamMapper();
+        result.loadFromProperties();
+        return result;
     }
 }

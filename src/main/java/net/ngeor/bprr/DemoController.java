@@ -34,6 +34,8 @@ class DefaultDemoController implements DemoController {
     public PullRequestsView createView(HttpServletRequest req) throws IOException {
         BitbucketClient bitbucketClient = bitbucketClientFactory.createClient(req);
         String fullRepoName = req.getParameter("repo");
+
+        // TODO: encapsulate username and repository in an object like RepositoryDescriptor
         String username = null;
         String repository = null;
         if (fullRepoName != null) {
@@ -59,7 +61,6 @@ class DefaultDemoController implements DemoController {
         DateRange updatedOn = new DateRange(updatedOnFrom, updatedOnUntil);
 
         PullRequestModel[] pullRequests = this.loadPullRequests(bitbucketClient, username, repository, updatedOn);
-        this.teamMapper.loadFromProperties();
 
         for (PullRequestModel pullRequestModel : pullRequests) {
             this.teamMapper.assignTeams(pullRequestModel);

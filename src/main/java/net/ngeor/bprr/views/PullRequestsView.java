@@ -18,6 +18,7 @@ public class PullRequestsView {
         normalize();
     }
 
+    // TODO move this back to the controller
     private void normalize() {
         if (pullRequests == null) {
             return;

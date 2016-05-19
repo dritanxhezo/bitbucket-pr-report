@@ -2,16 +2,11 @@ package net.ngeor.bprr;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Properties;
 
 public interface TeamMapper {
     void assignTeams(PullRequestModel model);
-
-    void put(String user, String team);
-
-    void loadFromProperties() throws IOException;
 }
 
 class DefaultTeamMapper implements TeamMapper {
@@ -35,24 +30,37 @@ class DefaultTeamMapper implements TeamMapper {
         return result;
     }
 
-    @Override
-    public void put(String user, String team) {
+    void put(String user, String team) {
         userToTeam.put(user, team);
     }
 
-    @Override
-    public void loadFromProperties() throws IOException {
+    public void loadFromProperties() {
         if (!userToTeam.isEmpty()) {
             return;
         }
 
-        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        InputStream in = classLoader.getResourceAsStream("net/ngeor/bprr/teams.properties");
         Properties properties = new Properties();
-        properties.load(in);
-        in.close();
+        populateProperties(properties);
+
         for (String username : properties.stringPropertyNames()) {
             put(username, properties.getProperty(username));
+        }
+    }
+
+    private void populateProperties(Properties properties) {
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        InputStream in = classLoader.getResourceAsStream("net/ngeor/bprr/teams.properties");
+
+        try {
+            properties.load(in);
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        } finally {
+            try {
+                in.close();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
         }
     }
 
