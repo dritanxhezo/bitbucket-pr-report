@@ -27,17 +27,17 @@
     <th>Id</th>
     <th>Author</th>
     <th>Author Team</th>
-    <c:forEach var="number" begin="1" end="${view.maxReviewerCount}">
+    <c:forEach var="number" begin="1" end="${view.pullRequests.maxReviewerCount}">
         <th>Approved By ${number}</th>
         <th>Approved By Team ${number}</th>
     </c:forEach>
 </tr>
-<c:forEach var="pr" items="${view.pullRequests}">
+<c:forEach var="pr" items="${view.pullRequests.toArray()}">
     <tr>
         <td>${pr.id}</td>
         <td>${pr.author}</td>
         <td>${pr.authorTeam}</td>
-        <c:forEach var="number" begin="0" end="${view.maxReviewerCount - 1}">
+        <c:forEach var="number" begin="0" end="${view.pullRequests.maxReviewerCount - 1}">
             <td>
                 ${pr.reviewers[number]}
             </td>

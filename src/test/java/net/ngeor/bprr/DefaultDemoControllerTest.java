@@ -138,7 +138,7 @@ public class DefaultDemoControllerTest {
         PullRequestsView view = createView();
 
         // assert
-        PullRequestModel[] pullRequestModels = view.getPullRequests();
+        PullRequestModel[] pullRequestModels = view.getPullRequests().toArray();
         assertArrayEquals(expectedPullRequestModels, pullRequestModels);
     }
 
@@ -163,7 +163,7 @@ public class DefaultDemoControllerTest {
         PullRequestsView view = createView();
 
         // assert
-        PullRequestModel[] pullRequestModels = view.getPullRequests();
+        PullRequestModel[] pullRequestModels = view.getPullRequests().toArray();
         verify(teamMapper).assignTeams(expectedPullRequestModels[0]);
         verify(teamMapper).assignTeams(expectedPullRequestModels[1]);
     }
@@ -195,7 +195,7 @@ public class DefaultDemoControllerTest {
         PullRequestsView view = createView();
 
         // assert
-        PullRequestModel[] pullRequestModels = view.getPullRequests();
+        PullRequestModel[] pullRequestModels = view.getPullRequests().toArray();
         assertArrayEquals(expectedPullRequestModels, pullRequestModels);
     }
 

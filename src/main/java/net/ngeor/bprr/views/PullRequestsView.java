@@ -1,54 +1,24 @@
 package net.ngeor.bprr.views;
 
 import net.ngeor.bprr.PullRequestModel;
+import net.ngeor.bprr.PullRequestModelCollection;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class PullRequestsView {
-    private PullRequestModel[] pullRequests;
+    private PullRequestModelCollection pullRequests;
     private String formUrl;
     private String repo;
     private String updatedOnFrom;
     private String updatedOnUntil;
 
-    public void setPullRequests(PullRequestModel[] pullRequests) {
-        this.pullRequests = pullRequests;
-        normalize();
-    }
-
-    // TODO move this back to the controller
-    private void normalize() {
-        if (pullRequests == null) {
-            return;
-        }
-
-        int maxReviewerCount = getMaxReviewerCount();
-        for (PullRequestModel model : pullRequests) {
-            normalize(model, maxReviewerCount);
-        }
-    }
-
-    private void normalize(PullRequestModel model, int maxReviewerCount) {
-        if (maxReviewerCount <= 0) {
-            return;
-        }
-
-        String[] reviewers = model.getReviewers();
-        if (reviewers.length > maxReviewerCount) {
-            throw new IllegalStateException();
-        }
-
-        if (reviewers.length == maxReviewerCount) {
-            return;
-        }
-
-        model.setReviewers(Arrays.copyOf(reviewers, maxReviewerCount));
-    }
-
-    public PullRequestModel[] getPullRequests() {
+    public PullRequestModelCollection getPullRequests() {
         return pullRequests;
+    }
+
+    public void setPullRequests(PullRequestModelCollection pullRequests) {
+        this.pullRequests = pullRequests;
     }
 
     public Statistics[] getStatistics() {
@@ -69,6 +39,10 @@ public class PullRequestsView {
     }
 
     private void increaseReviewers(List<Statistics> result, String reviewerTeam) {
+        if (reviewerTeam == null) {
+            return;
+        }
+
         Statistics statistic = findOrCreate(result, reviewerTeam);
         statistic.setReviewed(1 + statistic.getReviewed());
     }
@@ -80,6 +54,11 @@ public class PullRequestsView {
 
     private Statistics findOrCreate(List<Statistics> items, String team) {
         Statistics result = null;
+
+        if (team == null || team.isEmpty()) {
+            throw new IllegalArgumentException("team cannot be empty");
+        }
+
         for (int i = 0; i < items.size(); i++) {
             if (items.get(i).getName().equals(team)) {
                 result = items.get(i);
@@ -91,20 +70,6 @@ public class PullRequestsView {
             result = new Statistics();
             result.setName(team);
             items.add(result);
-        }
-
-        return result;
-    }
-
-    public int getMaxReviewerCount() {
-        int result = 0;
-        if (pullRequests != null) {
-            for (PullRequestModel model : pullRequests) {
-                String[] reviewers = model.getReviewers();
-                if (reviewers != null) {
-                    result = Math.max(result, reviewers.length);
-                }
-            }
         }
 
         return result;
@@ -149,8 +114,7 @@ public class PullRequestsView {
 
         PullRequestsView that = (PullRequestsView) o;
 
-        // Probably incorrect - comparing Object[] arrays with Arrays.equals
-        if (!Arrays.equals(pullRequests, that.pullRequests)) return false;
+        if (pullRequests != null ? !pullRequests.equals(that.pullRequests) : that.pullRequests != null) return false;
         if (formUrl != null ? !formUrl.equals(that.formUrl) : that.formUrl != null) return false;
         if (repo != null ? !repo.equals(that.repo) : that.repo != null) return false;
         if (updatedOnFrom != null ? !updatedOnFrom.equals(that.updatedOnFrom) : that.updatedOnFrom != null)
@@ -161,7 +125,7 @@ public class PullRequestsView {
 
     @Override
     public int hashCode() {
-        int result = Arrays.hashCode(pullRequests);
+        int result = pullRequests.hashCode();
         result = 31 * result + (formUrl != null ? formUrl.hashCode() : 0);
         result = 31 * result + (repo != null ? repo.hashCode() : 0);
         result = 31 * result + (updatedOnFrom != null ? updatedOnFrom.hashCode() : 0);
@@ -169,33 +133,4 @@ public class PullRequestsView {
         return result;
     }
 
-    public static class Statistics {
-        private String name;
-        private int created;
-        private int reviewed;
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public int getCreated() {
-            return created;
-        }
-
-        public void setCreated(int created) {
-            this.created = created;
-        }
-
-        public int getReviewed() {
-            return reviewed;
-        }
-
-        public void setReviewed(int reviewed) {
-            this.reviewed = reviewed;
-        }
-    }
 }

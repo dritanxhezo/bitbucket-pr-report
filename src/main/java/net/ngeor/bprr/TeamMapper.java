@@ -65,6 +65,15 @@ class DefaultTeamMapper implements TeamMapper {
     }
 
     private String mapAuthor(String user) {
-        return userToTeam.get(user);
+        if (user == null) {
+            return null;
+        }
+
+        String team = userToTeam.get(user);
+        if (team == null) {
+            throw new IllegalArgumentException("Unknown team for user " + user);
+        }
+
+        return team;
     }
 }

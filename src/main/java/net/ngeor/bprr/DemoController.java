@@ -60,23 +60,23 @@ class DefaultDemoController implements DemoController {
 
         DateRange updatedOn = new DateRange(updatedOnFrom, updatedOnUntil);
 
-        PullRequestModel[] pullRequests = this.loadPullRequests(bitbucketClient, username, repository, updatedOn);
+        PullRequestModelCollection pullRequestModelCollection = this.loadPullRequests(bitbucketClient, username, repository, updatedOn);
 
-        for (PullRequestModel pullRequestModel : pullRequests) {
+        for (PullRequestModel pullRequestModel : pullRequestModelCollection) {
             this.teamMapper.assignTeams(pullRequestModel);
         }
 
         PullRequestsView view = new PullRequestsView();
         view.setFormUrl(req.getRequestURI());
         view.setRepo(fullRepoName);
-        view.setPullRequests(pullRequests);
+        view.setPullRequests(pullRequestModelCollection);
         view.setUpdatedOnFrom(DateHelper.formatDate(updatedOnFrom));
         view.setUpdatedOnUntil(DateHelper.formatDate(updatedOnUntil));
         return view;
     }
 
     @NotNull
-    private PullRequestModel[] loadPullRequests(BitbucketClient bitbucketClient, String username, String repository, DateRange updatedOn) throws IOException {
+    private PullRequestModelCollection loadPullRequests(BitbucketClient bitbucketClient, String username, String repository, DateRange updatedOn) throws IOException {
         // collect models here
         List<PullRequestModel> result = new ArrayList<>();
 
@@ -101,7 +101,7 @@ class DefaultDemoController implements DemoController {
             }
         } while (fetchMorePages);
 
-        return result.toArray(new PullRequestModel[result.size()]);
+        return new PullRequestModelCollection(result);
     }
 
     private void collectPullRequestModels(BitbucketClient bitbucketClient, String username, String repository, PullRequestsResponse pullRequestsResponse, List<PullRequestModel> models) throws IOException {
