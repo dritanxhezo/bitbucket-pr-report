@@ -8,7 +8,6 @@ import java.util.Properties;
 
 class SettingsImpl implements Settings {
     private String user;
-    private String clientId;
     private String secret;
 
     public SettingsImpl(ResourceLoader resourceLoader) throws IOException {
@@ -17,18 +16,12 @@ class SettingsImpl implements Settings {
         properties.load(in);
         in.close();
         this.user = properties.getProperty("user");
-        this.clientId = properties.getProperty("key");
         this.secret = properties.getProperty("secret");
     }
 
     @Override
     public String getUser() {
         return user;
-    }
-
-    @Override
-    public String getClientId() {
-        return clientId;
     }
 
     @Override

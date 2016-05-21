@@ -35,10 +35,9 @@ public class BitbucketClientImplTest {
         public void before() throws URISyntaxException, IOException {
             // arrange
             InputStream responseStream = new ResourceLoaderImpl().getResourceAsStream("net/ngeor/bprr/serialization/pullRequests.json");
-            URI expected = new URI("https://api.bitbucket.org/2.0/repositories/owner/repo_slug/pullrequests?access_token=123");
+            URI expected = new URI("https://api.bitbucket.org/2.0/repositories/owner/repo_slug/pullrequests");
             HttpClientFactory httpClientFactory = setupHttpClientFactory(responseStream, expected);
-            BitbucketClientImpl bitbucketClient = new BitbucketClientImpl(httpClientFactory);
-            bitbucketClient.setAccessToken("123");
+            BitbucketClientImpl bitbucketClient = new BitbucketClientImpl(httpClientFactory, setupSettings());
 
             // act
             response = bitbucketClient.execute(
@@ -89,10 +88,9 @@ public class BitbucketClientImplTest {
         public void shouldUseRequestInTheURI() throws URISyntaxException, IOException {
             // arrange
             InputStream responseStream = new ResourceLoaderImpl().getResourceAsStream("net/ngeor/bprr/serialization/pullRequests.json");
-            URI expected = new URI("https://api.bitbucket.org/2.0/repositories/owner/repo_slug/pullrequests?access_token=123");
+            URI expected = new URI("https://api.bitbucket.org/2.0/repositories/owner/repo_slug/pullrequests");
             HttpClientFactory httpClientFactory = setupHttpClientFactory(responseStream, expected);
-            BitbucketClientImpl bitbucketClient = new BitbucketClientImpl(httpClientFactory);
-            bitbucketClient.setAccessToken("123");
+            BitbucketClientImpl bitbucketClient = new BitbucketClientImpl(httpClientFactory, setupSettings());
 
             // act
             bitbucketClient.execute(
@@ -110,8 +108,7 @@ public class BitbucketClientImplTest {
             InputStream responseStream = new ResourceLoaderImpl().getResourceAsStream("net/ngeor/bprr/serialization/pullRequests.json");
             URI expected = new URI("https://api.bitbucket.org/2.0/whatever");
             HttpClientFactory httpClientFactory = setupHttpClientFactory(responseStream, expected);
-            BitbucketClientImpl bitbucketClient = new BitbucketClientImpl(httpClientFactory);
-            bitbucketClient.setAccessToken("123");
+            BitbucketClientImpl bitbucketClient = new BitbucketClientImpl(httpClientFactory, setupSettings());
 
             // act
             bitbucketClient.execute(
@@ -139,6 +136,11 @@ public class BitbucketClientImplTest {
             }
         };
         return httpClientFactory;
+    }
+
+    private static Settings setupSettings() {
+        Settings settings = mock(Settings.class);
+        return settings;
     }
 
     private static HttpUriRequest matchHttpGet(URI expectedURI) {

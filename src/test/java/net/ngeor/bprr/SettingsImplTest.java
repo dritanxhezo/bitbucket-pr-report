@@ -15,7 +15,6 @@ public class SettingsImplTest {
         SettingsImpl settings = new SettingsImpl(resourceLoader);
 
         assertEquals("myuser", settings.getUser());
-        assertEquals("mykey", settings.getClientId());
         assertEquals("asecret", settings.getSecret());
     }
 }

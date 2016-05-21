@@ -16,11 +16,19 @@ class Factory {
     public static final Factory Instance = new Factory();
 
     public DemoController demoController() {
-        return new DemoControllerImpl(bitbucketClientFactory(), teamMapper());
+        try {
+            return new DemoControllerImpl(bitbucketClient(), teamMapper());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public BitbucketClientFactory bitbucketClientFactory() {
-        return new BitbucketClientFactoryImpl();
+    public BitbucketClient bitbucketClient() throws IOException {
+        return new BitbucketClientImpl(httpClientFactory(), settings());
+    }
+
+    public HttpClientFactory httpClientFactory() {
+        return new HttpClientFactoryImpl();
     }
 
     public TeamMapper teamMapper() {

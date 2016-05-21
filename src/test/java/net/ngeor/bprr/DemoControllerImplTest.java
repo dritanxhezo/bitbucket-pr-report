@@ -21,7 +21,6 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 public class DemoControllerImplTest {
-    private BitbucketClientFactory bitbucketClientFactory;
     private TeamMapper teamMapper;
     private BitbucketClient bitbucketClient;
     private HttpServletRequest req;
@@ -30,13 +29,9 @@ public class DemoControllerImplTest {
     @Before
     public void before() throws IOException {
         // arrange - create mocks
-        bitbucketClientFactory = mock(BitbucketClientFactory.class);
         teamMapper = mock(TeamMapper.class);
         bitbucketClient = mock(BitbucketClient.class, RETURNS_SMART_NULLS);
         req = mock(HttpServletRequest.class);
-
-        // arrange - mock relationships
-        when(bitbucketClientFactory.createClient(req)).thenReturn(bitbucketClient);
 
         // arrange - common data for all tests
         when(req.getRequestURI()).thenReturn("/form");
@@ -201,7 +196,7 @@ public class DemoControllerImplTest {
 
     @NotNull
     private DemoControllerImpl createDefaultDemoController() {
-        return new DemoControllerImpl(bitbucketClientFactory, teamMapper);
+        return new DemoControllerImpl(bitbucketClient, teamMapper);
     }
 
     @NotNull
