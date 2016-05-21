@@ -52,7 +52,7 @@ public class PullRequestsServlet extends HttpServlet {
                 parts[1],
                 PullRequestsRequest.State.Open);
 
-        DefaultBitbucketClient bitbucketClient = new DefaultBitbucketClient();
+        BitbucketClientImpl bitbucketClient = new BitbucketClientImpl();
         bitbucketClient.setAccessToken(accessToken);
         return bitbucketClient.execute(pullRequestsRequest, PullRequestsResponse.class);
     }
@@ -69,7 +69,7 @@ public class PullRequestsServlet extends HttpServlet {
         String[] parts = fullRepoName.split("\\/");
         PullRequestRequest pullRequestRequest = new PullRequestRequest(parts[0], parts[1], id);
 
-        DefaultBitbucketClient bitbucketClient = new DefaultBitbucketClient();
+        BitbucketClientImpl bitbucketClient = new BitbucketClientImpl();
         bitbucketClient.setAccessToken(accessToken);
         return bitbucketClient.execute(pullRequestRequest, PullRequestResponse.class);
     }

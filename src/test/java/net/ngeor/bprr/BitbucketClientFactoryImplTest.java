@@ -9,10 +9,10 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class DefaultBitbucketClientFactoryTest {
+public class BitbucketClientFactoryImplTest {
     @Test
     public void shouldGetAccessTokenFromSession() {
-        BitbucketClientFactory factory = new DefaultBitbucketClientFactory();
+        BitbucketClientFactory factory = new BitbucketClientFactoryImpl();
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpSession session = mock(HttpSession.class);
         when(request.getSession()).thenReturn(session);

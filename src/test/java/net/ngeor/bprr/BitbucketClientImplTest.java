@@ -3,6 +3,7 @@ package net.ngeor.bprr;
 import net.ngeor.bprr.serialization.PullRequestResponse;
 import net.ngeor.bprr.serialization.PullRequestsResponse;
 import net.ngeor.testutil.HttpGetMatcher;
+import net.ngeor.util.ResourceLoaderImpl;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -26,17 +27,17 @@ import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.*;
 
 @RunWith(Enclosed.class)
-public class DefaultBitbucketClientTest {
+public class BitbucketClientImplTest {
     public static class PullRequests {
         private PullRequestsResponse response;
 
         @Before
         public void before() throws URISyntaxException, IOException {
             // arrange
-            InputStream responseStream = getClass().getResourceAsStream("serialization/pullRequests.json");
+            InputStream responseStream = new ResourceLoaderImpl().getResourceAsStream("net/ngeor/bprr/serialization/pullRequests.json");
             URI expected = new URI("https://api.bitbucket.org/2.0/repositories/owner/repo_slug/pullrequests?access_token=123");
             HttpClientFactory httpClientFactory = setupHttpClientFactory(responseStream, expected);
-            DefaultBitbucketClient bitbucketClient = new DefaultBitbucketClient(httpClientFactory);
+            BitbucketClientImpl bitbucketClient = new BitbucketClientImpl(httpClientFactory);
             bitbucketClient.setAccessToken("123");
 
             // act
@@ -87,10 +88,10 @@ public class DefaultBitbucketClientTest {
         @Test
         public void shouldUseRequestInTheURI() throws URISyntaxException, IOException {
             // arrange
-            InputStream responseStream = getClass().getResourceAsStream("serialization/pullRequests.json");
+            InputStream responseStream = new ResourceLoaderImpl().getResourceAsStream("net/ngeor/bprr/serialization/pullRequests.json");
             URI expected = new URI("https://api.bitbucket.org/2.0/repositories/owner/repo_slug/pullrequests?access_token=123");
             HttpClientFactory httpClientFactory = setupHttpClientFactory(responseStream, expected);
-            DefaultBitbucketClient bitbucketClient = new DefaultBitbucketClient(httpClientFactory);
+            BitbucketClientImpl bitbucketClient = new BitbucketClientImpl(httpClientFactory);
             bitbucketClient.setAccessToken("123");
 
             // act
@@ -106,10 +107,10 @@ public class DefaultBitbucketClientTest {
         @Test
         public void shouldUseRequestAsIsIfItIsBitbucketUrl() throws URISyntaxException, IOException {
             // arrange
-            InputStream responseStream = getClass().getResourceAsStream("serialization/pullRequests.json");
+            InputStream responseStream = new ResourceLoaderImpl().getResourceAsStream("net/ngeor/bprr/serialization/pullRequests.json");
             URI expected = new URI("https://api.bitbucket.org/2.0/whatever");
             HttpClientFactory httpClientFactory = setupHttpClientFactory(responseStream, expected);
-            DefaultBitbucketClient bitbucketClient = new DefaultBitbucketClient(httpClientFactory);
+            BitbucketClientImpl bitbucketClient = new BitbucketClientImpl(httpClientFactory);
             bitbucketClient.setAccessToken("123");
 
             // act

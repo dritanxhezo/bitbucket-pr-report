@@ -20,7 +20,7 @@ import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
-public class DefaultDemoControllerTest {
+public class DemoControllerImplTest {
     private BitbucketClientFactory bitbucketClientFactory;
     private TeamMapper teamMapper;
     private BitbucketClient bitbucketClient;
@@ -200,8 +200,8 @@ public class DefaultDemoControllerTest {
     }
 
     @NotNull
-    private DefaultDemoController createDefaultDemoController() {
-        return new DefaultDemoController(bitbucketClientFactory, teamMapper);
+    private DemoControllerImpl createDefaultDemoController() {
+        return new DemoControllerImpl(bitbucketClientFactory, teamMapper);
     }
 
     @NotNull

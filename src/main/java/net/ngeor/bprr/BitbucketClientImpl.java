@@ -10,16 +10,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-public class DefaultBitbucketClient implements BitbucketClient {
+public class BitbucketClientImpl implements BitbucketClient {
     private String accessToken;
     private final HttpClientFactory httpClientFactory;
 
-    public DefaultBitbucketClient(HttpClientFactory httpClientFactory) {
+    public BitbucketClientImpl(HttpClientFactory httpClientFactory) {
         this.httpClientFactory = httpClientFactory;
     }
 
-    public DefaultBitbucketClient() {
-        this(new DefaultHttpClientFactory());
+    public BitbucketClientImpl() {
+        this(new HttpClientFactoryImpl());
     }
 
     @Override

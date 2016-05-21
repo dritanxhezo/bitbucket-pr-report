@@ -1,17 +1,21 @@
 package net.ngeor.bprr;
 
+import net.ngeor.util.ResourceLoader;
+import net.ngeor.util.ResourceLoaderImpl;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 
-public class TeamMapperTest {
-    private DefaultTeamMapper teamMapper;
+public class TeamMapperImplTest {
+    private TeamMapperImpl teamMapper;
+    private ResourceLoader resourceLoader;
 
     @Before
     public void before() {
-        teamMapper = new DefaultTeamMapper();
+        resourceLoader = new ResourceLoaderImpl();
+        teamMapper = new TeamMapperImpl(resourceLoader);
         teamMapper.put("ngeor", "DDV");
         teamMapper.put("user1", "ADV");
     }

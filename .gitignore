@@ -21,5 +21,4 @@ target/
 # Mac
 .DS_Store
 
-bitbucket.properties
-teams.properties
+src/main/resources/**/*.properties

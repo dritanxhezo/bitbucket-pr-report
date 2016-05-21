@@ -32,9 +32,10 @@ import java.util.List;
 public class OAuthServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Settings settings = Factory.Instance.settings();
         String code = req.getParameter("code");
-        String key = Settings.getInstance().getClientId();
-        String secret = Settings.getInstance().getSecret();
+        String key = settings.getClientId();
+        String secret = settings.getSecret();
 
         if (code == null) {
             throw new IllegalStateException("No code!");
