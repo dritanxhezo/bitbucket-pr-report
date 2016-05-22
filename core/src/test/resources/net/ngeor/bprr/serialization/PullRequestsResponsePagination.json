@@ -1,0 +1,24 @@
+{
+  "pagelen": 1,
+  "next": "https://api.bitbucket.org/2.0/pullrequests/2",
+  "values": [
+    {
+      "description": "description 1",
+      "author": {
+        "username": "mfrauenholtz",
+        "display_name": "Michael Frauenholtz"
+      },
+      "state": "OPEN",
+      "id": 1
+    },
+    {
+      "description": "description 2",
+      "author": {
+        "username": "ngeor",
+        "display_name": "Nikolaos Georgiou"
+      },
+      "state": "OPEN",
+      "id": 2
+    }
+  ]
+}
