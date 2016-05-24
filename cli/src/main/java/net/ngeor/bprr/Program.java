@@ -38,17 +38,7 @@ public class Program {
 
         // echo mini.local bitbucket.open.pull.requests 0 | zabbix_sender -z localhost -vv -i -
         HttpClientFactory httpClientFactory = new HttpClientFactoryImpl();
-        Settings settings = new Settings() {
-            @Override
-            public String getUser() {
-                return user;
-            }
-
-            @Override
-            public String getSecret() {
-                return secret;
-            }
-        };
+        Settings settings = new SettingsImpl(user, secret);
         BitbucketClient bitbucketClient = new BitbucketClientImpl(httpClientFactory, settings);
         PullRequestsRequest request = new PullRequestsRequest(user, repositorySlug, PullRequestsRequest.State.Open);
         PullRequestsResponse pullRequestsResponse = bitbucketClient.execute(request, PullRequestsResponse.class);

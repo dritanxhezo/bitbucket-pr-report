@@ -17,4 +17,13 @@ public class SettingsImplTest {
         assertEquals("myuser", settings.getUser());
         assertEquals("asecret", settings.getSecret());
     }
+
+    @Test
+    public void shouldAcceptSettingsAsParameters() {
+        SettingsImpl settings = new SettingsImpl("user", "secret");
+
+        assertEquals("user", settings.getUser());
+        assertEquals("secret", settings.getSecret());
+    }
+
 }

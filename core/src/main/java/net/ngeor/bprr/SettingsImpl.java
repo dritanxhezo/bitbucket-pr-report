@@ -7,8 +7,8 @@ import java.io.InputStream;
 import java.util.Properties;
 
 class SettingsImpl implements Settings {
-    private String user;
-    private String secret;
+    private final String user;
+    private final String secret;
 
     public SettingsImpl(ResourceLoader resourceLoader) throws IOException {
         InputStream in = resourceLoader.getResourceAsStream("net/ngeor/bprr/bitbucket.properties");
@@ -17,6 +17,11 @@ class SettingsImpl implements Settings {
         in.close();
         this.user = properties.getProperty("user");
         this.secret = properties.getProperty("secret");
+    }
+
+    public SettingsImpl(String user, String secret) {
+        this.user = user;
+        this.secret = secret;
     }
 
     @Override
