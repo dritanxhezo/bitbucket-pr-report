@@ -72,6 +72,8 @@ class DemoControllerImpl implements DemoController {
 
     @NotNull
     private PullRequestModelCollection loadPullRequests(String username, String repository, DateRange updatedOn) throws IOException {
+        // TODO use PullRequestClient
+
         // collect models here
         List<PullRequestModel> result = new ArrayList<>();
 

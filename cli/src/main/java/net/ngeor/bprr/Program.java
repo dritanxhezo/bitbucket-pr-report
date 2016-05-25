@@ -40,8 +40,9 @@ public class Program {
         HttpClientFactory httpClientFactory = new HttpClientFactoryImpl();
         Settings settings = new SettingsImpl(user, secret);
         BitbucketClient bitbucketClient = new BitbucketClientImpl(httpClientFactory, settings);
+        PullRequestClient pullRequestClient = new PullRequestClientImpl(bitbucketClient);
         PullRequestsRequest request = new PullRequestsRequest(user, repositorySlug, PullRequestsRequest.State.Open);
-        PullRequestsResponse pullRequestsResponse = bitbucketClient.execute(request, PullRequestsResponse.class);
+        PullRequestsResponse pullRequestsResponse = pullRequestClient.load(request);
 
         // generate output that can be used with zabbix_sender
         System.out.println("mini.local bitbucket.open.pull.requests " + pullRequestsResponse.getSize());
