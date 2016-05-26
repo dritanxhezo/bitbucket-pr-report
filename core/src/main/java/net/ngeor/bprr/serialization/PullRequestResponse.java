@@ -1,5 +1,7 @@
 package net.ngeor.bprr.serialization;
 
+import jdk.nashorn.internal.runtime.FindProperty;
+
 import java.util.Date;
 
 public class PullRequestResponse {
@@ -10,7 +12,7 @@ public class PullRequestResponse {
     private Date updated_on;
     private Author author;
     private Participant[] participants;
-
+    private Links links;
 
     public PullRequestResponse() {
     }
@@ -41,5 +43,16 @@ public class PullRequestResponse {
 
     public Date getUpdatedOn() {
         return updated_on;
+    }
+
+    public Links getLinks() {
+        return links;
+    }
+    
+    public static class Links {
+        private Link self;
+        public Link getSelf() {
+            return self;
+        }
     }
 }

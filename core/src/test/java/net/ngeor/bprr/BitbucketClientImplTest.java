@@ -81,6 +81,11 @@ public class BitbucketClientImplTest {
             Date expected = calendar.getTime();
             assertEquals(expected, createdOn);
         }
+
+        @Test
+        public void shouldHaveLinkToSelf() {
+            assertEquals("https://api.bitbucket.org/2.0/repositories/bitbucket/bitbucket/pullrequests/3767", response.getValues()[0].getLinks().getSelf().getHref());
+        }
     }
 
     public static class URLHandling {

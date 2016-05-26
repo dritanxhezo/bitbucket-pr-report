@@ -55,13 +55,4 @@ public class RepositoriesResponse {
             return pullrequests;
         }
     }
-
-    public class Link {
-        private String href;
-
-        public String getHref() {
-            return href;
-        }
-    }
-
 }

@@ -1,6 +1,8 @@
 package net.ngeor.bprr;
 
 import net.ngeor.bprr.requests.PullRequestsRequest;
+import net.ngeor.bprr.serialization.Link;
+import net.ngeor.bprr.serialization.PullRequestResponse;
 import net.ngeor.bprr.serialization.PullRequestsResponse;
 import org.junit.Test;
 
@@ -86,5 +88,40 @@ public class PullRequestClientImplTest {
         assertEquals(expectedFirstResponse, actualResponse.get(0));
         assertEquals(expectedSecondResponse, actualResponse.get(1));
         assertEquals(expectedThirdResponse, actualResponse.get(2));
+    }
+
+    @Test
+    public void shouldFetchDetailsOfPullRequests() throws IOException {
+        BitbucketClient bitbucketClient = mock(BitbucketClient.class);
+        PullRequestClient pullRequestClient = new PullRequestClientImpl(bitbucketClient);
+        PullRequestsResponse pullRequestsResponse = mock(PullRequestsResponse.class);
+        PullRequestResponse firstPullRequest = mock(PullRequestResponse.class);
+        PullRequestResponse secondPullRequest = mock(PullRequestResponse.class);
+        PullRequestResponse[] partialResponses = new PullRequestResponse[] {
+                mockResponse("http://first-pr"),
+                mockResponse("http://second-pr")
+        };
+        when(pullRequestsResponse.getValues()).thenReturn(partialResponses);
+
+        when(bitbucketClient.execute("http://first-pr", PullRequestResponse.class)).thenReturn(firstPullRequest);
+        when(bitbucketClient.execute("http://second-pr", PullRequestResponse.class)).thenReturn(secondPullRequest);
+
+        // act
+        List<PullRequestResponse> pullRequests = pullRequestClient.loadDetails(pullRequestsResponse);
+
+        // assert
+        assertEquals(2, pullRequests.size());
+        assertEquals(firstPullRequest, pullRequests.get(0));
+        assertEquals(secondPullRequest, pullRequests.get(1));
+    }
+
+    private static PullRequestResponse mockResponse(String href) {
+        PullRequestResponse response = mock(PullRequestResponse.class);
+        PullRequestResponse.Links links = mock(PullRequestResponse.Links.class);
+        Link selfLink = mock(Link.class);
+        when(response.getLinks()).thenReturn(links);
+        when(links.getSelf()).thenReturn(selfLink);
+        when(selfLink.getHref()).thenReturn(href);
+        return response;
     }
 }

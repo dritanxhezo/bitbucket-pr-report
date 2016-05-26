@@ -1,6 +1,7 @@
 package net.ngeor.bprr;
 
 import net.ngeor.bprr.requests.PullRequestsRequest;
+import net.ngeor.bprr.serialization.PullRequestResponse;
 import net.ngeor.bprr.serialization.PullRequestsResponse;
 
 import java.io.IOException;
@@ -11,5 +12,5 @@ public interface PullRequestClient {
 
     List<PullRequestsResponse> loadAllPages(PullRequestsRequest request) throws IOException;
 
-    // TODO List<PullRequestResponse> loadDetails(List<PullRequestsResponse>)
+    List<PullRequestResponse> loadDetails(PullRequestsResponse pullRequestsResponse) throws IOException;
 }

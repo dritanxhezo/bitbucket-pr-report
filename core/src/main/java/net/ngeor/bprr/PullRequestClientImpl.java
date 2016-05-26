@@ -1,6 +1,7 @@
 package net.ngeor.bprr;
 
 import net.ngeor.bprr.requests.PullRequestsRequest;
+import net.ngeor.bprr.serialization.PullRequestResponse;
 import net.ngeor.bprr.serialization.PullRequestsResponse;
 import org.apache.commons.lang3.StringUtils;
 
@@ -30,6 +31,18 @@ public class PullRequestClientImpl implements PullRequestClient {
             response = bitbucketClient.execute(next, PullRequestsResponse.class);
             next = response.getNext();
             result.add(response);
+        }
+
+        return result;
+    }
+
+    @Override
+    public List<PullRequestResponse> loadDetails(PullRequestsResponse pullRequestsResponse) throws IOException {
+        List<PullRequestResponse> result = new ArrayList<>();
+        for (PullRequestResponse partialResponse : pullRequestsResponse.getValues()) {
+            String href = partialResponse.getLinks().getSelf().getHref();
+            PullRequestResponse fullResponse = bitbucketClient.execute(href, PullRequestResponse.class);
+            result.add(fullResponse);
         }
 
         return result;
