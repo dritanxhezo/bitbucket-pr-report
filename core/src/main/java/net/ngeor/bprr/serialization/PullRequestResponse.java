@@ -1,7 +1,5 @@
 package net.ngeor.bprr.serialization;
 
-import jdk.nashorn.internal.runtime.FindProperty;
-
 import java.util.Date;
 
 public class PullRequestResponse {

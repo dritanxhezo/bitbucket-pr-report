@@ -1,9 +1,7 @@
 package net.ngeor.bprr;
 
-import net.ngeor.bprr.requests.PullRequestRequest;
 import net.ngeor.bprr.requests.PullRequestsRequest;
 import net.ngeor.bprr.serialization.PullRequestResponse;
-import net.ngeor.bprr.serialization.PullRequestsResponse;
 import net.ngeor.bprr.views.PullRequestsView;
 import net.ngeor.testutil.TestData;
 import net.ngeor.util.DateHelper;
@@ -14,6 +12,8 @@ import org.junit.Test;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 
 import static org.junit.Assert.assertArrayEquals;
@@ -22,30 +22,26 @@ import static org.mockito.Mockito.*;
 
 public class DemoControllerImplTest {
     private TeamMapper teamMapper;
-    private BitbucketClient bitbucketClient;
+    private PullRequestClient pullRequestClient;
     private HttpServletRequest req;
-    private PullRequestsResponse emptyResponse;
+    private PullRequestResponse firstWithParticipants;
+    private PullRequestResponse secondWithParticipants;
 
     @Before
     public void before() throws IOException {
         // arrange - create mocks
         teamMapper = mock(TeamMapper.class);
-        bitbucketClient = mock(BitbucketClient.class, RETURNS_SMART_NULLS);
+        pullRequestClient = mock(PullRequestClient.class, RETURNS_SMART_NULLS);
         req = mock(HttpServletRequest.class);
 
         // arrange - common data for all tests
         when(req.getRequestURI()).thenReturn("/form");
         when(req.getParameter("repo")).thenReturn("currentUser/repo");
-        PullRequestResponse firstWithParticipants = TestData.load(PullRequestResponse.class, "OneParticipantNotApproved");
-        PullRequestResponse secondWithParticipants = TestData.load(PullRequestResponse.class, "ThreeParticipantsTwoApproved");
-        when(bitbucketClient.execute(new PullRequestRequest("currentUser", "repo", 1), PullRequestResponse.class))
-                .thenReturn(firstWithParticipants);
-        when(bitbucketClient.execute(new PullRequestRequest("currentUser", "repo", 2), PullRequestResponse.class))
-                .thenReturn(secondWithParticipants);
+        firstWithParticipants = TestData.load(PullRequestResponse.class, "OneParticipantNotApproved");
+        secondWithParticipants = TestData.load(PullRequestResponse.class, "ThreeParticipantsTwoApproved");
 
-        emptyResponse = new PullRequestsResponse();
-        when(bitbucketClient.execute(new PullRequestsRequest("currentUser", "repo", PullRequestsRequest.State.Merged, new DateRange(DateHelper.utcToday(), DateHelper.utcToday())), PullRequestsResponse.class))
-                .thenReturn(emptyResponse);
+        when(pullRequestClient.loadAllDetails(new PullRequestsRequest("currentUser", "repo", PullRequestsRequest.State.Merged, new DateRange(DateHelper.utcToday(), DateHelper.utcToday()))))
+                .thenReturn(new ArrayList<PullRequestResponse>());
     }
 
     @Test
@@ -70,8 +66,8 @@ public class DemoControllerImplTest {
     public void shouldSetUpdatedOnFrom() throws IOException {
         // arrange
         when(req.getParameter("updatedOnFrom")).thenReturn("2016-05-05");
-        when(bitbucketClient.execute(new PullRequestsRequest("currentUser", "repo", PullRequestsRequest.State.Merged, new DateRange(DateHelper.utcDate(2016, 5, 5), DateHelper.utcToday())), PullRequestsResponse.class))
-                .thenReturn(emptyResponse);
+        when(pullRequestClient.loadAllDetails(new PullRequestsRequest("currentUser", "repo", PullRequestsRequest.State.Merged, new DateRange(DateHelper.utcDate(2016, 5, 5), DateHelper.utcToday()))))
+                .thenReturn(new ArrayList<PullRequestResponse>());
 
         // act
         PullRequestsView view = createView();
@@ -93,8 +89,8 @@ public class DemoControllerImplTest {
     public void shouldSetUpdatedOnUntil() throws IOException {
         // arrange
         when(req.getParameter("updatedOnUntil")).thenReturn("2016-05-07");
-        when(bitbucketClient.execute(new PullRequestsRequest("currentUser", "repo", PullRequestsRequest.State.Merged, new DateRange(DateHelper.utcToday(), DateHelper.utcDate(2016, 5, 7))), PullRequestsResponse.class))
-                .thenReturn(emptyResponse);
+        when(pullRequestClient.loadAllDetails(new PullRequestsRequest("currentUser", "repo", PullRequestsRequest.State.Merged, new DateRange(DateHelper.utcToday(), DateHelper.utcDate(2016, 5, 7)))))
+                .thenReturn(new ArrayList<PullRequestResponse>());
 
         // act
         PullRequestsView view = createView();
@@ -117,8 +113,6 @@ public class DemoControllerImplTest {
         // arrange
         when(req.getParameter("updatedOnFrom")).thenReturn("2016-05-05");
 
-        PullRequestsResponse pullRequestsResponse = TestData.load(PullRequestsResponse.class, "NoPagination");
-
         Date dt1 = DateHelper.utcDate(2010, 6, 1);
         Date dt2 = DateHelper.utcDate(2011, 7, 2);
         PullRequestModel[] expectedPullRequestModels = new PullRequestModel[]{
@@ -126,8 +120,8 @@ public class DemoControllerImplTest {
                 new PullRequestModel(2, "description 2", "OPEN", dt2, dt2, "ngeor", "ngeor", "reviewer 1")
         };
 
-        when(bitbucketClient.execute(new PullRequestsRequest("currentUser", "repo", PullRequestsRequest.State.Merged, new DateRange(DateHelper.utcDate(2016, 5, 5), DateHelper.utcToday())), PullRequestsResponse.class))
-                .thenReturn(pullRequestsResponse);
+        when(pullRequestClient.loadAllDetails(new PullRequestsRequest("currentUser", "repo", PullRequestsRequest.State.Merged, new DateRange(DateHelper.utcDate(2016, 5, 5), DateHelper.utcToday()))))
+                .thenReturn(Arrays.asList(firstWithParticipants, secondWithParticipants));
 
         // act
         PullRequestsView view = createView();
@@ -142,8 +136,6 @@ public class DemoControllerImplTest {
         // arrange
         when(req.getParameter("updatedOnFrom")).thenReturn("2016-05-05");
 
-        PullRequestsResponse pullRequestsResponse = TestData.load(PullRequestsResponse.class, "NoPagination");
-
         Date dt1 = DateHelper.utcDate(2010, 6, 1);
         Date dt2 = DateHelper.utcDate(2011, 7, 2);
         PullRequestModel[] expectedPullRequestModels = new PullRequestModel[]{
@@ -151,8 +143,8 @@ public class DemoControllerImplTest {
                 new PullRequestModel(2, "description 2", "OPEN", dt2, dt2, "ngeor", "ngeor", "reviewer 1")
         };
 
-        when(bitbucketClient.execute(new PullRequestsRequest("currentUser", "repo", PullRequestsRequest.State.Merged, new DateRange(DateHelper.utcDate(2016, 5, 5), DateHelper.utcToday())), PullRequestsResponse.class))
-                .thenReturn(pullRequestsResponse);
+        when(pullRequestClient.loadAllDetails(new PullRequestsRequest("currentUser", "repo", PullRequestsRequest.State.Merged, new DateRange(DateHelper.utcDate(2016, 5, 5), DateHelper.utcToday()))))
+                .thenReturn(Arrays.asList(firstWithParticipants, secondWithParticipants));
 
         // act
         PullRequestsView view = createView();
@@ -163,40 +155,9 @@ public class DemoControllerImplTest {
         verify(teamMapper).assignTeams(expectedPullRequestModels[1]);
     }
 
-    @Test
-    public void shouldCollectAllPages() throws IOException {
-        // arrange
-        when(req.getParameter("updatedOnUntil")).thenReturn("2016-05-04");
-
-        PullRequestsResponse firstPullRequestsResponse = TestData.load(PullRequestsResponse.class, "Pagination");
-        PullRequestsResponse secondPullRequestsResponse = TestData.load(PullRequestsResponse.class, "NoPagination");
-
-
-        Date dt1 = DateHelper.utcDate(2010, 6, 1);
-        Date dt2 = DateHelper.utcDate(2011, 7, 2);
-        PullRequestModel[] expectedPullRequestModels = new PullRequestModel[]{
-                new PullRequestModel(1, "description 1", "OPEN", dt1, dt1, "mfrauenholtz", null, null),
-                new PullRequestModel(2, "description 2", "OPEN", dt2, dt2, "ngeor", "ngeor", "reviewer 1"),
-                new PullRequestModel(1, "description 1", "OPEN", dt1, dt1, "mfrauenholtz", null, null),
-                new PullRequestModel(2, "description 2", "OPEN", dt2, dt2, "ngeor", "ngeor", "reviewer 1")
-        };
-
-        when(bitbucketClient.execute(new PullRequestsRequest("currentUser", "repo", PullRequestsRequest.State.Merged, new DateRange(DateHelper.utcToday(), DateHelper.utcDate(2016, 5, 4))), PullRequestsResponse.class))
-                .thenReturn(firstPullRequestsResponse);
-        when(bitbucketClient.execute("https://api.bitbucket.org/2.0/pullrequests/2", PullRequestsResponse.class))
-                .thenReturn(secondPullRequestsResponse);
-
-        // act
-        PullRequestsView view = createView();
-
-        // assert
-        PullRequestModel[] pullRequestModels = view.getPullRequests().toArray();
-        assertArrayEquals(expectedPullRequestModels, pullRequestModels);
-    }
-
     @NotNull
     private DemoControllerImpl createDefaultDemoController() {
-        return new DemoControllerImpl(bitbucketClient, teamMapper);
+        return new DemoControllerImpl(pullRequestClient, teamMapper);
     }
 
     @NotNull

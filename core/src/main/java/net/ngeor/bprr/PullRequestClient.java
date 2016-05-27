@@ -13,4 +13,6 @@ public interface PullRequestClient {
     List<PullRequestsResponse> loadAllPages(PullRequestsRequest request) throws IOException;
 
     List<PullRequestResponse> loadDetails(PullRequestsResponse pullRequestsResponse) throws IOException;
+
+    List<PullRequestResponse> loadAllDetails(PullRequestsRequest request) throws IOException;
 }

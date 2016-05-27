@@ -17,7 +17,7 @@ class Factory {
 
     public DemoController demoController() {
         try {
-            return new DemoControllerImpl(bitbucketClient(), teamMapper());
+            return new DemoControllerImpl(pullRequestClient(), teamMapper());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -43,5 +43,9 @@ class Factory {
 
     public ResourceLoader resourceLoader() {
         return new ResourceLoaderImpl();
+    }
+
+    public PullRequestClient pullRequestClient() throws IOException {
+        return new PullRequestClientImpl(bitbucketClient());
     }
 }

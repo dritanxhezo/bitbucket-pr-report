@@ -47,4 +47,15 @@ public class PullRequestClientImpl implements PullRequestClient {
 
         return result;
     }
+
+    @Override
+    public List<PullRequestResponse> loadAllDetails(PullRequestsRequest request) throws IOException {
+        List<PullRequestsResponse> pullRequestsResponses = loadAllPages(request);
+        List<PullRequestResponse> result = new ArrayList<>();
+        for (PullRequestsResponse pullRequestsResponse : pullRequestsResponses) {
+            result.addAll(loadDetails(pullRequestsResponse));
+        }
+
+        return result;
+    }
 }
