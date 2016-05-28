@@ -2,10 +2,7 @@ package net.ngeor.bprr;
 
 import net.ngeor.bprr.serialization.PullRequest;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Statistics {
     // TODO support teams
@@ -23,7 +20,7 @@ public class Statistics {
     }
 
     private Map<String, List<PullRequest>> groupByAuthor(List<PullRequest> pullRequests) {
-        Map<String, List<PullRequest>> result = new HashMap<>();
+        Map<String, List<PullRequest>> result = new TreeMap<>();
         for (PullRequest pullRequest : pullRequests) {
             String username = pullRequest.getAuthor().getUsername();
             List<PullRequest> pullRequestsOfAuthor;
