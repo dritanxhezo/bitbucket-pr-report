@@ -1,7 +1,7 @@
 package net.ngeor.bprr;
 
 import net.ngeor.bprr.requests.PullRequestsRequest;
-import net.ngeor.bprr.serialization.PullRequestResponse;
+import net.ngeor.bprr.serialization.PullRequest;
 import net.ngeor.bprr.views.PullRequestsView;
 import net.ngeor.testutil.TestData;
 import net.ngeor.util.DateHelper;
@@ -24,8 +24,8 @@ public class DemoControllerImplTest {
     private TeamMapper teamMapper;
     private PullRequestClient pullRequestClient;
     private HttpServletRequest req;
-    private PullRequestResponse firstWithParticipants;
-    private PullRequestResponse secondWithParticipants;
+    private PullRequest firstWithParticipants;
+    private PullRequest secondWithParticipants;
 
     @Before
     public void before() throws IOException {
@@ -37,11 +37,11 @@ public class DemoControllerImplTest {
         // arrange - common data for all tests
         when(req.getRequestURI()).thenReturn("/form");
         when(req.getParameter("repo")).thenReturn("currentUser/repo");
-        firstWithParticipants = TestData.load(PullRequestResponse.class, "OneParticipantNotApproved");
-        secondWithParticipants = TestData.load(PullRequestResponse.class, "ThreeParticipantsTwoApproved");
+        firstWithParticipants = TestData.load(PullRequest.class, "OneParticipantNotApproved");
+        secondWithParticipants = TestData.load(PullRequest.class, "ThreeParticipantsTwoApproved");
 
         when(pullRequestClient.loadAllDetails(new PullRequestsRequest("currentUser", "repo", PullRequestsRequest.State.Merged, new DateRange(DateHelper.utcToday(), DateHelper.utcToday()))))
-                .thenReturn(new ArrayList<PullRequestResponse>());
+                .thenReturn(new ArrayList<PullRequest>());
     }
 
     @Test
@@ -67,7 +67,7 @@ public class DemoControllerImplTest {
         // arrange
         when(req.getParameter("updatedOnFrom")).thenReturn("2016-05-05");
         when(pullRequestClient.loadAllDetails(new PullRequestsRequest("currentUser", "repo", PullRequestsRequest.State.Merged, new DateRange(DateHelper.utcDate(2016, 5, 5), DateHelper.utcToday()))))
-                .thenReturn(new ArrayList<PullRequestResponse>());
+                .thenReturn(new ArrayList<PullRequest>());
 
         // act
         PullRequestsView view = createView();
@@ -90,7 +90,7 @@ public class DemoControllerImplTest {
         // arrange
         when(req.getParameter("updatedOnUntil")).thenReturn("2016-05-07");
         when(pullRequestClient.loadAllDetails(new PullRequestsRequest("currentUser", "repo", PullRequestsRequest.State.Merged, new DateRange(DateHelper.utcToday(), DateHelper.utcDate(2016, 5, 7)))))
-                .thenReturn(new ArrayList<PullRequestResponse>());
+                .thenReturn(new ArrayList<PullRequest>());
 
         // act
         PullRequestsView view = createView();

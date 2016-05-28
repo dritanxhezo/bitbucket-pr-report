@@ -1,7 +1,6 @@
 package net.ngeor.bprr;
 
-import net.ngeor.bprr.serialization.PullRequestResponse;
-import net.ngeor.bprr.serialization.PullRequestsResponse;
+import net.ngeor.bprr.serialization.PullRequest;
 import net.ngeor.testutil.HttpGetMatcher;
 import net.ngeor.util.ResourceLoaderImpl;
 import org.apache.http.HttpEntity;
@@ -29,7 +28,7 @@ import static org.mockito.Mockito.*;
 @RunWith(Enclosed.class)
 public class BitbucketClientImplTest {
     public static class PullRequests {
-        private PullRequestsResponse response;
+        private net.ngeor.bprr.serialization.PullRequests response;
 
         @Before
         public void before() throws URISyntaxException, IOException {
@@ -42,7 +41,7 @@ public class BitbucketClientImplTest {
             // act
             response = bitbucketClient.execute(
                     "repositories/owner/repo_slug/pullrequests",
-                    PullRequestsResponse.class);
+                    net.ngeor.bprr.serialization.PullRequests.class);
         }
 
         @Test
@@ -57,7 +56,7 @@ public class BitbucketClientImplTest {
 
         @Test
         public void shouldHaveValues() {
-            PullRequestResponse[] values = response.getValues();
+            PullRequest[] values = response.getValues();
             assertNotNull(values);
         }
 
@@ -100,7 +99,7 @@ public class BitbucketClientImplTest {
             // act
             bitbucketClient.execute(
                     "repositories/owner/repo_slug/pullrequests",
-                    PullRequestsResponse.class);
+                    net.ngeor.bprr.serialization.PullRequests.class);
 
             // assert
             HttpClient httpClient = httpClientFactory.create();
@@ -118,7 +117,7 @@ public class BitbucketClientImplTest {
             // act
             bitbucketClient.execute(
                     "https://api.bitbucket.org/2.0/whatever",
-                    PullRequestsResponse.class);
+                    net.ngeor.bprr.serialization.PullRequests.class);
 
             // assert
             HttpClient httpClient = httpClientFactory.create();

@@ -2,7 +2,7 @@ package net.ngeor.bprr;
 
 import net.ngeor.bprr.requests.PullRequestsRequest;
 import net.ngeor.bprr.serialization.Participant;
-import net.ngeor.bprr.serialization.PullRequestResponse;
+import net.ngeor.bprr.serialization.PullRequest;
 import net.ngeor.bprr.views.PullRequestsView;
 import net.ngeor.util.DateHelper;
 import net.ngeor.util.DateRange;
@@ -72,26 +72,26 @@ class DemoControllerImpl implements DemoController {
     private PullRequestModelCollection loadPullRequests(String username, String repository, DateRange updatedOn) throws IOException {
         // fetch pull requests
         PullRequestsRequest request = new PullRequestsRequest(username, repository, PullRequestsRequest.State.Merged, updatedOn);
-        List<PullRequestResponse> pullRequestResponses = pullRequestClient.loadAllDetails(request);
+        List<PullRequest> pullRequests = pullRequestClient.loadAllDetails(request);
 
         // collect models here
         List<PullRequestModel> result = new ArrayList<>();
-        for (PullRequestResponse pullRequestResponse : pullRequestResponses) {
-            result.add(convertToModel(pullRequestResponse));
+        for (PullRequest pullRequest : pullRequests) {
+            result.add(convertToModel(pullRequest));
         }
 
         return new PullRequestModelCollection(result);
     }
 
-    private PullRequestModel convertToModel(PullRequestResponse pullRequestResponse) {
+    private PullRequestModel convertToModel(PullRequest pullRequest) {
         PullRequestModel model = new PullRequestModel();
-        model.setId(pullRequestResponse.getId());
-        model.setDescription(pullRequestResponse.getDescription());
-        model.setState(pullRequestResponse.getState());
-        model.setCreatedOn(pullRequestResponse.getCreatedOn());
-        model.setUpdatedOn(pullRequestResponse.getUpdatedOn());
-        model.setAuthor(pullRequestResponse.getAuthor().getUsername());
-        model.setReviewers(convertReviewers(pullRequestResponse.getParticipants()));
+        model.setId(pullRequest.getId());
+        model.setDescription(pullRequest.getDescription());
+        model.setState(pullRequest.getState());
+        model.setCreatedOn(pullRequest.getCreatedOn());
+        model.setUpdatedOn(pullRequest.getUpdatedOn());
+        model.setAuthor(pullRequest.getAuthor().getUsername());
+        model.setReviewers(convertReviewers(pullRequest.getParticipants()));
         return model;
     }
 

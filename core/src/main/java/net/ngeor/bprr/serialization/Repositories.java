@@ -1,6 +1,6 @@
 package net.ngeor.bprr.serialization;
 
-public class RepositoriesResponse {
+public class Repositories {
     private Repository[] values;
     private int page;
     private int size;

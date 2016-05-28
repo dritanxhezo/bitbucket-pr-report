@@ -1,19 +1,11 @@
 package net.ngeor.bprr.serialization;
 
-public class PullRequestsResponse {
+public class PullRequests {
     private int page;
     private int size;
     private int pagelen;
     private String next;
-    private PullRequestResponse[] values;
-
-    public PullRequestsResponse() {
-        this(new PullRequestResponse[0]);
-    }
-
-    public PullRequestsResponse(PullRequestResponse... values) {
-        this.values = values;
-    }
+    private PullRequest[] values;
 
     /**
      * Gets the URL to the next page of the response.
@@ -22,7 +14,7 @@ public class PullRequestsResponse {
         return next;
     }
 
-    public PullRequestResponse[] getValues() {
+    public PullRequest[] getValues() {
         return values;
     }
 

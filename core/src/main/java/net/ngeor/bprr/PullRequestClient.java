@@ -1,18 +1,18 @@
 package net.ngeor.bprr;
 
 import net.ngeor.bprr.requests.PullRequestsRequest;
-import net.ngeor.bprr.serialization.PullRequestResponse;
-import net.ngeor.bprr.serialization.PullRequestsResponse;
+import net.ngeor.bprr.serialization.PullRequest;
+import net.ngeor.bprr.serialization.PullRequests;
 
 import java.io.IOException;
 import java.util.List;
 
 public interface PullRequestClient {
-    PullRequestsResponse load(PullRequestsRequest request) throws IOException;
+    PullRequests load(PullRequestsRequest request) throws IOException;
 
-    List<PullRequestsResponse> loadAllPages(PullRequestsRequest request) throws IOException;
+    List<PullRequests> loadAllPages(PullRequestsRequest request) throws IOException;
 
-    List<PullRequestResponse> loadDetails(PullRequestsResponse pullRequestsResponse) throws IOException;
+    List<PullRequest> loadDetails(PullRequests pullRequests) throws IOException;
 
-    List<PullRequestResponse> loadAllDetails(PullRequestsRequest request) throws IOException;
+    List<PullRequest> loadAllDetails(PullRequestsRequest request) throws IOException;
 }

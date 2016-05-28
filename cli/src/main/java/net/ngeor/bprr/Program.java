@@ -1,7 +1,7 @@
 package net.ngeor.bprr;
 
 import net.ngeor.bprr.requests.PullRequestsRequest;
-import net.ngeor.bprr.serialization.PullRequestsResponse;
+import net.ngeor.bprr.serialization.PullRequests;
 import org.apache.commons.cli.*;
 import org.apache.commons.lang3.StringUtils;
 
@@ -42,9 +42,9 @@ public class Program {
         BitbucketClient bitbucketClient = new BitbucketClientImpl(httpClientFactory, settings);
         PullRequestClient pullRequestClient = new PullRequestClientImpl(bitbucketClient);
         PullRequestsRequest request = new PullRequestsRequest(user, repositorySlug, PullRequestsRequest.State.Open);
-        PullRequestsResponse pullRequestsResponse = pullRequestClient.load(request);
+        PullRequests pullRequests = pullRequestClient.load(request);
 
         // generate output that can be used with zabbix_sender
-        System.out.println("mini.local bitbucket.open.pull.requests " + pullRequestsResponse.getSize());
+        System.out.println("mini.local bitbucket.open.pull.requests " + pullRequests.getSize());
     }
 }

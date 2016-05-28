@@ -1,8 +1,8 @@
 package net.ngeor.bprr;
 
 import net.ngeor.bprr.requests.PullRequestsRequest;
-import net.ngeor.bprr.serialization.PullRequestResponse;
-import net.ngeor.bprr.serialization.PullRequestsResponse;
+import net.ngeor.bprr.serialization.PullRequest;
+import net.ngeor.bprr.serialization.PullRequests;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
@@ -17,18 +17,18 @@ public class PullRequestClientImpl implements PullRequestClient {
     }
 
     @Override
-    public PullRequestsResponse load(PullRequestsRequest request) throws IOException {
-        return bitbucketClient.execute(request, PullRequestsResponse.class);
+    public PullRequests load(PullRequestsRequest request) throws IOException {
+        return bitbucketClient.execute(request, PullRequests.class);
     }
 
     @Override
-    public List<PullRequestsResponse> loadAllPages(PullRequestsRequest request) throws IOException {
-        List<PullRequestsResponse> result = new ArrayList<>();
-        PullRequestsResponse response = load(request);
+    public List<PullRequests> loadAllPages(PullRequestsRequest request) throws IOException {
+        List<PullRequests> result = new ArrayList<>();
+        PullRequests response = load(request);
         result.add(response);
         String next = response.getNext();
         while (!StringUtils.isBlank(next)) {
-            response = bitbucketClient.execute(next, PullRequestsResponse.class);
+            response = bitbucketClient.execute(next, PullRequests.class);
             next = response.getNext();
             result.add(response);
         }
@@ -37,11 +37,11 @@ public class PullRequestClientImpl implements PullRequestClient {
     }
 
     @Override
-    public List<PullRequestResponse> loadDetails(PullRequestsResponse pullRequestsResponse) throws IOException {
-        List<PullRequestResponse> result = new ArrayList<>();
-        for (PullRequestResponse partialResponse : pullRequestsResponse.getValues()) {
+    public List<PullRequest> loadDetails(PullRequests pullRequests) throws IOException {
+        List<PullRequest> result = new ArrayList<>();
+        for (PullRequest partialResponse : pullRequests.getValues()) {
             String href = partialResponse.getLinks().getSelf().getHref();
-            PullRequestResponse fullResponse = bitbucketClient.execute(href, PullRequestResponse.class);
+            PullRequest fullResponse = bitbucketClient.execute(href, PullRequest.class);
             result.add(fullResponse);
         }
 
@@ -49,11 +49,11 @@ public class PullRequestClientImpl implements PullRequestClient {
     }
 
     @Override
-    public List<PullRequestResponse> loadAllDetails(PullRequestsRequest request) throws IOException {
-        List<PullRequestsResponse> pullRequestsResponses = loadAllPages(request);
-        List<PullRequestResponse> result = new ArrayList<>();
-        for (PullRequestsResponse pullRequestsResponse : pullRequestsResponses) {
-            result.addAll(loadDetails(pullRequestsResponse));
+    public List<PullRequest> loadAllDetails(PullRequestsRequest request) throws IOException {
+        List<PullRequests> pullRequestsList = loadAllPages(request);
+        List<PullRequest> result = new ArrayList<>();
+        for (PullRequests pullRequests : pullRequestsList) {
+            result.addAll(loadDetails(pullRequests));
         }
 
         return result;

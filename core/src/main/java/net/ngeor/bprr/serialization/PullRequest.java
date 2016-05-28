@@ -2,7 +2,7 @@ package net.ngeor.bprr.serialization;
 
 import java.util.Date;
 
-public class PullRequestResponse {
+public class PullRequest {
     private int id;
     private String description;
     private String state;
@@ -11,9 +11,6 @@ public class PullRequestResponse {
     private Author author;
     private Participant[] participants;
     private Links links;
-
-    public PullRequestResponse() {
-    }
 
     public int getId() {
         return id;
