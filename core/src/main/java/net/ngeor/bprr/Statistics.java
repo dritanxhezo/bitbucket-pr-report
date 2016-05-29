@@ -5,7 +5,6 @@ import net.ngeor.bprr.serialization.PullRequest;
 import java.util.*;
 
 public class Statistics {
-    // TODO support teams
     public List<Statistic> countByAuthor(List<PullRequest> pullRequests) {
         List<Statistic> result = new ArrayList<>();
         Map<String, List<PullRequest>> groupedByAuthor = groupByAuthor(pullRequests);
@@ -14,6 +13,39 @@ public class Statistics {
             List<PullRequest> pullRequestsOfAuthor = mapEntry.getValue();
             Statistic statistic = new Statistic(username, pullRequestsOfAuthor.size());
             result.add(statistic);
+        }
+
+        return result;
+    }
+
+    public List<Statistic> countByAuthorTeam(List<PullRequest> pullRequests, TeamMapper teamMapper) {
+        Map<String, List<PullRequest>> userMap = groupByAuthor(pullRequests);
+        Map<String, List<PullRequest>> groupMap = groupByTeam(userMap, teamMapper);
+        List<Statistic> result = new ArrayList<>();
+        for (Map.Entry<String, List<PullRequest>> mapEntry : groupMap.entrySet()) {
+            String team = mapEntry.getKey();
+            List<PullRequest> pullRequestsOfTeam = mapEntry.getValue();
+            Statistic statistic = new Statistic(team, pullRequestsOfTeam.size());
+            result.add(statistic);
+        }
+
+        return result;
+    }
+
+    private Map<String, List<PullRequest>> groupByTeam(Map<String, List<PullRequest>> userMap, TeamMapper teamMapper) {
+        Map<String, List<PullRequest>> result = new TreeMap<>();
+        for (Map.Entry<String, List<PullRequest>> userEntry : userMap.entrySet()) {
+            String username = userEntry.getKey();
+            String team = teamMapper.userToTeam(username);
+            List<PullRequest> teamPullRequests;
+            if (result.containsKey(team)) {
+                teamPullRequests = result.get(team);
+            } else {
+                teamPullRequests = new ArrayList<>();
+                result.put(team, teamPullRequests);
+            }
+
+            teamPullRequests.addAll(userEntry.getValue());
         }
 
         return result;

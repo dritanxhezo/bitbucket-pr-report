@@ -34,6 +34,33 @@ public class StatisticsTest {
         assertArrayEquals(expected, result.toArray());
     }
 
+    @Test
+    public void shouldCreateReportPerAuthorTeam() {
+        List<PullRequest> pullRequests = Arrays.asList(
+                mockPullRequest("ngeor"),
+                mockPullRequest("ngeor"),
+                mockPullRequest("test1"),
+                mockPullRequest("test2")
+        );
+
+        Statistics statistics = new Statistics();
+        TeamMapper teamMapper = mock(TeamMapper.class);
+        when(teamMapper.userToTeam("ngeor")).thenReturn("team1");
+        when(teamMapper.userToTeam("test1")).thenReturn("team1");
+        when(teamMapper.userToTeam("test2")).thenReturn("team2");
+
+        // act
+        List<Statistic> result = statistics.countByAuthorTeam(pullRequests, teamMapper);
+
+        // assert
+        Statistic[] expected = new Statistic[] {
+                new Statistic("team1", 3),
+                new Statistic("team2", 1)
+        };
+
+        assertArrayEquals(expected, result.toArray());
+    }
+
     private static PullRequest mockPullRequest(String authorUsername) {
         PullRequest pullRequest = mock(PullRequest.class);
         Author author = mock(Author.class);
