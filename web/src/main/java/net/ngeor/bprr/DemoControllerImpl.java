@@ -56,7 +56,7 @@ class DemoControllerImpl implements DemoController {
         PullRequestModelCollection pullRequestModelCollection = this.loadPullRequests(username, repository, updatedOn);
 
         for (PullRequestModel pullRequestModel : pullRequestModelCollection) {
-            this.teamMapper.assignTeams(pullRequestModel);
+            assignTeams(pullRequestModel);
         }
 
         PullRequestsView view = new PullRequestsView();
@@ -66,6 +66,17 @@ class DemoControllerImpl implements DemoController {
         view.setUpdatedOnFrom(DateHelper.formatDate(updatedOnFrom));
         view.setUpdatedOnUntil(DateHelper.formatDate(updatedOnUntil));
         return view;
+    }
+
+    private void assignTeams(PullRequestModel pullRequestModel) {
+        pullRequestModel.setAuthorTeam(teamMapper.userToTeam(pullRequestModel.getAuthor()));
+        String[] reviewers = pullRequestModel.getReviewers();
+        String[] reviewerTeams = new String[reviewers.length];
+        for (int i = 0; i < reviewers.length; i++) {
+            reviewerTeams[i] = teamMapper.userToTeam(reviewers[i]);
+        }
+
+        pullRequestModel.setReviewerTeams(reviewerTeams);
     }
 
     @NotNull

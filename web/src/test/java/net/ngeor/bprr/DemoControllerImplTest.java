@@ -120,6 +120,9 @@ public class DemoControllerImplTest {
                 new PullRequestModel(2, "description 2", "OPEN", dt2, dt2, "ngeor", "ngeor", "reviewer 1")
         };
 
+        expectedPullRequestModels[0].setReviewerTeams(new String[] { null, null });
+        expectedPullRequestModels[1].setReviewerTeams(new String[] { null, null });
+
         when(pullRequestClient.loadAllDetails(new PullRequestsRequest("currentUser", "repo", PullRequestsRequest.State.Merged, new DateRange(DateHelper.utcDate(2016, 5, 5), DateHelper.utcToday()))))
                 .thenReturn(Arrays.asList(firstWithParticipants, secondWithParticipants));
 
@@ -143,6 +146,13 @@ public class DemoControllerImplTest {
                 new PullRequestModel(2, "description 2", "OPEN", dt2, dt2, "ngeor", "ngeor", "reviewer 1")
         };
 
+        expectedPullRequestModels[0].setAuthorTeam("team1");
+        expectedPullRequestModels[0].setReviewerTeams(new String[] { null, null });
+        expectedPullRequestModels[1].setReviewerTeams(new String[] { null, "team2" });
+
+        when(teamMapper.userToTeam("mfrauenholtz")).thenReturn("team1");
+        when(teamMapper.userToTeam("reviewer 1")).thenReturn("team2");
+
         when(pullRequestClient.loadAllDetails(new PullRequestsRequest("currentUser", "repo", PullRequestsRequest.State.Merged, new DateRange(DateHelper.utcDate(2016, 5, 5), DateHelper.utcToday()))))
                 .thenReturn(Arrays.asList(firstWithParticipants, secondWithParticipants));
 
@@ -151,8 +161,7 @@ public class DemoControllerImplTest {
 
         // assert
         PullRequestModel[] pullRequestModels = view.getPullRequests().toArray();
-        verify(teamMapper).assignTeams(expectedPullRequestModels[0]);
-        verify(teamMapper).assignTeams(expectedPullRequestModels[1]);
+        assertArrayEquals(expectedPullRequestModels, pullRequestModels);
     }
 
     @NotNull

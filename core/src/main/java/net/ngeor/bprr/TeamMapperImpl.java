@@ -1,39 +1,22 @@
 package net.ngeor.bprr;
 
 import net.ngeor.util.ResourceLoader;
+import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Properties;
 
-class TeamMapperImpl implements TeamMapper {
+public class TeamMapperImpl implements TeamMapper {
     private final ResourceLoader resourceLoader;
-    private HashMap<String, String> userToTeam = new HashMap<>();
+    private final HashMap<String, String> userToTeam = new HashMap<>();
 
     public TeamMapperImpl(ResourceLoader resourceLoader) {
         this.resourceLoader = resourceLoader;
     }
 
-    @Override
-    public void assignTeams(PullRequestModel model) {
-        model.setAuthorTeam(mapAuthor(model.getAuthor()));
-        String[] reviewers = model.getReviewers();
-        if (reviewers != null) {
-            model.setReviewerTeams(mapAuthors(reviewers));
-        }
-    }
-
-    private String[] mapAuthors(String... reviewers) {
-        String[] result = new String[reviewers.length];
-        for (int i = 0; i < result.length; i++) {
-            result[i] = mapAuthor(reviewers[i]);
-        }
-
-        return result;
-    }
-
-    void put(String user, String team) {
+    private void put(String user, String team) {
         userToTeam.put(user, team);
     }
 
@@ -58,15 +41,12 @@ class TeamMapperImpl implements TeamMapper {
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         } finally {
-            try {
-                in.close();
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
+            IOUtils.closeQuietly(in);
         }
     }
 
-    private String mapAuthor(String user) {
+    @Override
+    public String userToTeam(String user) {
         if (user == null) {
             return null;
         }
