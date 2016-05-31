@@ -40,7 +40,7 @@ public class DemoControllerImplTest {
         firstWithParticipants = TestData.load(PullRequest.class, "OneParticipantNotApproved");
         secondWithParticipants = TestData.load(PullRequest.class, "ThreeParticipantsTwoApproved");
 
-        when(pullRequestClient.loadAllDetails(new PullRequestsRequest("currentUser", "repo", PullRequestsRequest.State.Merged, new DateRange(DateHelper.utcToday(), DateHelper.utcToday()))))
+        when(pullRequestClient.loadAllDetails(new PullRequestsRequest(new RepositoryDescriptor("currentUser", "repo"), PullRequestsRequest.State.Merged, new DateRange(DateHelper.utcToday(), DateHelper.utcToday()))))
                 .thenReturn(new ArrayList<PullRequest>());
     }
 
@@ -66,7 +66,7 @@ public class DemoControllerImplTest {
     public void shouldSetUpdatedOnFrom() throws IOException {
         // arrange
         when(req.getParameter("updatedOnFrom")).thenReturn("2016-05-05");
-        when(pullRequestClient.loadAllDetails(new PullRequestsRequest("currentUser", "repo", PullRequestsRequest.State.Merged, new DateRange(DateHelper.utcDate(2016, 5, 5), DateHelper.utcToday()))))
+        when(pullRequestClient.loadAllDetails(new PullRequestsRequest(new RepositoryDescriptor("currentUser", "repo"), PullRequestsRequest.State.Merged, new DateRange(DateHelper.utcDate(2016, 5, 5), DateHelper.utcToday()))))
                 .thenReturn(new ArrayList<PullRequest>());
 
         // act
@@ -89,7 +89,7 @@ public class DemoControllerImplTest {
     public void shouldSetUpdatedOnUntil() throws IOException {
         // arrange
         when(req.getParameter("updatedOnUntil")).thenReturn("2016-05-07");
-        when(pullRequestClient.loadAllDetails(new PullRequestsRequest("currentUser", "repo", PullRequestsRequest.State.Merged, new DateRange(DateHelper.utcToday(), DateHelper.utcDate(2016, 5, 7)))))
+        when(pullRequestClient.loadAllDetails(new PullRequestsRequest(new RepositoryDescriptor("currentUser", "repo"), PullRequestsRequest.State.Merged, new DateRange(DateHelper.utcToday(), DateHelper.utcDate(2016, 5, 7)))))
                 .thenReturn(new ArrayList<PullRequest>());
 
         // act
@@ -123,7 +123,7 @@ public class DemoControllerImplTest {
         expectedPullRequestModels[0].setReviewerTeams(new String[] { null, null });
         expectedPullRequestModels[1].setReviewerTeams(new String[] { null, null });
 
-        when(pullRequestClient.loadAllDetails(new PullRequestsRequest("currentUser", "repo", PullRequestsRequest.State.Merged, new DateRange(DateHelper.utcDate(2016, 5, 5), DateHelper.utcToday()))))
+        when(pullRequestClient.loadAllDetails(new PullRequestsRequest(new RepositoryDescriptor("currentUser", "repo"), PullRequestsRequest.State.Merged, new DateRange(DateHelper.utcDate(2016, 5, 5), DateHelper.utcToday()))))
                 .thenReturn(Arrays.asList(firstWithParticipants, secondWithParticipants));
 
         // act
@@ -153,7 +153,7 @@ public class DemoControllerImplTest {
         when(teamMapper.userToTeam("mfrauenholtz")).thenReturn("team1");
         when(teamMapper.userToTeam("reviewer 1")).thenReturn("team2");
 
-        when(pullRequestClient.loadAllDetails(new PullRequestsRequest("currentUser", "repo", PullRequestsRequest.State.Merged, new DateRange(DateHelper.utcDate(2016, 5, 5), DateHelper.utcToday()))))
+        when(pullRequestClient.loadAllDetails(new PullRequestsRequest(new RepositoryDescriptor("currentUser", "repo"), PullRequestsRequest.State.Merged, new DateRange(DateHelper.utcDate(2016, 5, 5), DateHelper.utcToday()))))
                 .thenReturn(Arrays.asList(firstWithParticipants, secondWithParticipants));
 
         // act

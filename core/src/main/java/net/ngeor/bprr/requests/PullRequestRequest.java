@@ -1,13 +1,13 @@
 package net.ngeor.bprr.requests;
 
+import net.ngeor.bprr.RepositoryDescriptor;
+
 public class PullRequestRequest {
-    private final String owner;
-    private final String repositorySlug;
+    private final RepositoryDescriptor repositoryDescriptor;
     private final int id;
 
-    public PullRequestRequest(String owner, String repositorySlug, int id) {
-        this.owner = owner;
-        this.repositorySlug = repositorySlug;
+    public PullRequestRequest(RepositoryDescriptor repositoryDescriptor, int id) {
+        this.repositoryDescriptor = repositoryDescriptor;
         this.id = id;
     }
 
@@ -19,21 +19,19 @@ public class PullRequestRequest {
         PullRequestRequest that = (PullRequestRequest) o;
 
         if (id != that.id) return false;
-        if (!owner.equals(that.owner)) return false;
-        return repositorySlug.equals(that.repositorySlug);
+        return repositoryDescriptor.equals(that.repositoryDescriptor);
 
     }
 
     @Override
     public int hashCode() {
-        int result = owner.hashCode();
-        result = 31 * result + repositorySlug.hashCode();
+        int result = repositoryDescriptor.hashCode();
         result = 31 * result + id;
         return result;
     }
 
     @Override
     public String toString() {
-        return "repositories/" + owner + "/" + repositorySlug + "/pullrequests/" + id;
+        return "repositories/" + repositoryDescriptor + "/pullrequests/" + id;
     }
 }

@@ -1,5 +1,6 @@
 package net.ngeor.bprr.requests;
 
+import net.ngeor.bprr.RepositoryDescriptor;
 import net.ngeor.util.DateRange;
 import net.ngeor.util.URLQueryWriter;
 import net.ngeor.util.URLStringBuilder;
@@ -9,36 +10,30 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class PullRequestsRequest {
-    private final String owner;
-    private final String repositorySlug;
+    private final RepositoryDescriptor repositoryDescriptor;
     private final State state;
     private final DateRange updatedOn;
 
-    public PullRequestsRequest(@NotNull String owner, @NotNull String repositorySlug, State state, DateRange updatedOn) {
-        if (owner == null || owner.isEmpty()) {
-            throw new IllegalArgumentException("owner cannot be null");
+    public PullRequestsRequest(@NotNull RepositoryDescriptor repositoryDescriptor, State state, DateRange updatedOn) {
+        if (repositoryDescriptor == null) {
+            throw new IllegalArgumentException("repositoryDescriptor cannot be null");
         }
 
-        if (repositorySlug == null || repositorySlug.isEmpty()) {
-            throw new IllegalArgumentException("repositorySlug cannot be null");
-        }
-
-        this.owner = owner;
-        this.repositorySlug = repositorySlug;
+        this.repositoryDescriptor = repositoryDescriptor;
         this.state = state;
         this.updatedOn = updatedOn;
     }
 
-    public PullRequestsRequest(@NotNull String owner, @NotNull String repositorySlug) {
-        this(owner, repositorySlug, null, null);
+    public PullRequestsRequest(@NotNull RepositoryDescriptor repositoryDescriptor) {
+        this(repositoryDescriptor, null, null);
     }
 
-    public PullRequestsRequest(@NotNull String owner, @NotNull String repositorySlug, State state) {
-        this(owner, repositorySlug, state, null);
+    public PullRequestsRequest(@NotNull RepositoryDescriptor repositoryDescriptor, State state) {
+        this(repositoryDescriptor, state, null);
     }
 
-    public PullRequestsRequest(@NotNull String owner, @NotNull String repositorySlug, DateRange updatedOn) {
-        this(owner, repositorySlug, null, updatedOn);
+    public PullRequestsRequest(@NotNull RepositoryDescriptor repositoryDescriptor, DateRange updatedOn) {
+        this(repositoryDescriptor, null, updatedOn);
     }
 
     private static String formatDate(Date date) {
@@ -51,7 +46,7 @@ public class PullRequestsRequest {
         URLStringBuilder result = new URLStringBuilder();
         URLQueryWriter urlQueryWriter = new URLQueryWriter(result);
 
-        result.append("repositories/").append(owner).append("/").append(repositorySlug).append("/pullrequests");
+        result.append("repositories/").append(repositoryDescriptor.toString()).append("/pullrequests");
         if (state != null || updatedOn != null) {
             result.append("?q=");
 
@@ -80,8 +75,7 @@ public class PullRequestsRequest {
 
         PullRequestsRequest that = (PullRequestsRequest) o;
 
-        if (!owner.equals(that.owner)) return false;
-        if (!repositorySlug.equals(that.repositorySlug)) return false;
+        if (!repositoryDescriptor.equals(that.repositoryDescriptor)) return false;
         if (state != that.state) return false;
         return updatedOn != null ? updatedOn.equals(that.updatedOn) : that.updatedOn == null;
 
@@ -89,8 +83,7 @@ public class PullRequestsRequest {
 
     @Override
     public int hashCode() {
-        int result = owner.hashCode();
-        result = 31 * result + repositorySlug.hashCode();
+        int result = repositoryDescriptor.hashCode();
         result = 31 * result + (state != null ? state.hashCode() : 0);
         result = 31 * result + (updatedOn != null ? updatedOn.hashCode() : 0);
         return result;

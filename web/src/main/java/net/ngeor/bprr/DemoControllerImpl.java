@@ -27,15 +27,7 @@ class DemoControllerImpl implements DemoController {
     @Override
     public PullRequestsView createView(HttpServletRequest req) throws IOException {
         String fullRepoName = req.getParameter("repo");
-
-        // TODO: encapsulate username and repository in an object like RepositoryDescriptor
-        String username = null;
-        String repository = null;
-        if (fullRepoName != null) {
-            String[] parts = fullRepoName.split("/");
-            username = parts[0];
-            repository = parts[1];
-        }
+        RepositoryDescriptor repositoryDescriptor = RepositoryDescriptor.parse(fullRepoName);
 
         Date updatedOnFrom;
         try {
@@ -53,7 +45,7 @@ class DemoControllerImpl implements DemoController {
 
         DateRange updatedOn = new DateRange(updatedOnFrom, updatedOnUntil);
 
-        PullRequestModelCollection pullRequestModelCollection = this.loadPullRequests(username, repository, updatedOn);
+        PullRequestModelCollection pullRequestModelCollection = this.loadPullRequests(repositoryDescriptor, updatedOn);
 
         for (PullRequestModel pullRequestModel : pullRequestModelCollection) {
             assignTeams(pullRequestModel);
@@ -80,9 +72,9 @@ class DemoControllerImpl implements DemoController {
     }
 
     @NotNull
-    private PullRequestModelCollection loadPullRequests(String username, String repository, DateRange updatedOn) throws IOException {
+    private PullRequestModelCollection loadPullRequests(RepositoryDescriptor repositoryDescriptor, DateRange updatedOn) throws IOException {
         // fetch pull requests
-        PullRequestsRequest request = new PullRequestsRequest(username, repository, PullRequestsRequest.State.Merged, updatedOn);
+        PullRequestsRequest request = new PullRequestsRequest(repositoryDescriptor, PullRequestsRequest.State.Merged, updatedOn);
         List<PullRequest> pullRequests = pullRequestClient.loadAllDetails(request);
 
         // collect models here

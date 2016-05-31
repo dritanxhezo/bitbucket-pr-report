@@ -41,7 +41,7 @@ public class Program {
         Settings settings = new SettingsImpl(user, secret);
         BitbucketClient bitbucketClient = new BitbucketClientImpl(httpClientFactory, settings);
         PullRequestClient pullRequestClient = new PullRequestClientImpl(bitbucketClient);
-        PullRequestsRequest request = new PullRequestsRequest(user, repositorySlug, PullRequestsRequest.State.Open);
+        PullRequestsRequest request = new PullRequestsRequest(new RepositoryDescriptor(user, repositorySlug), PullRequestsRequest.State.Open);
         PullRequests pullRequests = pullRequestClient.load(request);
 
         // generate output that can be used with zabbix_sender

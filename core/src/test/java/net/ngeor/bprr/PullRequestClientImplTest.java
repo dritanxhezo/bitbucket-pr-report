@@ -20,7 +20,7 @@ public class PullRequestClientImplTest {
     public void shouldFetchSinglePage() throws IOException {
         BitbucketClient bitbucketClient = mock(BitbucketClient.class);
         PullRequestClient pullRequestClient = new PullRequestClientImpl(bitbucketClient);
-        PullRequestsRequest request = new PullRequestsRequest("user", "repo");
+        PullRequestsRequest request = new PullRequestsRequest(new RepositoryDescriptor("user", "repo"));
         PullRequests expectedResponse = mock(PullRequests.class);
         when(bitbucketClient.execute(request, PullRequests.class)).thenReturn(expectedResponse);
 
@@ -35,7 +35,7 @@ public class PullRequestClientImplTest {
     public void shouldFetchAllPages_singlePage() throws IOException {
         BitbucketClient bitbucketClient = mock(BitbucketClient.class);
         PullRequestClient pullRequestClient = new PullRequestClientImpl(bitbucketClient);
-        PullRequestsRequest request = new PullRequestsRequest("user", "repo");
+        PullRequestsRequest request = new PullRequestsRequest(new RepositoryDescriptor("user", "repo"));
         PullRequests expectedFirstResponse = mock(PullRequests.class);
         when(bitbucketClient.execute(request, PullRequests.class)).thenReturn(expectedFirstResponse);
 
@@ -51,7 +51,7 @@ public class PullRequestClientImplTest {
     public void shouldFetchAllPages_twoPages() throws IOException {
         BitbucketClient bitbucketClient = mock(BitbucketClient.class);
         PullRequestClient pullRequestClient = new PullRequestClientImpl(bitbucketClient);
-        PullRequestsRequest request = new PullRequestsRequest("user", "repo");
+        PullRequestsRequest request = new PullRequestsRequest(new RepositoryDescriptor("user", "repo"));
         PullRequests expectedFirstResponse = mock(PullRequests.class);
         when(expectedFirstResponse.getNext()).thenReturn("link to second request");
         PullRequests expectedSecondResponse = mock(PullRequests.class);
@@ -72,7 +72,7 @@ public class PullRequestClientImplTest {
     public void shouldFetchAllPages_threePages() throws IOException {
         BitbucketClient bitbucketClient = mock(BitbucketClient.class);
         PullRequestClient pullRequestClient = new PullRequestClientImpl(bitbucketClient);
-        PullRequestsRequest request = new PullRequestsRequest("user", "repo");
+        PullRequestsRequest request = new PullRequestsRequest(new RepositoryDescriptor("user", "repo"));
         PullRequests expectedFirstResponse = mock(PullRequests.class);
         when(expectedFirstResponse.getNext()).thenReturn("link to second request");
         PullRequests expectedSecondResponse = mock(PullRequests.class);
