@@ -24,6 +24,8 @@ public class Program {
         options.addOption("r", "repository", true, "the repository slug");
         options.addOption("o", "openPullRequests", false, "show open pull requests");
         options.addOption("c", "closedPullRequests", false, "show closed pull requests statistics");
+        options.addOption("h", "zabbixHost", true, "zabbix host");
+        options.addOption("k", "zabbixKey", true, "zabbix key");
 
         // create the parser
         CommandLineParser commandLineParser = new DefaultParser();
@@ -44,6 +46,9 @@ public class Program {
             return;
         }
 
+        String zabbixHost = commandLine.getOptionValue("zabbixHost");
+        String zabbixKey = commandLine.getOptionValue("zabbixKey");
+
         // echo mini.local bitbucket.open.pull.requests 0 | zabbix_sender -z localhost -vv -i -
         HttpClientFactory httpClientFactory = new HttpClientFactoryImpl();
         Settings settings = new SettingsImpl(user, secret);
@@ -56,7 +61,7 @@ public class Program {
             PullRequests pullRequests = pullRequestClient.load(request);
 
             // generate output that can be used with zabbix_sender
-            System.out.println("mini.local bitbucket.open.pull.requests " + pullRequests.getSize());
+            System.out.println(zabbixHost + " " + zabbixKey + " " + pullRequests.getSize());
         } else if (commandLine.hasOption('c')) {
             PullRequestsRequest request = new PullRequestsRequest(
                     repositoryDescriptor,
@@ -65,7 +70,7 @@ public class Program {
             PullRequests pullRequests = pullRequestClient.load(request);
 
             // generate output that can be used with zabbix_sender
-            System.out.println("mini.local bitbucket.open.pull.requests " + pullRequests.getSize());
+            System.out.println(zabbixHost + " " + zabbixKey + " " + pullRequests.getSize());
         } else {
             System.err.println("No command speciried");
         }
