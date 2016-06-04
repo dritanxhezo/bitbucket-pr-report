@@ -5,8 +5,8 @@ import net.ngeor.bprr.serialization.PullRequest;
 import net.ngeor.bprr.views.PullRequestsView;
 import net.ngeor.testutil.TestData;
 import net.ngeor.util.DateHelper;
-import net.ngeor.util.DateRange;
 import org.jetbrains.annotations.NotNull;
+import org.joda.time.Interval;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -40,7 +40,7 @@ public class DemoControllerImplTest {
         firstWithParticipants = TestData.load(PullRequest.class, "OneParticipantNotApproved");
         secondWithParticipants = TestData.load(PullRequest.class, "ThreeParticipantsTwoApproved");
 
-        when(pullRequestClient.loadAllDetails(new PullRequestsRequest(new RepositoryDescriptor("currentUser", "repo"), PullRequestsRequest.State.Merged, new DateRange(DateHelper.utcToday(), DateHelper.utcToday()))))
+        when(pullRequestClient.loadAllDetails(new PullRequestsRequest(new RepositoryDescriptor("currentUser", "repo"), PullRequestsRequest.State.Merged, new Interval(DateHelper.utcToday(), DateHelper.utcToday()))))
                 .thenReturn(new ArrayList<PullRequest>());
     }
 
@@ -66,7 +66,7 @@ public class DemoControllerImplTest {
     public void shouldSetUpdatedOnFrom() throws IOException {
         // arrange
         when(req.getParameter("updatedOnFrom")).thenReturn("2016-05-05");
-        when(pullRequestClient.loadAllDetails(new PullRequestsRequest(new RepositoryDescriptor("currentUser", "repo"), PullRequestsRequest.State.Merged, new DateRange(DateHelper.utcDate(2016, 5, 5), DateHelper.utcToday()))))
+        when(pullRequestClient.loadAllDetails(new PullRequestsRequest(new RepositoryDescriptor("currentUser", "repo"), PullRequestsRequest.State.Merged, new Interval(DateHelper.utcDate(2016, 5, 5), DateHelper.utcToday()))))
                 .thenReturn(new ArrayList<PullRequest>());
 
         // act
@@ -77,19 +77,22 @@ public class DemoControllerImplTest {
     }
 
     @Test
-    public void shouldSetUpdatedOnFromFromCurrentDate() throws IOException {
+    public void shouldSetUpdatedOnFromFromMinDate() throws IOException {
         // act
         PullRequestsView view = createView();
 
         // assert
-        assertEquals(DateHelper.formatDate(DateHelper.utcToday()), view.getUpdatedOnFrom());
+        assertEquals("0001-01-01", view.getUpdatedOnFrom());
     }
 
     @Test
     public void shouldSetUpdatedOnUntil() throws IOException {
         // arrange
         when(req.getParameter("updatedOnUntil")).thenReturn("2016-05-07");
-        when(pullRequestClient.loadAllDetails(new PullRequestsRequest(new RepositoryDescriptor("currentUser", "repo"), PullRequestsRequest.State.Merged, new DateRange(DateHelper.utcToday(), DateHelper.utcDate(2016, 5, 7)))))
+        when(pullRequestClient.loadAllDetails(new PullRequestsRequest(
+                new RepositoryDescriptor("currentUser", "repo"),
+                PullRequestsRequest.State.Merged,
+                new Interval(DateHelper.MIN, DateHelper.utcDate(2016, 5, 7)))))
                 .thenReturn(new ArrayList<PullRequest>());
 
         // act
@@ -113,8 +116,8 @@ public class DemoControllerImplTest {
         // arrange
         when(req.getParameter("updatedOnFrom")).thenReturn("2016-05-05");
 
-        Date dt1 = DateHelper.utcDate(2010, 6, 1);
-        Date dt2 = DateHelper.utcDate(2011, 7, 2);
+        Date dt1 = DateHelper.utcDate(2010, 6, 1).toDate();
+        Date dt2 = DateHelper.utcDate(2011, 7, 2).toDate();
         PullRequestModel[] expectedPullRequestModels = new PullRequestModel[]{
                 new PullRequestModel(1, "description 1", "OPEN", dt1, dt1, "mfrauenholtz", null, null),
                 new PullRequestModel(2, "description 2", "OPEN", dt2, dt2, "ngeor", "ngeor", "reviewer 1")
@@ -123,7 +126,7 @@ public class DemoControllerImplTest {
         expectedPullRequestModels[0].setReviewerTeams(new String[] { null, null });
         expectedPullRequestModels[1].setReviewerTeams(new String[] { null, null });
 
-        when(pullRequestClient.loadAllDetails(new PullRequestsRequest(new RepositoryDescriptor("currentUser", "repo"), PullRequestsRequest.State.Merged, new DateRange(DateHelper.utcDate(2016, 5, 5), DateHelper.utcToday()))))
+        when(pullRequestClient.loadAllDetails(new PullRequestsRequest(new RepositoryDescriptor("currentUser", "repo"), PullRequestsRequest.State.Merged, new Interval(DateHelper.utcDate(2016, 5, 5), DateHelper.utcToday()))))
                 .thenReturn(Arrays.asList(firstWithParticipants, secondWithParticipants));
 
         // act
@@ -139,8 +142,8 @@ public class DemoControllerImplTest {
         // arrange
         when(req.getParameter("updatedOnFrom")).thenReturn("2016-05-05");
 
-        Date dt1 = DateHelper.utcDate(2010, 6, 1);
-        Date dt2 = DateHelper.utcDate(2011, 7, 2);
+        Date dt1 = DateHelper.utcDate(2010, 6, 1).toDate();
+        Date dt2 = DateHelper.utcDate(2011, 7, 2).toDate();
         PullRequestModel[] expectedPullRequestModels = new PullRequestModel[]{
                 new PullRequestModel(1, "description 1", "OPEN", dt1, dt1, "mfrauenholtz", null, null),
                 new PullRequestModel(2, "description 2", "OPEN", dt2, dt2, "ngeor", "ngeor", "reviewer 1")
@@ -153,7 +156,7 @@ public class DemoControllerImplTest {
         when(teamMapper.userToTeam("mfrauenholtz")).thenReturn("team1");
         when(teamMapper.userToTeam("reviewer 1")).thenReturn("team2");
 
-        when(pullRequestClient.loadAllDetails(new PullRequestsRequest(new RepositoryDescriptor("currentUser", "repo"), PullRequestsRequest.State.Merged, new DateRange(DateHelper.utcDate(2016, 5, 5), DateHelper.utcToday()))))
+        when(pullRequestClient.loadAllDetails(new PullRequestsRequest(new RepositoryDescriptor("currentUser", "repo"), PullRequestsRequest.State.Merged, new Interval(DateHelper.utcDate(2016, 5, 5), DateHelper.utcToday()))))
                 .thenReturn(Arrays.asList(firstWithParticipants, secondWithParticipants));
 
         // act

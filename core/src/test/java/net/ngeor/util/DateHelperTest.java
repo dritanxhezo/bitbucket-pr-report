@@ -1,40 +1,25 @@
 package net.ngeor.util;
 
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.junit.Test;
 
 import java.text.ParseException;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.TimeZone;
 
 import static org.junit.Assert.assertEquals;
 
 public class DateHelperTest {
-    @Test
-    public void date_shouldCreateDate() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(2016, 3, 30, 0, 0, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        Date expected = calendar.getTime();
-        Date actual = DateHelper.date(2016, 4, 30);
-        assertEquals(expected, actual);
-    }
 
     @Test
     public void utcDate_shouldCreateDate() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
-        calendar.set(2016, 3, 30, 0, 0, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        Date expected = calendar.getTime();
-        Date actual = DateHelper.utcDate(2016, 4, 30);
-        assertEquals(expected, actual);
+        DateTime actual = DateHelper.utcDate(2016, 4, 30);
+        assertEquals("2016-04-30T00:00:00.000Z", actual.toString());
     }
 
     @Test
     public void parseUtcDate_shouldParseDate() throws ParseException {
-        Date expected = DateHelper.utcDate(2016, 5, 5);
-        Date actual = DateHelper.parseUtcDate("2016-05-05");
+        DateTime expected = DateHelper.utcDate(2016, 5, 5);
+        DateTime actual = DateHelper.parseUtcDate("2016-05-05");
         assertEquals(expected, actual);
     }
 
@@ -50,14 +35,8 @@ public class DateHelperTest {
 
     @Test
     public void utcToday_shouldReturnCurrentDate() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        Date expected = calendar.getTime();
-        Date actual = DateHelper.utcToday();
+        DateTime expected = new DateTime(DateTimeZone.UTC).withTimeAtStartOfDay();
+        DateTime actual = DateHelper.utcToday();
         assertEquals(expected, actual);
     }
 }

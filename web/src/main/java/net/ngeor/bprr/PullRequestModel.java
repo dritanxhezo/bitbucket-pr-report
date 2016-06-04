@@ -20,6 +20,10 @@ public class PullRequestModel {
 
     }
 
+    public PullRequestModel(PullRequestModel other) {
+        // TODO implement copy constructor
+    }
+
     public PullRequestModel(int id) {
         this.id = id;
     }
@@ -154,5 +158,11 @@ public class PullRequestModel {
                 ", createdOn=" + createdOn +
                 ", updatedOn=" + updatedOn +
                 '}';
+    }
+
+    public PullRequestModel withReviewers(String... reviewers) {
+        PullRequestModel clone = new PullRequestModel(this);
+        clone.reviewers = reviewers;
+        return clone;
     }
 }

@@ -1,55 +1,35 @@
 package net.ngeor.util;
 
+import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.LocalDate;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.TimeZone;
 
-// TODO: replace with joda time
 public class DateHelper {
 
-    @NotNull
-    public static Date date(int year, int month, int day) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(year, month - 1, day, 0, 0, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        return calendar.getTime();
-    }
+    public static final DateTime MIN = utcDate(1, 1, 1);
 
     @NotNull
-    public static Date utcDate(int year, int month, int day) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
-        calendar.set(year, month - 1, day, 0, 0, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        return calendar.getTime();
+    public static DateTime utcDate(int year, int month, int day) {
+        return new DateTime(year, month, day, 0, 0, DateTimeZone.UTC);
     }
 
-    public static Date parseUtcDate(String text) throws ParseException {
-        if (text == null) {
+    public static DateTime parseUtcDate(String text) throws ParseException {
+        if (StringUtils.isBlank(text)) {
             throw new ParseException("Cannot parse null text", 0);
         }
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-        return simpleDateFormat.parse(text);
+        return LocalDate.parse(text).toDateTimeAtStartOfDay(DateTimeZone.UTC);
     }
 
-    public static Date utcToday() {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        return calendar.getTime();
+    public static DateTime utcToday() {
+        return new DateTime(DateTimeZone.UTC).withTimeAtStartOfDay();
     }
 
-    public static String formatDate(Date date) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        return simpleDateFormat.format(date);
+    public static String formatDate(DateTime date) {
+        return date.toLocalDate().toString();
     }
 }

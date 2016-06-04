@@ -5,14 +5,14 @@ import net.ngeor.bprr.serialization.Participant;
 import net.ngeor.bprr.serialization.PullRequest;
 import net.ngeor.bprr.views.PullRequestsView;
 import net.ngeor.util.DateHelper;
-import net.ngeor.util.DateRange;
 import org.jetbrains.annotations.NotNull;
+import org.joda.time.DateTime;
+import org.joda.time.Interval;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 class DemoControllerImpl implements DemoController {
@@ -29,21 +29,21 @@ class DemoControllerImpl implements DemoController {
         String fullRepoName = req.getParameter("repo");
         RepositoryDescriptor repositoryDescriptor = RepositoryDescriptor.parse(fullRepoName);
 
-        Date updatedOnFrom;
+        DateTime updatedOnFrom;
         try {
             updatedOnFrom = DateHelper.parseUtcDate(req.getParameter("updatedOnFrom"));
         } catch (ParseException e) {
-            updatedOnFrom = DateHelper.utcToday();
+            updatedOnFrom = DateHelper.MIN;
         }
 
-        Date updatedOnUntil;
+        DateTime updatedOnUntil;
         try {
             updatedOnUntil = DateHelper.parseUtcDate(req.getParameter("updatedOnUntil"));
         } catch (ParseException e) {
             updatedOnUntil = DateHelper.utcToday();
         }
 
-        DateRange updatedOn = new DateRange(updatedOnFrom, updatedOnUntil);
+        Interval updatedOn = new Interval(updatedOnFrom, updatedOnUntil);
 
         PullRequestModelCollection pullRequestModelCollection = this.loadPullRequests(repositoryDescriptor, updatedOn);
 
@@ -72,7 +72,7 @@ class DemoControllerImpl implements DemoController {
     }
 
     @NotNull
-    private PullRequestModelCollection loadPullRequests(RepositoryDescriptor repositoryDescriptor, DateRange updatedOn) throws IOException {
+    private PullRequestModelCollection loadPullRequests(RepositoryDescriptor repositoryDescriptor, Interval updatedOn) throws IOException {
         // fetch pull requests
         PullRequestsRequest request = new PullRequestsRequest(repositoryDescriptor, PullRequestsRequest.State.Merged, updatedOn);
         List<PullRequest> pullRequests = pullRequestClient.loadAllDetails(request);

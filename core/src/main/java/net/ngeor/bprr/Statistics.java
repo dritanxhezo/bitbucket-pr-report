@@ -2,7 +2,10 @@ package net.ngeor.bprr;
 
 import net.ngeor.bprr.serialization.PullRequest;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class Statistics {
     public List<Statistic> countByAuthor(List<PullRequest> pullRequests) {

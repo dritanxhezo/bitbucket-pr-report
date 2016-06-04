@@ -3,10 +3,8 @@ package net.ngeor.bprr;
 import net.ngeor.bprr.requests.PullRequestsRequest;
 import net.ngeor.bprr.serialization.PullRequests;
 import net.ngeor.util.DateHelper;
-import net.ngeor.util.DateRange;
-import org.apache.commons.cli.*;
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
+import org.joda.time.Interval;
 
 import java.io.IOException;
 
@@ -57,7 +55,7 @@ public class Program {
         PullRequestsRequest request = new PullRequestsRequest(
                 repositoryDescriptor,
                 PullRequestsRequest.State.Merged,
-                new DateRange(new DateTime(DateHelper.utcToday()).minusDays(1).toDate(), DateHelper.utcToday()));
+                new Interval(DateHelper.utcToday().minusDays(1), DateHelper.utcToday()));
         PullRequests pullRequests = pullRequestClient.load(request);
 
         // generate output that can be used with zabbix_sender
