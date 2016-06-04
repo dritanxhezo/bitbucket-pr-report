@@ -17,37 +17,21 @@ public class Program {
         // To run on Windows:
         // java -cp "bprr-cli-1.0-SNAPSHOT.jar;*" net.ngeor.bprr.Program
 
-        // create the options
-        Options options = new Options();
-        options.addOption("u", "user", true, "the user name that owns the repositories");
-        options.addOption("s", "secret", true, "base64 encoded authentication token");
-        options.addOption("r", "repository", true, "the repository slug");
-        options.addOption("o", "openPullRequests", false, "show open pull requests");
-        options.addOption("c", "closedPullRequests", false, "show closed pull requests statistics");
-        options.addOption("h", "zabbixHost", true, "zabbix host");
-        options.addOption("k", "zabbixKey", true, "zabbix key");
-
-        // create the parser
-        CommandLineParser commandLineParser = new DefaultParser();
-        CommandLine commandLine;
-        try {
-            commandLine = commandLineParser.parse(options, args);
-        } catch (ParseException ex) {
-            System.err.println("Parsing failed. Reason: " + ex.getMessage());
+        ProgramOptions programOptions = new ProgramOptions();
+        if (!programOptions.parse(args)){
             return;
         }
 
-        final String user = commandLine.getOptionValue("user");
-        final String secret = commandLine.getOptionValue("secret");
-        final String repositorySlug = commandLine.getOptionValue("repository");
+        final String user = programOptions.getUser();
+        final String secret = programOptions.getSecret();
+        final String repositorySlug = programOptions.getRepository();
         if (StringUtils.isBlank(user) || StringUtils.isBlank(secret) || StringUtils.isBlank(repositorySlug)) {
-            HelpFormatter helpFormatter = new HelpFormatter();
-            helpFormatter.printHelp("bprr", options);
+            programOptions.printHelp();
             return;
         }
 
-        String zabbixHost = commandLine.getOptionValue("zabbixHost");
-        String zabbixKey = commandLine.getOptionValue("zabbixKey");
+        String zabbixHost = programOptions.getZabbixHost();
+        String zabbixKey = programOptions.getZabbixKey();
 
         // echo mini.local bitbucket.open.pull.requests 0 | zabbix_sender -z localhost -vv -i -
         HttpClientFactory httpClientFactory = new HttpClientFactoryImpl();
@@ -56,23 +40,36 @@ public class Program {
         PullRequestClient pullRequestClient = new PullRequestClientImpl(bitbucketClient);
         RepositoryDescriptor repositoryDescriptor = new RepositoryDescriptor(user, repositorySlug);
 
-        if (commandLine.hasOption('o')) {
-            PullRequestsRequest request = new PullRequestsRequest(repositoryDescriptor, PullRequestsRequest.State.Open);
-            PullRequests pullRequests = pullRequestClient.load(request);
-
-            // generate output that can be used with zabbix_sender
-            System.out.println(zabbixHost + " " + zabbixKey + " " + pullRequests.getSize());
-        } else if (commandLine.hasOption('c')) {
-            PullRequestsRequest request = new PullRequestsRequest(
-                    repositoryDescriptor,
-                    PullRequestsRequest.State.Merged,
-                    new DateRange(new DateTime(DateHelper.utcToday()).minusDays(1).toDate(), DateHelper.utcToday()));
-            PullRequests pullRequests = pullRequestClient.load(request);
-
-            // generate output that can be used with zabbix_sender
-            System.out.println(zabbixHost + " " + zabbixKey + " " + pullRequests.getSize());
-        } else {
-            System.err.println("No command speciried");
+        ProgramOptions.Command command = programOptions.getCommand();
+        switch (command) {
+            case OpenPullRequests:
+                handleOpenPullRequests(repositoryDescriptor, pullRequestClient, zabbixHost, zabbixKey);
+                break;
+            case MergedPullRequests:
+                handleMergedPullRequests(repositoryDescriptor, pullRequestClient, zabbixHost, zabbixKey);
+                break;
+            default:
+                System.err.println("No command speciried");
         }
+    }
+
+    private static void handleMergedPullRequests(RepositoryDescriptor repositoryDescriptor, PullRequestClient pullRequestClient, String zabbixHost, String zabbixKey) throws IOException {
+        PullRequestsRequest request = new PullRequestsRequest(
+                repositoryDescriptor,
+                PullRequestsRequest.State.Merged,
+                new DateRange(new DateTime(DateHelper.utcToday()).minusDays(1).toDate(), DateHelper.utcToday()));
+        PullRequests pullRequests = pullRequestClient.load(request);
+
+        // generate output that can be used with zabbix_sender
+        System.out.println(zabbixHost + " " + zabbixKey + " " + pullRequests.getSize());
+    }
+
+    private static void handleOpenPullRequests(RepositoryDescriptor repositoryDescriptor, PullRequestClient pullRequestClient, String zabbixHost, String zabbixKey) throws IOException {
+        // TODO create class OpenPullRequestsHandler
+        PullRequestsRequest request = new PullRequestsRequest(repositoryDescriptor, PullRequestsRequest.State.Open);
+        PullRequests pullRequests = pullRequestClient.load(request);
+
+        // generate output that can be used with zabbix_sender
+        System.out.println(zabbixHost + " " + zabbixKey + " " + pullRequests.getSize());
     }
 }
