@@ -33,7 +33,7 @@ public class BitbucketClientImplTest {
         @Before
         public void before() throws URISyntaxException, IOException {
             // arrange
-            InputStream responseStream = new ResourceLoaderImpl().getResourceAsStream("net/ngeor/bprr/serialization/pullRequests.json");
+            InputStream responseStream = new ResourceLoaderImpl().getResourceAsStream("net/ngeor/bprr/serialization/PullRequestsSimple.json");
             URI expected = new URI("https://api.bitbucket.org/2.0/repositories/owner/repo_slug/pullrequests");
             HttpClientFactory httpClientFactory = setupHttpClientFactory(responseStream, expected);
             BitbucketClientImpl bitbucketClient = new BitbucketClientImpl(httpClientFactory, setupSettings());
@@ -91,7 +91,7 @@ public class BitbucketClientImplTest {
         @Test
         public void shouldUseRequestInTheURI() throws URISyntaxException, IOException {
             // arrange
-            InputStream responseStream = new ResourceLoaderImpl().getResourceAsStream("net/ngeor/bprr/serialization/pullRequests.json");
+            InputStream responseStream = new ResourceLoaderImpl().getResourceAsStream("net/ngeor/bprr/serialization/PullRequestsSimple.json");
             URI expected = new URI("https://api.bitbucket.org/2.0/repositories/owner/repo_slug/pullrequests");
             HttpClientFactory httpClientFactory = setupHttpClientFactory(responseStream, expected);
             BitbucketClientImpl bitbucketClient = new BitbucketClientImpl(httpClientFactory, setupSettings());
@@ -109,7 +109,7 @@ public class BitbucketClientImplTest {
         @Test
         public void shouldUseRequestAsIsIfItIsBitbucketUrl() throws URISyntaxException, IOException {
             // arrange
-            InputStream responseStream = new ResourceLoaderImpl().getResourceAsStream("net/ngeor/bprr/serialization/pullRequests.json");
+            InputStream responseStream = new ResourceLoaderImpl().getResourceAsStream("net/ngeor/bprr/serialization/PullRequestsSimple.json");
             URI expected = new URI("https://api.bitbucket.org/2.0/whatever");
             HttpClientFactory httpClientFactory = setupHttpClientFactory(responseStream, expected);
             BitbucketClientImpl bitbucketClient = new BitbucketClientImpl(httpClientFactory, setupSettings());
