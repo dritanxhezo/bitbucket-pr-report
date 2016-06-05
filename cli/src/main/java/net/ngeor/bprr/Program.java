@@ -1,6 +1,7 @@
 package net.ngeor.bprr;
 
 import net.ngeor.bprr.requests.PullRequestsRequest;
+import net.ngeor.bprr.serialization.BambooPlan;
 import net.ngeor.bprr.serialization.PullRequests;
 import net.ngeor.util.DateHelper;
 import org.apache.commons.lang3.StringUtils;
@@ -34,7 +35,7 @@ public class Program {
         // echo mini.local bitbucket.open.pull.requests 0 | zabbix_sender -z localhost -vv -i -
         HttpClientFactory httpClientFactory = new HttpClientFactoryImpl();
         Settings settings = new SettingsImpl(user, secret);
-        BitbucketClient bitbucketClient = new BitbucketClientImpl(httpClientFactory, settings);
+        RestClient bitbucketClient = new BitbucketClientImpl(httpClientFactory, settings);
         PullRequestClient pullRequestClient = new PullRequestClientImpl(bitbucketClient);
         RepositoryDescriptor repositoryDescriptor = new RepositoryDescriptor(user, repositorySlug);
 
@@ -45,6 +46,9 @@ public class Program {
                 break;
             case MergedPullRequests:
                 handleMergedPullRequests(repositoryDescriptor, pullRequestClient, zabbixHost, zabbixKey);
+                break;
+            case BambooAverageBuildTime:
+                handleBambooAverageBuildTime(httpClientFactory, settings, programOptions);
                 break;
             default:
                 System.err.println("No command speciried");
@@ -69,5 +73,16 @@ public class Program {
 
         // generate output that can be used with zabbix_sender
         System.out.println(zabbixHost + " " + zabbixKey + " " + pullRequests.getSize());
+    }
+
+    private static void handleBambooAverageBuildTime(HttpClientFactory httpClientFactory, Settings settings, ProgramOptions programOptions) throws IOException {
+        RestClient restClient = new RestClientImpl(httpClientFactory, settings);
+        String company = programOptions.getUser();
+        String planKey = programOptions.getRepository();
+        String zabbixHost = programOptions.getZabbixHost();
+        String zabbixKey = programOptions.getZabbixKey();
+        String url = String.format("https://%s.jira.com/builds/rest/api/latest/plan/%s.json?os_authType=basic", company, planKey);
+        BambooPlan bambooPlan = restClient.execute(url, BambooPlan.class);
+        System.out.format("%s %s %f", zabbixHost, zabbixKey, bambooPlan.getAverageBuildTimeInSeconds());
     }
 }

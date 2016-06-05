@@ -23,7 +23,7 @@ class Factory {
         }
     }
 
-    public BitbucketClient bitbucketClient() throws IOException {
+    public RestClient bitbucketClient() throws IOException {
         return new BitbucketClientImpl(httpClientFactory(), settings());
     }
 

@@ -10,9 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PullRequestClientImpl implements PullRequestClient {
-    private final BitbucketClient bitbucketClient;
+    private final RestClient bitbucketClient;
 
-    public PullRequestClientImpl(BitbucketClient bitbucketClient) {
+    public PullRequestClientImpl(RestClient bitbucketClient) {
         this.bitbucketClient = bitbucketClient;
     }
 

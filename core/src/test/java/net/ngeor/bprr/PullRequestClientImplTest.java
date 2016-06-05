@@ -18,7 +18,7 @@ import static org.mockito.Mockito.when;
 public class PullRequestClientImplTest {
     @Test
     public void shouldFetchSinglePage() throws IOException {
-        BitbucketClient bitbucketClient = mock(BitbucketClient.class);
+        RestClient bitbucketClient = mock(RestClient.class);
         PullRequestClient pullRequestClient = new PullRequestClientImpl(bitbucketClient);
         PullRequestsRequest request = new PullRequestsRequest(new RepositoryDescriptor("user", "repo"));
         PullRequests expectedResponse = mock(PullRequests.class);
@@ -33,7 +33,7 @@ public class PullRequestClientImplTest {
 
     @Test
     public void shouldFetchAllPages_singlePage() throws IOException {
-        BitbucketClient bitbucketClient = mock(BitbucketClient.class);
+        RestClient bitbucketClient = mock(RestClient.class);
         PullRequestClient pullRequestClient = new PullRequestClientImpl(bitbucketClient);
         PullRequestsRequest request = new PullRequestsRequest(new RepositoryDescriptor("user", "repo"));
         PullRequests expectedFirstResponse = mock(PullRequests.class);
@@ -49,7 +49,7 @@ public class PullRequestClientImplTest {
 
     @Test
     public void shouldFetchAllPages_twoPages() throws IOException {
-        BitbucketClient bitbucketClient = mock(BitbucketClient.class);
+        RestClient bitbucketClient = mock(RestClient.class);
         PullRequestClient pullRequestClient = new PullRequestClientImpl(bitbucketClient);
         PullRequestsRequest request = new PullRequestsRequest(new RepositoryDescriptor("user", "repo"));
         PullRequests expectedFirstResponse = mock(PullRequests.class);
@@ -70,7 +70,7 @@ public class PullRequestClientImplTest {
 
     @Test
     public void shouldFetchAllPages_threePages() throws IOException {
-        BitbucketClient bitbucketClient = mock(BitbucketClient.class);
+        RestClient bitbucketClient = mock(RestClient.class);
         PullRequestClient pullRequestClient = new PullRequestClientImpl(bitbucketClient);
         PullRequestsRequest request = new PullRequestsRequest(new RepositoryDescriptor("user", "repo"));
         PullRequests expectedFirstResponse = mock(PullRequests.class);
@@ -94,7 +94,7 @@ public class PullRequestClientImplTest {
 
     @Test
     public void shouldFetchDetailsOfPullRequests() throws IOException {
-        BitbucketClient bitbucketClient = mock(BitbucketClient.class);
+        RestClient bitbucketClient = mock(RestClient.class);
         PullRequestClient pullRequestClient = new PullRequestClientImpl(bitbucketClient);
         PullRequests pullRequestsResponse = mock(PullRequests.class);
         PullRequest firstPullRequest = mock(PullRequest.class);
