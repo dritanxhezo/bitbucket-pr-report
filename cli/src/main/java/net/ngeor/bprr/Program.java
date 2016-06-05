@@ -83,6 +83,7 @@ public class Program {
         String zabbixKey = programOptions.getZabbixKey();
         String url = String.format("https://%s.jira.com/builds/rest/api/latest/plan/%s.json?os_authType=basic", company, planKey);
         BambooPlan bambooPlan = restClient.execute(url, BambooPlan.class);
-        System.out.format("%s %s %f", zabbixHost, zabbixKey, bambooPlan.getAverageBuildTimeInSeconds());
+        double timeInMinutes = bambooPlan.getAverageBuildTimeInSeconds() / 60.0;
+        System.out.println(String.format("%s %s %f", zabbixHost, zabbixKey, timeInMinutes));
     }
 }
