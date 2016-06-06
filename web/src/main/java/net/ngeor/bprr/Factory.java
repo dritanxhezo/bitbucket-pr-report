@@ -24,7 +24,7 @@ class Factory {
     }
 
     public RestClient bitbucketClient() throws IOException {
-        return new BitbucketClientImpl(httpClientFactory(), settings());
+        return new BitbucketClientImpl(httpClientFactory(), settings().getSecret());
     }
 
     public HttpClientFactory httpClientFactory() {
