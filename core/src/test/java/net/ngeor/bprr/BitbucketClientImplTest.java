@@ -36,7 +36,7 @@ public class BitbucketClientImplTest {
             InputStream responseStream = new ResourceLoaderImpl().getResourceAsStream("net/ngeor/bprr/serialization/PullRequestsSimple.json");
             URI expected = new URI("https://api.bitbucket.org/2.0/repositories/owner/repo_slug/pullrequests");
             HttpClientFactory httpClientFactory = setupHttpClientFactory(responseStream, expected);
-            BitbucketClientImpl bitbucketClient = new BitbucketClientImpl(httpClientFactory, setupSettings());
+            BitbucketClientImpl bitbucketClient = new BitbucketClientImpl(httpClientFactory, "some secret");
 
             // act
             response = bitbucketClient.execute(
@@ -75,7 +75,7 @@ public class BitbucketClientImplTest {
             Date createdOn = response.getValues()[0].getCreatedOn();
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
-            calendar.set(2013, Calendar.NOVEMBER, 05, 23, 59, 26);
+            calendar.set(2013, Calendar.NOVEMBER, 5, 23, 59, 26);
             calendar.set(Calendar.MILLISECOND, 480);
             Date expected = calendar.getTime();
             assertEquals(expected, createdOn);
@@ -94,7 +94,7 @@ public class BitbucketClientImplTest {
             InputStream responseStream = new ResourceLoaderImpl().getResourceAsStream("net/ngeor/bprr/serialization/PullRequestsSimple.json");
             URI expected = new URI("https://api.bitbucket.org/2.0/repositories/owner/repo_slug/pullrequests");
             HttpClientFactory httpClientFactory = setupHttpClientFactory(responseStream, expected);
-            BitbucketClientImpl bitbucketClient = new BitbucketClientImpl(httpClientFactory, setupSettings());
+            BitbucketClientImpl bitbucketClient = new BitbucketClientImpl(httpClientFactory, "some secret");
 
             // act
             bitbucketClient.execute(
@@ -112,7 +112,7 @@ public class BitbucketClientImplTest {
             InputStream responseStream = new ResourceLoaderImpl().getResourceAsStream("net/ngeor/bprr/serialization/PullRequestsSimple.json");
             URI expected = new URI("https://api.bitbucket.org/2.0/whatever");
             HttpClientFactory httpClientFactory = setupHttpClientFactory(responseStream, expected);
-            BitbucketClientImpl bitbucketClient = new BitbucketClientImpl(httpClientFactory, setupSettings());
+            BitbucketClientImpl bitbucketClient = new BitbucketClientImpl(httpClientFactory, "some secret");
 
             // act
             bitbucketClient.execute(
@@ -140,11 +140,6 @@ public class BitbucketClientImplTest {
             }
         };
         return httpClientFactory;
-    }
-
-    private static Settings setupSettings() {
-        Settings settings = mock(Settings.class);
-        return settings;
     }
 
     private static HttpUriRequest matchHttpGet(URI expectedURI) {

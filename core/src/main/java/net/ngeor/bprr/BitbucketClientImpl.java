@@ -1,8 +1,8 @@
 package net.ngeor.bprr;
 
 public class BitbucketClientImpl extends RestClientImpl {
-    public BitbucketClientImpl(HttpClientFactory httpClientFactory, Settings settings) {
-        super(httpClientFactory, settings);
+    public BitbucketClientImpl(HttpClientFactory httpClientFactory, String secret) {
+        super(httpClientFactory, secret);
     }
 
     @Override

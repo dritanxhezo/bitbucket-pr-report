@@ -13,11 +13,11 @@ import java.io.InputStream;
 
 public class RestClientImpl implements RestClient {
     private final HttpClientFactory httpClientFactory;
-    private final Settings settings;
+    private final String secret;
 
-    public RestClientImpl(HttpClientFactory httpClientFactory, Settings settings) {
+    public RestClientImpl(HttpClientFactory httpClientFactory, String secret) {
         this.httpClientFactory = httpClientFactory;
-        this.settings = settings;
+        this.secret = secret;
     }
 
     @Override
@@ -26,7 +26,7 @@ public class RestClientImpl implements RestClient {
         try {
             String url = createUrl(resource);
             HttpGet httpGet = new HttpGet(url);
-            httpGet.addHeader("Authorization", "Basic " + settings.getSecret());
+            httpGet.addHeader("Authorization", "Basic " + secret);
             HttpResponse httpResponse = httpClient.execute(httpGet);
             if (httpResponse == null) {
                 throw new NullPointerException("Null HTTP response");

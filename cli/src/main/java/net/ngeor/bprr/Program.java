@@ -34,8 +34,7 @@ public class Program {
 
         // echo mini.local bitbucket.open.pull.requests 0 | zabbix_sender -z localhost -vv -i -
         HttpClientFactory httpClientFactory = new HttpClientFactoryImpl();
-        Settings settings = new SettingsImpl(user, secret);
-        RestClient bitbucketClient = new BitbucketClientImpl(httpClientFactory, settings);
+        RestClient bitbucketClient = new BitbucketClientImpl(httpClientFactory, secret);
         PullRequestClient pullRequestClient = new PullRequestClientImpl(bitbucketClient);
         RepositoryDescriptor repositoryDescriptor = new RepositoryDescriptor(user, repositorySlug);
 
@@ -48,7 +47,7 @@ public class Program {
                 handleMergedPullRequests(repositoryDescriptor, pullRequestClient, zabbixHost, zabbixKey);
                 break;
             case BambooAverageBuildTime:
-                handleBambooAverageBuildTime(httpClientFactory, settings, programOptions);
+                handleBambooAverageBuildTime(httpClientFactory, programOptions);
                 break;
             default:
                 System.err.println("No command speciried");
@@ -75,15 +74,9 @@ public class Program {
         System.out.println(zabbixHost + " " + zabbixKey + " " + pullRequests.getSize());
     }
 
-    private static void handleBambooAverageBuildTime(HttpClientFactory httpClientFactory, Settings settings, ProgramOptions programOptions) throws IOException {
-        RestClient restClient = new RestClientImpl(httpClientFactory, settings);
-        String company = programOptions.getUser();
-        String planKey = programOptions.getRepository();
-        String zabbixHost = programOptions.getZabbixHost();
-        String zabbixKey = programOptions.getZabbixKey();
-        String url = String.format("https://%s.jira.com/builds/rest/api/latest/plan/%s.json?os_authType=basic", company, planKey);
-        BambooPlan bambooPlan = restClient.execute(url, BambooPlan.class);
-        double timeInMinutes = bambooPlan.getAverageBuildTimeInSeconds() / 60.0;
-        System.out.println(String.format("%s %s %f", zabbixHost, zabbixKey, timeInMinutes));
+    private static void handleBambooAverageBuildTime(HttpClientFactory httpClientFactory, ProgramOptions programOptions) throws IOException {
+        BambooAverageBuildTimeHandler handler = new BambooAverageBuildTimeHandler();
+        RestClient restClient = new RestClientImpl(httpClientFactory, programOptions.getSecret());
+        handler.handle(restClient, programOptions, System.out);
     }
 }
