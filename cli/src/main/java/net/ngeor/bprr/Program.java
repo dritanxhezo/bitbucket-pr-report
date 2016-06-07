@@ -1,11 +1,8 @@
 package net.ngeor.bprr;
 
 import net.ngeor.bprr.requests.PullRequestsRequest;
-import net.ngeor.bprr.serialization.BambooPlan;
 import net.ngeor.bprr.serialization.PullRequests;
-import net.ngeor.util.DateHelper;
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.Interval;
 
 import java.io.IOException;
 
@@ -44,7 +41,7 @@ public class Program {
                 handleOpenPullRequests(repositoryDescriptor, pullRequestClient, zabbixHost, zabbixKey);
                 break;
             case MergedPullRequests:
-                handleMergedPullRequests(repositoryDescriptor, pullRequestClient, zabbixHost, zabbixKey);
+                handleMergedPullRequests(pullRequestClient, programOptions);
                 break;
             case BambooAverageBuildTime:
                 handleBambooAverageBuildTime(httpClientFactory, programOptions);
@@ -54,15 +51,9 @@ public class Program {
         }
     }
 
-    private static void handleMergedPullRequests(RepositoryDescriptor repositoryDescriptor, PullRequestClient pullRequestClient, String zabbixHost, String zabbixKey) throws IOException {
-        PullRequestsRequest request = new PullRequestsRequest(
-                repositoryDescriptor,
-                PullRequestsRequest.State.Merged,
-                new Interval(DateHelper.utcToday().minusDays(1), DateHelper.utcToday()));
-        PullRequests pullRequests = pullRequestClient.load(request);
-
-        // generate output that can be used with zabbix_sender
-        System.out.println(zabbixHost + " " + zabbixKey + " " + pullRequests.getSize());
+    private static void handleMergedPullRequests(PullRequestClient pullRequestClient, ProgramOptions programOptions) throws IOException {
+        MergedPullRequestsHandler handler = new MergedPullRequestsHandler();
+        handler.handle(pullRequestClient, programOptions, System.out);
     }
 
     private static void handleOpenPullRequests(RepositoryDescriptor repositoryDescriptor, PullRequestClient pullRequestClient, String zabbixHost, String zabbixKey) throws IOException {
