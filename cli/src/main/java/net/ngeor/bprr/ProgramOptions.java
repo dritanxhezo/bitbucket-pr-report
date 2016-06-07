@@ -19,9 +19,7 @@ public class ProgramOptions {
         options.addOption("u", "user", true, "the user name that owns the repositories");
         options.addOption("s", "secret", true, "base64 encoded authentication token");
         options.addOption("r", "repository", true, "the repository slug");
-        options.addOption("c", "command", true, "the command to run [ OpenPullRequests, MergedPullRequests ]");
-        options.addOption("h", "zabbixHost", true, "zabbix host");
-        options.addOption("k", "zabbixKey", true, "zabbix key");
+        options.addOption("c", "command", true, "the command to run [ OpenPullRequests, MergedPullRequests, BambooAverageBuildTime ]");
     }
 
     public void printHelp() {
@@ -52,14 +50,6 @@ public class ProgramOptions {
 
     public String getRepository() {
         return commandLine.getOptionValue("repository");
-    }
-
-    public String getZabbixHost() {
-        return commandLine.getOptionValue("zabbixHost");
-    }
-
-    public String getZabbixKey() {
-        return commandLine.getOptionValue("zabbixKey");
     }
 
     public Command getCommand() {

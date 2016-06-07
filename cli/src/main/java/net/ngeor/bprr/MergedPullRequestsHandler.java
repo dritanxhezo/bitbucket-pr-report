@@ -17,9 +17,6 @@ public class MergedPullRequestsHandler {
                 new Interval(DateHelper.utcToday().minusDays(1), DateHelper.utcToday()));
         PullRequests pullRequests = pullRequestClient.load(request);
 
-        // generate output that can be used with zabbix_sender
-        String zabbixHost = programOptions.getZabbixHost();
-        String zabbixKey = programOptions.getZabbixKey();
-        out.println(zabbixHost + " " + zabbixKey + " " + pullRequests.getSize());
+        out.println(pullRequests.getSize());
     }
 }

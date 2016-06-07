@@ -22,8 +22,6 @@ public class MergedPullRequestsHandlerTest {
         PrintStream out = mock(PrintStream.class);
         when(programOptions.getRepository()).thenReturn("repository");
         when(programOptions.getUser()).thenReturn("user");
-        when(programOptions.getZabbixKey()).thenReturn("key");
-        when(programOptions.getZabbixHost()).thenReturn("host");
         RepositoryDescriptor repositoryDescriptor = new RepositoryDescriptor("user", "repository");
         PullRequestsRequest pullRequestsRequest = new PullRequestsRequest(
                 repositoryDescriptor,
@@ -38,6 +36,6 @@ public class MergedPullRequestsHandlerTest {
         handler.handle(pullRequestClient, programOptions, out);
 
         // assert
-        verify(out).println("host key 5");
+        verify(out).println(5);
     }
 }

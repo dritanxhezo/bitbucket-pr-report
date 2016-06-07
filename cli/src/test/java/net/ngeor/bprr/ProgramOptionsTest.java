@@ -49,34 +49,6 @@ public class ProgramOptionsTest {
     }
 
     @Test
-    public void shouldParseZabbixHostWithShortOption() {
-        ProgramOptions programOptions = new ProgramOptions();
-        programOptions.parse("-h", "some.host");
-        assertEquals("some.host", programOptions.getZabbixHost());
-    }
-
-    @Test
-    public void shouldParseZabbixHostWithLongOption() {
-        ProgramOptions programOptions = new ProgramOptions();
-        programOptions.parse("--zabbixHost", "some.host");
-        assertEquals("some.host", programOptions.getZabbixHost());
-    }
-
-    @Test
-    public void shouldParseZabbixKeyWithShortOption() {
-        ProgramOptions programOptions = new ProgramOptions();
-        programOptions.parse("-k", "zabbix.key");
-        assertEquals("zabbix.key", programOptions.getZabbixKey());
-    }
-
-    @Test
-    public void shouldParseZabbixKeyWithLongOption() {
-        ProgramOptions programOptions = new ProgramOptions();
-        programOptions.parse("--zabbixKey", "zabbix.key");
-        assertEquals("zabbix.key", programOptions.getZabbixKey());
-    }
-
-    @Test
     public void shouldParseOpenPullRequestsCommandWithShortOption() {
         ProgramOptions programOptions = new ProgramOptions();
         programOptions.parse("-c", "OpenPullRequests");

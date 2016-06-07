@@ -26,10 +26,6 @@ public class Program {
             return;
         }
 
-        String zabbixHost = programOptions.getZabbixHost();
-        String zabbixKey = programOptions.getZabbixKey();
-
-        // echo mini.local bitbucket.open.pull.requests 0 | zabbix_sender -z localhost -vv -i -
         HttpClientFactory httpClientFactory = new HttpClientFactoryImpl();
         RestClient bitbucketClient = new BitbucketClientImpl(httpClientFactory, secret);
         PullRequestClient pullRequestClient = new PullRequestClientImpl(bitbucketClient);
@@ -38,7 +34,7 @@ public class Program {
         ProgramOptions.Command command = programOptions.getCommand();
         switch (command) {
             case OpenPullRequests:
-                handleOpenPullRequests(repositoryDescriptor, pullRequestClient, zabbixHost, zabbixKey);
+                handleOpenPullRequests(repositoryDescriptor, pullRequestClient);
                 break;
             case MergedPullRequests:
                 handleMergedPullRequests(pullRequestClient, programOptions);
@@ -56,13 +52,11 @@ public class Program {
         handler.handle(pullRequestClient, programOptions, System.out);
     }
 
-    private static void handleOpenPullRequests(RepositoryDescriptor repositoryDescriptor, PullRequestClient pullRequestClient, String zabbixHost, String zabbixKey) throws IOException {
+    private static void handleOpenPullRequests(RepositoryDescriptor repositoryDescriptor, PullRequestClient pullRequestClient) throws IOException {
         // TODO create class OpenPullRequestsHandler
         PullRequestsRequest request = new PullRequestsRequest(repositoryDescriptor, PullRequestsRequest.State.Open);
         PullRequests pullRequests = pullRequestClient.load(request);
-
-        // generate output that can be used with zabbix_sender
-        System.out.println(zabbixHost + " " + zabbixKey + " " + pullRequests.getSize());
+        System.out.println(pullRequests.getSize());
     }
 
     private static void handleBambooAverageBuildTime(HttpClientFactory httpClientFactory, ProgramOptions programOptions) throws IOException {

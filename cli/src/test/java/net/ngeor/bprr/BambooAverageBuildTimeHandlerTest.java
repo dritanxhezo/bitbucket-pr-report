@@ -19,8 +19,6 @@ public class BambooAverageBuildTimeHandlerTest {
         PrintStream out = mock(PrintStream.class);
         BambooPlan bambooPlan = mock(BambooPlan.class);
 
-        when(programOptions.getZabbixHost()).thenReturn("host");
-        when(programOptions.getZabbixKey()).thenReturn("key");
         when(programOptions.getUser()).thenReturn("company");
         when(programOptions.getRepository()).thenReturn("planKey");
         when(restClient.execute("https://company.jira.com/builds/rest/api/latest/plan/planKey.json?os_authType=basic", BambooPlan.class))
@@ -32,6 +30,6 @@ public class BambooAverageBuildTimeHandlerTest {
         handler.handle(restClient, programOptions, out);
 
         // assert
-        verify(out).println("host key 2.00");
+        verify(out).println("2.00");
     }
 }
