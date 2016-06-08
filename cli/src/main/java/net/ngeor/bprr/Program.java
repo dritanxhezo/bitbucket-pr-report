@@ -1,7 +1,5 @@
 package net.ngeor.bprr;
 
-import net.ngeor.bprr.requests.PullRequestsRequest;
-import net.ngeor.bprr.serialization.PullRequests;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
@@ -29,12 +27,11 @@ public class Program {
         HttpClientFactory httpClientFactory = new HttpClientFactoryImpl();
         RestClient bitbucketClient = new BitbucketClientImpl(httpClientFactory, secret);
         PullRequestClient pullRequestClient = new PullRequestClientImpl(bitbucketClient);
-        RepositoryDescriptor repositoryDescriptor = new RepositoryDescriptor(user, repositorySlug);
 
         ProgramOptions.Command command = programOptions.getCommand();
         switch (command) {
             case OpenPullRequests:
-                handleOpenPullRequests(repositoryDescriptor, pullRequestClient);
+                handleOpenPullRequests(pullRequestClient, programOptions);
                 break;
             case MergedPullRequests:
                 handleMergedPullRequests(pullRequestClient, programOptions);
@@ -44,19 +41,18 @@ public class Program {
                 break;
             default:
                 System.err.println("No command speciried");
+                break;
         }
+    }
+
+    private static void handleOpenPullRequests(PullRequestClient pullRequestClient, ProgramOptions programOptions) throws IOException {
+        OpenPullRequestsHandler handler = new OpenPullRequestsHandler();
+        handler.handle(pullRequestClient, programOptions, System.out);
     }
 
     private static void handleMergedPullRequests(PullRequestClient pullRequestClient, ProgramOptions programOptions) throws IOException {
         MergedPullRequestsHandler handler = new MergedPullRequestsHandler();
         handler.handle(pullRequestClient, programOptions, System.out);
-    }
-
-    private static void handleOpenPullRequests(RepositoryDescriptor repositoryDescriptor, PullRequestClient pullRequestClient) throws IOException {
-        // TODO create class OpenPullRequestsHandler
-        PullRequestsRequest request = new PullRequestsRequest(repositoryDescriptor, PullRequestsRequest.State.Open);
-        PullRequests pullRequests = pullRequestClient.load(request);
-        System.out.println(pullRequests.getSize());
     }
 
     private static void handleBambooAverageBuildTime(HttpClientFactory httpClientFactory, ProgramOptions programOptions) throws IOException {
