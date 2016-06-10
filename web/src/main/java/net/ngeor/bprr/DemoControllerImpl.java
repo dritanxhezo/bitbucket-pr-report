@@ -5,9 +5,9 @@ import net.ngeor.bprr.serialization.Participant;
 import net.ngeor.bprr.serialization.PullRequest;
 import net.ngeor.bprr.views.PullRequestsView;
 import net.ngeor.util.DateHelper;
+import net.ngeor.util.LocalDateInterval;
 import org.jetbrains.annotations.NotNull;
-import org.joda.time.DateTime;
-import org.joda.time.Interval;
+import org.joda.time.LocalDate;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -29,21 +29,21 @@ class DemoControllerImpl implements DemoController {
         String fullRepoName = req.getParameter("repo");
         RepositoryDescriptor repositoryDescriptor = RepositoryDescriptor.parse(fullRepoName);
 
-        DateTime updatedOnFrom;
+        LocalDate updatedOnFrom;
         try {
-            updatedOnFrom = DateHelper.parseUtcDate(req.getParameter("updatedOnFrom"));
+            updatedOnFrom = DateHelper.parseUtcDate(req.getParameter("updatedOnFrom")).toLocalDate();
         } catch (ParseException e) {
-            updatedOnFrom = DateHelper.MIN;
+            updatedOnFrom = null;
         }
 
-        DateTime updatedOnUntil;
+        LocalDate updatedOnUntil;
         try {
-            updatedOnUntil = DateHelper.parseUtcDate(req.getParameter("updatedOnUntil"));
+            updatedOnUntil = DateHelper.parseUtcDate(req.getParameter("updatedOnUntil")).toLocalDate();
         } catch (ParseException e) {
-            updatedOnUntil = DateHelper.utcToday();
+            updatedOnUntil = null;
         }
 
-        Interval updatedOn = new Interval(updatedOnFrom, updatedOnUntil);
+        LocalDateInterval updatedOn = new LocalDateInterval(updatedOnFrom, updatedOnUntil);
 
         PullRequestModelCollection pullRequestModelCollection = this.loadPullRequests(repositoryDescriptor, updatedOn);
 
@@ -55,8 +55,8 @@ class DemoControllerImpl implements DemoController {
         view.setFormUrl(req.getRequestURI());
         view.setRepo(fullRepoName);
         view.setPullRequests(pullRequestModelCollection);
-        view.setUpdatedOnFrom(DateHelper.formatDate(updatedOnFrom));
-        view.setUpdatedOnUntil(DateHelper.formatDate(updatedOnUntil));
+        view.setUpdatedOnFrom(updatedOnFrom != null ? updatedOnFrom.toString() : "");
+        view.setUpdatedOnUntil(updatedOnUntil != null ? updatedOnUntil.toString() : "");
         return view;
     }
 
@@ -72,7 +72,7 @@ class DemoControllerImpl implements DemoController {
     }
 
     @NotNull
-    private PullRequestModelCollection loadPullRequests(RepositoryDescriptor repositoryDescriptor, Interval updatedOn) throws IOException {
+    private PullRequestModelCollection loadPullRequests(RepositoryDescriptor repositoryDescriptor, LocalDateInterval updatedOn) throws IOException {
         // fetch pull requests
         PullRequestsRequest request = new PullRequestsRequest(repositoryDescriptor, PullRequestsRequest.State.Merged, updatedOn);
         List<PullRequest> pullRequests = pullRequestClient.loadAllDetails(request);

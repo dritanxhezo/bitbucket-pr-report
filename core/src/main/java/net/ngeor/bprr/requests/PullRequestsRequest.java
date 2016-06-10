@@ -1,20 +1,18 @@
 package net.ngeor.bprr.requests;
 
 import net.ngeor.bprr.RepositoryDescriptor;
-import net.ngeor.util.DateHelper;
+import net.ngeor.util.LocalDateInterval;
 import net.ngeor.util.URLQueryWriter;
 import net.ngeor.util.URLStringBuilder;
 import org.jetbrains.annotations.NotNull;
-import org.joda.time.DateTime;
-import org.joda.time.Interval;
 import org.joda.time.LocalDate;
 
 public class PullRequestsRequest {
     private final RepositoryDescriptor repositoryDescriptor;
     private final State state;
-    private final Interval updatedOn;
+    private final LocalDateInterval updatedOn;
 
-    public PullRequestsRequest(@NotNull RepositoryDescriptor repositoryDescriptor, State state, Interval updatedOn) {
+    public PullRequestsRequest(@NotNull RepositoryDescriptor repositoryDescriptor, State state, LocalDateInterval updatedOn) {
         if (repositoryDescriptor == null) {
             throw new IllegalArgumentException("repositoryDescriptor cannot be null");
         }
@@ -32,12 +30,12 @@ public class PullRequestsRequest {
         this(repositoryDescriptor, state, null);
     }
 
-    public PullRequestsRequest(@NotNull RepositoryDescriptor repositoryDescriptor, Interval updatedOn) {
+    public PullRequestsRequest(@NotNull RepositoryDescriptor repositoryDescriptor, LocalDateInterval updatedOn) {
         this(repositoryDescriptor, null, updatedOn);
     }
 
-    private static String formatDate(DateTime date) {
-        return date.toLocalDate().toString();
+    private static String formatDate(LocalDate date) {
+        return date.toString();
     }
 
     @Override
@@ -54,11 +52,11 @@ public class PullRequestsRequest {
             }
 
             if (updatedOn != null) {
-                if (updatedOn.getStart() != null && updatedOn.getStart().isAfter(DateHelper.MIN)) {
+                if (updatedOn.getStart() != null) {
                     urlQueryWriter.write("updated_on", ">=", formatDate(updatedOn.getStart()));
                 }
 
-                if (updatedOn.getEnd() != null && updatedOn.getEnd().isBefore(new LocalDate().toDateTimeAtStartOfDay())) {
+                if (updatedOn.getEnd() != null) {
                     urlQueryWriter.write("updated_on", "<", formatDate(updatedOn.getEnd()));
                 }
             }

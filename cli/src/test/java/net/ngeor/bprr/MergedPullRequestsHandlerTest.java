@@ -3,7 +3,7 @@ package net.ngeor.bprr;
 import net.ngeor.bprr.requests.PullRequestsRequest;
 import net.ngeor.bprr.serialization.PullRequests;
 import net.ngeor.util.DateHelper;
-import org.joda.time.Interval;
+import net.ngeor.util.LocalDateInterval;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -23,7 +23,7 @@ public class MergedPullRequestsHandlerTest {
         PullRequestsRequest pullRequestsRequest = new PullRequestsRequest(
                 repositoryDescriptor,
                 PullRequestsRequest.State.Merged,
-                new Interval(DateHelper.utcToday().minusDays(1), DateHelper.utcToday()));
+                new LocalDateInterval(DateHelper.utcToday().minusDays(1).toLocalDate(), null));
         PullRequests response = mock(PullRequests.class);
         when(response.getSize()).thenReturn(5);
         when(pullRequestClient.load(pullRequestsRequest)).thenReturn(response);

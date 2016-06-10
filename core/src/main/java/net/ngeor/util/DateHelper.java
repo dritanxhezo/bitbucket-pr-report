@@ -10,8 +10,6 @@ import java.text.ParseException;
 
 public class DateHelper {
 
-    public static final DateTime MIN = utcDate(1, 1, 1);
-
     @NotNull
     public static DateTime utcDate(int year, int month, int day) {
         return new DateTime(year, month, day, 0, 0, DateTimeZone.UTC);
@@ -29,7 +27,4 @@ public class DateHelper {
         return new DateTime(DateTimeZone.UTC).withTimeAtStartOfDay();
     }
 
-    public static String formatDate(DateTime date) {
-        return date.toLocalDate().toString();
-    }
 }

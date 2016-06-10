@@ -3,7 +3,7 @@ package net.ngeor.bprr;
 import net.ngeor.bprr.requests.PullRequestsRequest;
 import net.ngeor.bprr.serialization.PullRequests;
 import net.ngeor.util.DateHelper;
-import org.joda.time.Interval;
+import net.ngeor.util.LocalDateInterval;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -14,7 +14,7 @@ public class MergedPullRequestsHandler {
         PullRequestsRequest request = new PullRequestsRequest(
                 repositoryDescriptor,
                 PullRequestsRequest.State.Merged,
-                new Interval(DateHelper.utcToday().minusDays(1), DateHelper.utcToday()));
+                new LocalDateInterval(DateHelper.utcToday().minusDays(1).toLocalDate(), null));
         PullRequests pullRequests = pullRequestClient.load(request);
 
         out.println(pullRequests.getSize());
