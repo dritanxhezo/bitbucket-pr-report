@@ -14,7 +14,7 @@ public class MergedPullRequestsHandler {
         PullRequestsRequest request = new PullRequestsRequest(
                 repositoryDescriptor,
                 PullRequestsRequest.State.Merged,
-                new LocalDateInterval(DateHelper.utcToday().minusDays(1).toLocalDate(), null));
+                new LocalDateInterval(DateHelper.utcToday().minusDays(1).toLocalDate(), DateHelper.utcToday().toLocalDate()));
         PullRequests pullRequests = pullRequestClient.load(request);
 
         out.println(pullRequests.getSize());
