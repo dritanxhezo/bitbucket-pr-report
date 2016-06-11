@@ -69,7 +69,7 @@ public class DemoControllerImplTest {
         when(pullRequestClient.loadAllDetails(new PullRequestsRequest(
                 new RepositoryDescriptor("currentUser", "repo"),
                 PullRequestsRequest.State.Merged,
-                new LocalDateInterval(DateHelper.utcDate(2016, 5, 5).toLocalDate(), null))))
+                new LocalDateInterval(DateHelper.localDate(2016, 5, 5), null))))
                 .thenReturn(new ArrayList<PullRequest>());
 
         // act
@@ -95,7 +95,7 @@ public class DemoControllerImplTest {
         when(pullRequestClient.loadAllDetails(new PullRequestsRequest(
                 new RepositoryDescriptor("currentUser", "repo"),
                 PullRequestsRequest.State.Merged,
-                new LocalDateInterval(null, DateHelper.utcDate(2016, 5, 7).toLocalDate()))))
+                new LocalDateInterval(null, DateHelper.localDate(2016, 5, 7)))))
                 .thenReturn(new ArrayList<PullRequest>());
 
         // act
@@ -119,8 +119,8 @@ public class DemoControllerImplTest {
         // arrange
         when(req.getParameter("updatedOnFrom")).thenReturn("2016-05-05");
 
-        Date dt1 = DateHelper.utcDate(2010, 6, 1).toDate();
-        Date dt2 = DateHelper.utcDate(2011, 7, 2).toDate();
+        Date dt1 = DateHelper.utcDate(2010, 6, 1);
+        Date dt2 = DateHelper.utcDate(2011, 7, 2);
         PullRequestModel[] expectedPullRequestModels = new PullRequestModel[]{
                 new PullRequestModel(1, "description 1", "OPEN", dt1, dt1, "mfrauenholtz", null, null),
                 new PullRequestModel(2, "description 2", "OPEN", dt2, dt2, "ngeor", "ngeor", "reviewer 1")
@@ -132,7 +132,7 @@ public class DemoControllerImplTest {
         when(pullRequestClient.loadAllDetails(new PullRequestsRequest(
                 new RepositoryDescriptor("currentUser", "repo"),
                 PullRequestsRequest.State.Merged,
-                new LocalDateInterval(DateHelper.utcDate(2016, 5, 5).toLocalDate(), null))))
+                new LocalDateInterval(DateHelper.localDate(2016, 5, 5), null))))
                 .thenReturn(Arrays.asList(firstWithParticipants, secondWithParticipants));
 
         // act
@@ -148,8 +148,8 @@ public class DemoControllerImplTest {
         // arrange
         when(req.getParameter("updatedOnFrom")).thenReturn("2016-05-05");
 
-        Date dt1 = DateHelper.utcDate(2010, 6, 1).toDate();
-        Date dt2 = DateHelper.utcDate(2011, 7, 2).toDate();
+        Date dt1 = DateHelper.utcDate(2010, 6, 1);
+        Date dt2 = DateHelper.utcDate(2011, 7, 2);
         PullRequestModel[] expectedPullRequestModels = new PullRequestModel[]{
                 new PullRequestModel(1, "description 1", "OPEN", dt1, dt1, "mfrauenholtz", null, null),
                 new PullRequestModel(2, "description 2", "OPEN", dt2, dt2, "ngeor", "ngeor", "reviewer 1")
@@ -165,7 +165,7 @@ public class DemoControllerImplTest {
         when(pullRequestClient.loadAllDetails(new PullRequestsRequest(
                 new RepositoryDescriptor("currentUser", "repo"),
                 PullRequestsRequest.State.Merged,
-                new LocalDateInterval(DateHelper.utcDate(2016, 5, 5).toLocalDate(), null))))
+                new LocalDateInterval(DateHelper.localDate(2016, 5, 5), null))))
                 .thenReturn(Arrays.asList(firstWithParticipants, secondWithParticipants));
 
         // act

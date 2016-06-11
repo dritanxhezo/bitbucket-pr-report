@@ -31,14 +31,14 @@ class DemoControllerImpl implements DemoController {
 
         LocalDate updatedOnFrom;
         try {
-            updatedOnFrom = DateHelper.parseUtcDate(req.getParameter("updatedOnFrom")).toLocalDate();
+            updatedOnFrom = DateHelper.parseLocalDate(req.getParameter("updatedOnFrom"));
         } catch (ParseException e) {
             updatedOnFrom = null;
         }
 
         LocalDate updatedOnUntil;
         try {
-            updatedOnUntil = DateHelper.parseUtcDate(req.getParameter("updatedOnUntil")).toLocalDate();
+            updatedOnUntil = DateHelper.parseLocalDate(req.getParameter("updatedOnUntil"));
         } catch (ParseException e) {
             updatedOnUntil = null;
         }

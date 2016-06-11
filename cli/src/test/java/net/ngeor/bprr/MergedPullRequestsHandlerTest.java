@@ -23,7 +23,7 @@ public class MergedPullRequestsHandlerTest {
         PullRequestsRequest pullRequestsRequest = new PullRequestsRequest(
                 repositoryDescriptor,
                 PullRequestsRequest.State.Merged,
-                new LocalDateInterval(DateHelper.utcToday().minusDays(1).toLocalDate(), DateHelper.utcToday().toLocalDate()));
+                new LocalDateInterval(DateHelper.utcToday(), DateHelper.utcToday().plusDays(1)));
         PullRequests response = mock(PullRequests.class);
         when(response.getSize()).thenReturn(5);
         when(pullRequestClient.load(pullRequestsRequest)).thenReturn(response);

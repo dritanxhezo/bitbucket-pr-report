@@ -25,7 +25,7 @@ public class PullRequestsRequestTest {
 
     @Test
     public void shouldFormatUpdatedOn() {
-        LocalDateInterval updatedOn = new LocalDateInterval(DateHelper.utcDate(2016, 5, 4).toLocalDate(), null);
+        LocalDateInterval updatedOn = new LocalDateInterval(DateHelper.localDate(2016, 5, 4), null);
         PullRequestsRequest request = new PullRequestsRequest(new RepositoryDescriptor("ngeor", "bprr"), updatedOn);
         String url = request.toString();
         assertEquals("repositories/ngeor/bprr/pullrequests?q=updated_on+%3E%3D+2016-05-04", url);
@@ -33,7 +33,7 @@ public class PullRequestsRequestTest {
 
     @Test
     public void shouldFormatUpdatedOnWithOnlyUntil() {
-        LocalDateInterval updatedOn = new LocalDateInterval(null, DateHelper.utcDate(2016, 5, 4).toLocalDate());
+        LocalDateInterval updatedOn = new LocalDateInterval(null, DateHelper.localDate(2016, 5, 4));
         PullRequestsRequest request = new PullRequestsRequest(new RepositoryDescriptor("ngeor", "bprr"), updatedOn);
         String url = request.toString();
         assertEquals("repositories/ngeor/bprr/pullrequests?q=updated_on+%3C+2016-05-04", url);
@@ -50,7 +50,7 @@ public class PullRequestsRequestTest {
 
     @Test
     public void shouldSetUpdatedOnUntilWhenDateIsToday() {
-        LocalDate today = DateHelper.utcToday().toLocalDate();
+        LocalDate today = DateHelper.utcToday();
         LocalDateInterval updatedOn = new LocalDateInterval(null, today);
         PullRequestsRequest request = new PullRequestsRequest(new RepositoryDescriptor("ngeor", "bprr"), updatedOn);
         String url = request.toString();
@@ -59,7 +59,7 @@ public class PullRequestsRequestTest {
 
     @Test
     public void shouldFormatUpdatedOnWithBothFromAndUntil() {
-        LocalDateInterval updatedOn = new LocalDateInterval(DateHelper.utcDate(2016, 5, 1).toLocalDate(), DateHelper.utcDate(2016, 5, 4).toLocalDate());
+        LocalDateInterval updatedOn = new LocalDateInterval(DateHelper.localDate(2016, 5, 1), DateHelper.localDate(2016, 5, 4));
         PullRequestsRequest request = new PullRequestsRequest(new RepositoryDescriptor("ngeor", "bprr"), updatedOn);
         String url = request.toString();
         assertEquals("repositories/ngeor/bprr/pullrequests?q=updated_on+%3E%3D+2016-05-01+AND+updated_on+%3C+2016-05-04", url);
@@ -67,7 +67,7 @@ public class PullRequestsRequestTest {
 
     @Test
     public void shouldFormatStateAndUpdatedOn() {
-        LocalDateInterval updatedOn = new LocalDateInterval(DateHelper.utcDate(2016, 5, 3).toLocalDate(), null);
+        LocalDateInterval updatedOn = new LocalDateInterval(DateHelper.localDate(2016, 5, 3), null);
         PullRequestsRequest request = new PullRequestsRequest(new RepositoryDescriptor("ngeor", "bprr"), PullRequestsRequest.State.Merged, updatedOn);
         String url = request.toString();
         assertEquals("repositories/ngeor/bprr/pullrequests?q=state+%3D+%22MERGED%22+AND+updated_on+%3E%3D+2016-05-03", url);

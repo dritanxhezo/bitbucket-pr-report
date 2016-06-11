@@ -2,29 +2,34 @@ package net.ngeor.util;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
-import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDate;
 
 import java.text.ParseException;
+import java.util.Date;
 
 public class DateHelper {
 
     @NotNull
-    public static DateTime utcDate(int year, int month, int day) {
-        return new DateTime(year, month, day, 0, 0, DateTimeZone.UTC);
+    public static LocalDate localDate(int year, int month, int day) {
+        return new LocalDate(year, month, day);
     }
 
-    public static DateTime parseUtcDate(String text) throws ParseException {
+    @NotNull
+    public static Date utcDate(int year, int month, int day) {
+        return DateHelper.localDate(year, month, day).toDateTimeAtStartOfDay(DateTimeZone.UTC).toDate();
+    }
+
+    public static LocalDate parseLocalDate(String text) throws ParseException {
         if (StringUtils.isBlank(text)) {
             throw new ParseException("Cannot parse null text", 0);
         }
 
-        return LocalDate.parse(text).toDateTimeAtStartOfDay(DateTimeZone.UTC);
+        return LocalDate.parse(text);
     }
 
-    public static DateTime utcToday() {
-        return new DateTime(DateTimeZone.UTC).withTimeAtStartOfDay();
+    public static LocalDate utcToday() {
+        return new LocalDate();
     }
 
 }
