@@ -20,6 +20,7 @@ public class ProgramOptions {
         options.addOption("s", "secret", true, "base64 encoded authentication token");
         options.addOption("r", "repository", true, "the repository slug");
         options.addOption("c", "command", true, "the command to run [ OpenPullRequests, MergedPullRequests, BambooAverageBuildTime ]");
+        options.addOption("t", "team", true, "filter pull requests of the given team");
     }
 
     public void printHelp() {
@@ -59,5 +60,9 @@ public class ProgramOptions {
         }
 
         return Command.valueOf(commandLine.getOptionValue("command"));
+    }
+
+    public String getTeam() {
+        return commandLine.getOptionValue("team");
     }
 }

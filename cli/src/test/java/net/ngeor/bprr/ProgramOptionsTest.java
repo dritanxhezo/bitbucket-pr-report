@@ -82,4 +82,19 @@ public class ProgramOptionsTest {
         programOptions.parse();
         assertNull(programOptions.getCommand());
     }
+
+    @Test
+    public void shouldParseTeamWithShortOption() {
+        ProgramOptions programOptions = new ProgramOptions();
+        programOptions.parse("-t", "TeamId");
+        assertEquals("TeamId", programOptions.getTeam());
+    }
+
+    @Test
+    public void shouldParseTeamWithLongOption() {
+        ProgramOptions programOptions = new ProgramOptions();
+        programOptions.parse("--team", "TeamId");
+        assertEquals("TeamId", programOptions.getTeam());
+    }
+
 }
