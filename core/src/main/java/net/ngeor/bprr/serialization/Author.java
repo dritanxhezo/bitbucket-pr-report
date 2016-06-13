@@ -8,9 +8,9 @@ public class Author {
 
     }
 
-    public Author(String username, String display_name) {
+    public Author(String username, String displayName) {
         this.username = username;
-        this.display_name = display_name;
+        this.display_name = displayName;
     }
 
     public String getUsername() {

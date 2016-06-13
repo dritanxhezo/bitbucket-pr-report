@@ -10,7 +10,7 @@ import java.io.PrintStream;
 import java.util.List;
 
 public class OpenPullRequestsHandler {
-    public void handle(PullRequestClient pullRequestClient, ProgramOptions programOptions, PrintStream out) throws IOException {
+    public void handle(PullRequestClient pullRequestClient, ProgramOptions programOptions, PrintStream out, TeamMapper teamMapper) throws IOException {
         RepositoryDescriptor repositoryDescriptor = new RepositoryDescriptor(programOptions.getUser(), programOptions.getRepository());
         PullRequestsRequest request = new PullRequestsRequest(repositoryDescriptor, PullRequestsRequest.State.Open);
 
@@ -19,9 +19,17 @@ public class OpenPullRequestsHandler {
             PullRequests pullRequests = pullRequestClient.load(request);
             out.println(pullRequests.getSize());
         } else {
-            // TODO use TeamMapper to filter team
             List<PullRequest> pullRequests = pullRequestClient.loadAllDetails(request);
-            out.println(pullRequests.size());
+            int count = 0;
+            for (PullRequest pullRequest : pullRequests) {
+                String username = pullRequest.getAuthor().getUsername();
+                String pullRequestTeam = teamMapper.userToTeam(username);
+                if (team.equalsIgnoreCase(pullRequestTeam)) {
+                    count++;
+                }
+            }
+
+            out.println(count);
         }
     }
 }
