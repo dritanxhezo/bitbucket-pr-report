@@ -14,22 +14,17 @@ public class OpenPullRequestsHandler {
         RepositoryDescriptor repositoryDescriptor = new RepositoryDescriptor(programOptions.getUser(), programOptions.getRepository());
         PullRequestsRequest request = new PullRequestsRequest(repositoryDescriptor, PullRequestsRequest.State.Open);
 
-        String team = programOptions.getTeam();
-        if (StringUtils.isBlank(team)) {
+        boolean isGroupByTeam = programOptions.isGroupByTeam();
+        if (!isGroupByTeam) {
             PullRequests pullRequests = pullRequestClient.load(request);
             out.println(pullRequests.getSize());
         } else {
+            Statistics statistics = new Statistics();
             List<PullRequest> pullRequests = pullRequestClient.loadAllDetails(request);
-            int count = 0;
-            for (PullRequest pullRequest : pullRequests) {
-                String username = pullRequest.getAuthor().getUsername();
-                String pullRequestTeam = teamMapper.userToTeam(username);
-                if (team.equalsIgnoreCase(pullRequestTeam)) {
-                    count++;
-                }
+            List<Statistic> statisticList = statistics.countByAuthorTeam(pullRequests, teamMapper);
+            for (Statistic statistic : statisticList) {
+                out.println(String.format("%s %d", statistic.getUsername(), statistic.getCount()));
             }
-
-            out.println(count);
         }
     }
 }

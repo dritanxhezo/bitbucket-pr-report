@@ -2,8 +2,7 @@ package net.ngeor.bprr;
 
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 public class ProgramOptionsTest {
     @Test
@@ -86,15 +85,21 @@ public class ProgramOptionsTest {
     @Test
     public void shouldParseTeamWithShortOption() {
         ProgramOptions programOptions = new ProgramOptions();
-        programOptions.parse("-t", "TeamId");
-        assertEquals("TeamId", programOptions.getTeam());
+        programOptions.parse("-t");
+        assertTrue(programOptions.isGroupByTeam());
     }
 
     @Test
     public void shouldParseTeamWithLongOption() {
         ProgramOptions programOptions = new ProgramOptions();
-        programOptions.parse("--team", "TeamId");
-        assertEquals("TeamId", programOptions.getTeam());
+        programOptions.parse("--team");
+        assertTrue(programOptions.isGroupByTeam());
     }
 
+    @Test
+    public void shouldNotRequireTeamOption() {
+        ProgramOptions programOptions = new ProgramOptions();
+        programOptions.parse();
+        assertFalse(programOptions.isGroupByTeam());
+    }
 }

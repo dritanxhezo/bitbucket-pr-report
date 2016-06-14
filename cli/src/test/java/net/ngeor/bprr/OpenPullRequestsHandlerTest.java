@@ -48,7 +48,7 @@ public class OpenPullRequestsHandlerTest {
 
         when(programOptions.getRepository()).thenReturn("repository");
         when(programOptions.getUser()).thenReturn("user");
-        when(programOptions.getTeam()).thenReturn("team");
+        when(programOptions.isGroupByTeam()).thenReturn(true);
         when(teamMapper.userToTeam("ngeor")).thenReturn("team");
         when(teamMapper.userToTeam("testUser")).thenReturn("otherTeam");
 
@@ -69,7 +69,8 @@ public class OpenPullRequestsHandlerTest {
         handler.handle(pullRequestClient, programOptions, out, teamMapper);
 
         // assert
-        verify(out).println(2);
+        verify(out).println("team 2");
+        verify(out).println("otherTeam 1");
     }
 
     private static PullRequest stubPullRequest(String authorUsername) {
