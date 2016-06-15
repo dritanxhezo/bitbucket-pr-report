@@ -1,0 +1,915 @@
+{
+  "results": {
+    "size": 25,
+    "expand": "result",
+    "start-index": 0,
+    "max-result": 25,
+    "result": [
+      {
+        "link": {
+          "href": "https://company.jira.com/builds/rest/api/latest/result/PRJ-PLN-1031",
+          "rel": "self"
+        },
+        "plan": {
+          "shortName": "Plan",
+          "shortKey": "PLN",
+          "type": "chain",
+          "enabled": true,
+          "link": {
+            "href": "https://company.jira.com/builds/rest/api/latest/plan/PRJ-PLN",
+            "rel": "self"
+          },
+          "key": "PRJ-PLN",
+          "name": "Project - Plan",
+          "planKey": {
+            "key": "PRJ-PLN"
+          }
+        },
+        "buildResultKey": "PRJ-PLN-1031",
+        "lifeCycleState": "Finished",
+        "id": 86769949,
+        "key": "PRJ-PLN-1031",
+        "planResultKey": {
+          "key": "PRJ-PLN-1031",
+          "entityKey": {
+            "key": "PRJ-PLN"
+          },
+          "resultNumber": 1031
+        },
+        "state": "Successful",
+        "buildState": "Successful",
+        "number": 1031,
+        "buildNumber": 1031
+      },
+      {
+        "link": {
+          "href": "https://company.jira.com/builds/rest/api/latest/result/PRJ-PLN-1030",
+          "rel": "self"
+        },
+        "plan": {
+          "shortName": "Plan",
+          "shortKey": "PLN",
+          "type": "chain",
+          "enabled": true,
+          "link": {
+            "href": "https://company.jira.com/builds/rest/api/latest/plan/PRJ-PLN",
+            "rel": "self"
+          },
+          "key": "PRJ-PLN",
+          "name": "Project - Plan",
+          "planKey": {
+            "key": "PRJ-PLN"
+          }
+        },
+        "buildResultKey": "PRJ-PLN-1030",
+        "lifeCycleState": "Finished",
+        "id": 86769913,
+        "key": "PRJ-PLN-1030",
+        "planResultKey": {
+          "key": "PRJ-PLN-1030",
+          "entityKey": {
+            "key": "PRJ-PLN"
+          },
+          "resultNumber": 1030
+        },
+        "state": "Failed",
+        "buildState": "Failed",
+        "number": 1030,
+        "buildNumber": 1030
+      },
+      {
+        "link": {
+          "href": "https://company.jira.com/builds/rest/api/latest/result/PRJ-PLN-1029",
+          "rel": "self"
+        },
+        "plan": {
+          "shortName": "Plan",
+          "shortKey": "PLN",
+          "type": "chain",
+          "enabled": true,
+          "link": {
+            "href": "https://company.jira.com/builds/rest/api/latest/plan/PRJ-PLN",
+            "rel": "self"
+          },
+          "key": "PRJ-PLN",
+          "name": "Project - Plan",
+          "planKey": {
+            "key": "PRJ-PLN"
+          }
+        },
+        "buildResultKey": "PRJ-PLN-1029",
+        "lifeCycleState": "Finished",
+        "id": 86769899,
+        "key": "PRJ-PLN-1029",
+        "planResultKey": {
+          "key": "PRJ-PLN-1029",
+          "entityKey": {
+            "key": "PRJ-PLN"
+          },
+          "resultNumber": 1029
+        },
+        "state": "Failed",
+        "buildState": "Failed",
+        "number": 1029,
+        "buildNumber": 1029
+      },
+      {
+        "link": {
+          "href": "https://company.jira.com/builds/rest/api/latest/result/PRJ-PLN-1028",
+          "rel": "self"
+        },
+        "plan": {
+          "shortName": "Plan",
+          "shortKey": "PLN",
+          "type": "chain",
+          "enabled": true,
+          "link": {
+            "href": "https://company.jira.com/builds/rest/api/latest/plan/PRJ-PLN",
+            "rel": "self"
+          },
+          "key": "PRJ-PLN",
+          "name": "Project - Plan",
+          "planKey": {
+            "key": "PRJ-PLN"
+          }
+        },
+        "buildResultKey": "PRJ-PLN-1028",
+        "lifeCycleState": "Finished",
+        "id": 86769887,
+        "key": "PRJ-PLN-1028",
+        "planResultKey": {
+          "key": "PRJ-PLN-1028",
+          "entityKey": {
+            "key": "PRJ-PLN"
+          },
+          "resultNumber": 1028
+        },
+        "state": "Failed",
+        "buildState": "Failed",
+        "number": 1028,
+        "buildNumber": 1028
+      },
+      {
+        "link": {
+          "href": "https://company.jira.com/builds/rest/api/latest/result/PRJ-PLN-1027",
+          "rel": "self"
+        },
+        "plan": {
+          "shortName": "Plan",
+          "shortKey": "PLN",
+          "type": "chain",
+          "enabled": true,
+          "link": {
+            "href": "https://company.jira.com/builds/rest/api/latest/plan/PRJ-PLN",
+            "rel": "self"
+          },
+          "key": "PRJ-PLN",
+          "name": "Project - Plan",
+          "planKey": {
+            "key": "PRJ-PLN"
+          }
+        },
+        "buildResultKey": "PRJ-PLN-1027",
+        "lifeCycleState": "Finished",
+        "id": 86769837,
+        "key": "PRJ-PLN-1027",
+        "planResultKey": {
+          "key": "PRJ-PLN-1027",
+          "entityKey": {
+            "key": "PRJ-PLN"
+          },
+          "resultNumber": 1027
+        },
+        "state": "Failed",
+        "buildState": "Failed",
+        "number": 1027,
+        "buildNumber": 1027
+      },
+      {
+        "link": {
+          "href": "https://company.jira.com/builds/rest/api/latest/result/PRJ-PLN-1026",
+          "rel": "self"
+        },
+        "plan": {
+          "shortName": "Plan",
+          "shortKey": "PLN",
+          "type": "chain",
+          "enabled": true,
+          "link": {
+            "href": "https://company.jira.com/builds/rest/api/latest/plan/PRJ-PLN",
+            "rel": "self"
+          },
+          "key": "PRJ-PLN",
+          "name": "Project - Plan",
+          "planKey": {
+            "key": "PRJ-PLN"
+          }
+        },
+        "buildResultKey": "PRJ-PLN-1026",
+        "lifeCycleState": "Finished",
+        "id": 84936294,
+        "key": "PRJ-PLN-1026",
+        "planResultKey": {
+          "key": "PRJ-PLN-1026",
+          "entityKey": {
+            "key": "PRJ-PLN"
+          },
+          "resultNumber": 1026
+        },
+        "state": "Failed",
+        "buildState": "Failed",
+        "number": 1026,
+        "buildNumber": 1026
+      },
+      {
+        "link": {
+          "href": "https://company.jira.com/builds/rest/api/latest/result/PRJ-PLN-1025",
+          "rel": "self"
+        },
+        "plan": {
+          "shortName": "Plan",
+          "shortKey": "PLN",
+          "type": "chain",
+          "enabled": true,
+          "link": {
+            "href": "https://company.jira.com/builds/rest/api/latest/plan/PRJ-PLN",
+            "rel": "self"
+          },
+          "key": "PRJ-PLN",
+          "name": "Project - Plan",
+          "planKey": {
+            "key": "PRJ-PLN"
+          }
+        },
+        "buildResultKey": "PRJ-PLN-1025",
+        "lifeCycleState": "Finished",
+        "id": 84936288,
+        "key": "PRJ-PLN-1025",
+        "planResultKey": {
+          "key": "PRJ-PLN-1025",
+          "entityKey": {
+            "key": "PRJ-PLN"
+          },
+          "resultNumber": 1025
+        },
+        "state": "Failed",
+        "buildState": "Failed",
+        "number": 1025,
+        "buildNumber": 1025
+      },
+      {
+        "link": {
+          "href": "https://company.jira.com/builds/rest/api/latest/result/PRJ-PLN-1024",
+          "rel": "self"
+        },
+        "plan": {
+          "shortName": "Plan",
+          "shortKey": "PLN",
+          "type": "chain",
+          "enabled": true,
+          "link": {
+            "href": "https://company.jira.com/builds/rest/api/latest/plan/PRJ-PLN",
+            "rel": "self"
+          },
+          "key": "PRJ-PLN",
+          "name": "Project - Plan",
+          "planKey": {
+            "key": "PRJ-PLN"
+          }
+        },
+        "buildResultKey": "PRJ-PLN-1024",
+        "lifeCycleState": "Finished",
+        "id": 84936258,
+        "key": "PRJ-PLN-1024",
+        "planResultKey": {
+          "key": "PRJ-PLN-1024",
+          "entityKey": {
+            "key": "PRJ-PLN"
+          },
+          "resultNumber": 1024
+        },
+        "state": "Failed",
+        "buildState": "Failed",
+        "number": 1024,
+        "buildNumber": 1024
+      },
+      {
+        "link": {
+          "href": "https://company.jira.com/builds/rest/api/latest/result/PRJ-PLN-1023",
+          "rel": "self"
+        },
+        "plan": {
+          "shortName": "Plan",
+          "shortKey": "PLN",
+          "type": "chain",
+          "enabled": true,
+          "link": {
+            "href": "https://company.jira.com/builds/rest/api/latest/plan/PRJ-PLN",
+            "rel": "self"
+          },
+          "key": "PRJ-PLN",
+          "name": "Project - Plan",
+          "planKey": {
+            "key": "PRJ-PLN"
+          }
+        },
+        "buildResultKey": "PRJ-PLN-1023",
+        "lifeCycleState": "Finished",
+        "id": 84936208,
+        "key": "PRJ-PLN-1023",
+        "planResultKey": {
+          "key": "PRJ-PLN-1023",
+          "entityKey": {
+            "key": "PRJ-PLN"
+          },
+          "resultNumber": 1023
+        },
+        "state": "Failed",
+        "buildState": "Failed",
+        "number": 1023,
+        "buildNumber": 1023
+      },
+      {
+        "link": {
+          "href": "https://company.jira.com/builds/rest/api/latest/result/PRJ-PLN-1022",
+          "rel": "self"
+        },
+        "plan": {
+          "shortName": "Plan",
+          "shortKey": "PLN",
+          "type": "chain",
+          "enabled": true,
+          "link": {
+            "href": "https://company.jira.com/builds/rest/api/latest/plan/PRJ-PLN",
+            "rel": "self"
+          },
+          "key": "PRJ-PLN",
+          "name": "Project - Plan",
+          "planKey": {
+            "key": "PRJ-PLN"
+          }
+        },
+        "buildResultKey": "PRJ-PLN-1022",
+        "lifeCycleState": "Finished",
+        "id": 84936192,
+        "key": "PRJ-PLN-1022",
+        "planResultKey": {
+          "key": "PRJ-PLN-1022",
+          "entityKey": {
+            "key": "PRJ-PLN"
+          },
+          "resultNumber": 1022
+        },
+        "state": "Failed",
+        "buildState": "Failed",
+        "number": 1022,
+        "buildNumber": 1022
+      },
+      {
+        "link": {
+          "href": "https://company.jira.com/builds/rest/api/latest/result/PRJ-PLN-1021",
+          "rel": "self"
+        },
+        "plan": {
+          "shortName": "Plan",
+          "shortKey": "PLN",
+          "type": "chain",
+          "enabled": true,
+          "link": {
+            "href": "https://company.jira.com/builds/rest/api/latest/plan/PRJ-PLN",
+            "rel": "self"
+          },
+          "key": "PRJ-PLN",
+          "name": "Project - Plan",
+          "planKey": {
+            "key": "PRJ-PLN"
+          }
+        },
+        "buildResultKey": "PRJ-PLN-1021",
+        "lifeCycleState": "Finished",
+        "id": 84936190,
+        "key": "PRJ-PLN-1021",
+        "planResultKey": {
+          "key": "PRJ-PLN-1021",
+          "entityKey": {
+            "key": "PRJ-PLN"
+          },
+          "resultNumber": 1021
+        },
+        "state": "Failed",
+        "buildState": "Failed",
+        "number": 1021,
+        "buildNumber": 1021
+      },
+      {
+        "link": {
+          "href": "https://company.jira.com/builds/rest/api/latest/result/PRJ-PLN-1020",
+          "rel": "self"
+        },
+        "plan": {
+          "shortName": "Plan",
+          "shortKey": "PLN",
+          "type": "chain",
+          "enabled": true,
+          "link": {
+            "href": "https://company.jira.com/builds/rest/api/latest/plan/PRJ-PLN",
+            "rel": "self"
+          },
+          "key": "PRJ-PLN",
+          "name": "Project - Plan",
+          "planKey": {
+            "key": "PRJ-PLN"
+          }
+        },
+        "buildResultKey": "PRJ-PLN-1020",
+        "lifeCycleState": "Finished",
+        "id": 84936186,
+        "key": "PRJ-PLN-1020",
+        "planResultKey": {
+          "key": "PRJ-PLN-1020",
+          "entityKey": {
+            "key": "PRJ-PLN"
+          },
+          "resultNumber": 1020
+        },
+        "state": "Failed",
+        "buildState": "Failed",
+        "number": 1020,
+        "buildNumber": 1020
+      },
+      {
+        "link": {
+          "href": "https://company.jira.com/builds/rest/api/latest/result/PRJ-PLN-1019",
+          "rel": "self"
+        },
+        "plan": {
+          "shortName": "Plan",
+          "shortKey": "PLN",
+          "type": "chain",
+          "enabled": true,
+          "link": {
+            "href": "https://company.jira.com/builds/rest/api/latest/plan/PRJ-PLN",
+            "rel": "self"
+          },
+          "key": "PRJ-PLN",
+          "name": "Project - Plan",
+          "planKey": {
+            "key": "PRJ-PLN"
+          }
+        },
+        "buildResultKey": "PRJ-PLN-1019",
+        "lifeCycleState": "Finished",
+        "id": 84936170,
+        "key": "PRJ-PLN-1019",
+        "planResultKey": {
+          "key": "PRJ-PLN-1019",
+          "entityKey": {
+            "key": "PRJ-PLN"
+          },
+          "resultNumber": 1019
+        },
+        "state": "Successful",
+        "buildState": "Successful",
+        "number": 1019,
+        "buildNumber": 1019
+      },
+      {
+        "link": {
+          "href": "https://company.jira.com/builds/rest/api/latest/result/PRJ-PLN-1018",
+          "rel": "self"
+        },
+        "plan": {
+          "shortName": "Plan",
+          "shortKey": "PLN",
+          "type": "chain",
+          "enabled": true,
+          "link": {
+            "href": "https://company.jira.com/builds/rest/api/latest/plan/PRJ-PLN",
+            "rel": "self"
+          },
+          "key": "PRJ-PLN",
+          "name": "Project - Plan",
+          "planKey": {
+            "key": "PRJ-PLN"
+          }
+        },
+        "buildResultKey": "PRJ-PLN-1018",
+        "lifeCycleState": "Finished",
+        "id": 84936160,
+        "key": "PRJ-PLN-1018",
+        "planResultKey": {
+          "key": "PRJ-PLN-1018",
+          "entityKey": {
+            "key": "PRJ-PLN"
+          },
+          "resultNumber": 1018
+        },
+        "state": "Failed",
+        "buildState": "Failed",
+        "number": 1018,
+        "buildNumber": 1018
+      },
+      {
+        "link": {
+          "href": "https://company.jira.com/builds/rest/api/latest/result/PRJ-PLN-1017",
+          "rel": "self"
+        },
+        "plan": {
+          "shortName": "Plan",
+          "shortKey": "PLN",
+          "type": "chain",
+          "enabled": true,
+          "link": {
+            "href": "https://company.jira.com/builds/rest/api/latest/plan/PRJ-PLN",
+            "rel": "self"
+          },
+          "key": "PRJ-PLN",
+          "name": "Project - Plan",
+          "planKey": {
+            "key": "PRJ-PLN"
+          }
+        },
+        "buildResultKey": "PRJ-PLN-1017",
+        "lifeCycleState": "Finished",
+        "id": 84936092,
+        "key": "PRJ-PLN-1017",
+        "planResultKey": {
+          "key": "PRJ-PLN-1017",
+          "entityKey": {
+            "key": "PRJ-PLN"
+          },
+          "resultNumber": 1017
+        },
+        "state": "Successful",
+        "buildState": "Successful",
+        "number": 1017,
+        "buildNumber": 1017
+      },
+      {
+        "link": {
+          "href": "https://company.jira.com/builds/rest/api/latest/result/PRJ-PLN-1016",
+          "rel": "self"
+        },
+        "plan": {
+          "shortName": "Plan",
+          "shortKey": "PLN",
+          "type": "chain",
+          "enabled": true,
+          "link": {
+            "href": "https://company.jira.com/builds/rest/api/latest/plan/PRJ-PLN",
+            "rel": "self"
+          },
+          "key": "PRJ-PLN",
+          "name": "Project - Plan",
+          "planKey": {
+            "key": "PRJ-PLN"
+          }
+        },
+        "buildResultKey": "PRJ-PLN-1016",
+        "lifeCycleState": "Finished",
+        "id": 84936072,
+        "key": "PRJ-PLN-1016",
+        "planResultKey": {
+          "key": "PRJ-PLN-1016",
+          "entityKey": {
+            "key": "PRJ-PLN"
+          },
+          "resultNumber": 1016
+        },
+        "state": "Failed",
+        "buildState": "Failed",
+        "number": 1016,
+        "buildNumber": 1016
+      },
+      {
+        "link": {
+          "href": "https://company.jira.com/builds/rest/api/latest/result/PRJ-PLN-1015",
+          "rel": "self"
+        },
+        "plan": {
+          "shortName": "Plan",
+          "shortKey": "PLN",
+          "type": "chain",
+          "enabled": true,
+          "link": {
+            "href": "https://company.jira.com/builds/rest/api/latest/plan/PRJ-PLN",
+            "rel": "self"
+          },
+          "key": "PRJ-PLN",
+          "name": "Project - Plan",
+          "planKey": {
+            "key": "PRJ-PLN"
+          }
+        },
+        "buildResultKey": "PRJ-PLN-1015",
+        "lifeCycleState": "Finished",
+        "id": 84935925,
+        "key": "PRJ-PLN-1015",
+        "planResultKey": {
+          "key": "PRJ-PLN-1015",
+          "entityKey": {
+            "key": "PRJ-PLN"
+          },
+          "resultNumber": 1015
+        },
+        "state": "Failed",
+        "buildState": "Failed",
+        "number": 1015,
+        "buildNumber": 1015
+      },
+      {
+        "link": {
+          "href": "https://company.jira.com/builds/rest/api/latest/result/PRJ-PLN-1014",
+          "rel": "self"
+        },
+        "plan": {
+          "shortName": "Plan",
+          "shortKey": "PLN",
+          "type": "chain",
+          "enabled": true,
+          "link": {
+            "href": "https://company.jira.com/builds/rest/api/latest/plan/PRJ-PLN",
+            "rel": "self"
+          },
+          "key": "PRJ-PLN",
+          "name": "Project - Plan",
+          "planKey": {
+            "key": "PRJ-PLN"
+          }
+        },
+        "buildResultKey": "PRJ-PLN-1014",
+        "lifeCycleState": "Finished",
+        "id": 84935909,
+        "key": "PRJ-PLN-1014",
+        "planResultKey": {
+          "key": "PRJ-PLN-1014",
+          "entityKey": {
+            "key": "PRJ-PLN"
+          },
+          "resultNumber": 1014
+        },
+        "state": "Failed",
+        "buildState": "Failed",
+        "number": 1014,
+        "buildNumber": 1014
+      },
+      {
+        "link": {
+          "href": "https://company.jira.com/builds/rest/api/latest/result/PRJ-PLN-1013",
+          "rel": "self"
+        },
+        "plan": {
+          "shortName": "Plan",
+          "shortKey": "PLN",
+          "type": "chain",
+          "enabled": true,
+          "link": {
+            "href": "https://company.jira.com/builds/rest/api/latest/plan/PRJ-PLN",
+            "rel": "self"
+          },
+          "key": "PRJ-PLN",
+          "name": "Project - Plan",
+          "planKey": {
+            "key": "PRJ-PLN"
+          }
+        },
+        "buildResultKey": "PRJ-PLN-1013",
+        "lifeCycleState": "Finished",
+        "id": 84935827,
+        "key": "PRJ-PLN-1013",
+        "planResultKey": {
+          "key": "PRJ-PLN-1013",
+          "entityKey": {
+            "key": "PRJ-PLN"
+          },
+          "resultNumber": 1013
+        },
+        "state": "Failed",
+        "buildState": "Failed",
+        "number": 1013,
+        "buildNumber": 1013
+      },
+      {
+        "link": {
+          "href": "https://company.jira.com/builds/rest/api/latest/result/PRJ-PLN-1012",
+          "rel": "self"
+        },
+        "plan": {
+          "shortName": "Plan",
+          "shortKey": "PLN",
+          "type": "chain",
+          "enabled": true,
+          "link": {
+            "href": "https://company.jira.com/builds/rest/api/latest/plan/PRJ-PLN",
+            "rel": "self"
+          },
+          "key": "PRJ-PLN",
+          "name": "Project - Plan",
+          "planKey": {
+            "key": "PRJ-PLN"
+          }
+        },
+        "buildResultKey": "PRJ-PLN-1012",
+        "lifeCycleState": "Finished",
+        "id": 84935813,
+        "key": "PRJ-PLN-1012",
+        "planResultKey": {
+          "key": "PRJ-PLN-1012",
+          "entityKey": {
+            "key": "PRJ-PLN"
+          },
+          "resultNumber": 1012
+        },
+        "state": "Failed",
+        "buildState": "Failed",
+        "number": 1012,
+        "buildNumber": 1012
+      },
+      {
+        "link": {
+          "href": "https://company.jira.com/builds/rest/api/latest/result/PRJ-PLN-1011",
+          "rel": "self"
+        },
+        "plan": {
+          "shortName": "Plan",
+          "shortKey": "PLN",
+          "type": "chain",
+          "enabled": true,
+          "link": {
+            "href": "https://company.jira.com/builds/rest/api/latest/plan/PRJ-PLN",
+            "rel": "self"
+          },
+          "key": "PRJ-PLN",
+          "name": "Project - Plan",
+          "planKey": {
+            "key": "PRJ-PLN"
+          }
+        },
+        "buildResultKey": "PRJ-PLN-1011",
+        "lifeCycleState": "Finished",
+        "id": 84935757,
+        "key": "PRJ-PLN-1011",
+        "planResultKey": {
+          "key": "PRJ-PLN-1011",
+          "entityKey": {
+            "key": "PRJ-PLN"
+          },
+          "resultNumber": 1011
+        },
+        "state": "Failed",
+        "buildState": "Failed",
+        "number": 1011,
+        "buildNumber": 1011
+      },
+      {
+        "link": {
+          "href": "https://company.jira.com/builds/rest/api/latest/result/PRJ-PLN-1010",
+          "rel": "self"
+        },
+        "plan": {
+          "shortName": "Plan",
+          "shortKey": "PLN",
+          "type": "chain",
+          "enabled": true,
+          "link": {
+            "href": "https://company.jira.com/builds/rest/api/latest/plan/PRJ-PLN",
+            "rel": "self"
+          },
+          "key": "PRJ-PLN",
+          "name": "Project - Plan",
+          "planKey": {
+            "key": "PRJ-PLN"
+          }
+        },
+        "buildResultKey": "PRJ-PLN-1010",
+        "lifeCycleState": "Finished",
+        "id": 84935753,
+        "key": "PRJ-PLN-1010",
+        "planResultKey": {
+          "key": "PRJ-PLN-1010",
+          "entityKey": {
+            "key": "PRJ-PLN"
+          },
+          "resultNumber": 1010
+        },
+        "state": "Failed",
+        "buildState": "Failed",
+        "number": 1010,
+        "buildNumber": 1010
+      },
+      {
+        "link": {
+          "href": "https://company.jira.com/builds/rest/api/latest/result/PRJ-PLN-1009",
+          "rel": "self"
+        },
+        "plan": {
+          "shortName": "Plan",
+          "shortKey": "PLN",
+          "type": "chain",
+          "enabled": true,
+          "link": {
+            "href": "https://company.jira.com/builds/rest/api/latest/plan/PRJ-PLN",
+            "rel": "self"
+          },
+          "key": "PRJ-PLN",
+          "name": "Project - Plan",
+          "planKey": {
+            "key": "PRJ-PLN"
+          }
+        },
+        "buildResultKey": "PRJ-PLN-1009",
+        "lifeCycleState": "Finished",
+        "id": 84935717,
+        "key": "PRJ-PLN-1009",
+        "planResultKey": {
+          "key": "PRJ-PLN-1009",
+          "entityKey": {
+            "key": "PRJ-PLN"
+          },
+          "resultNumber": 1009
+        },
+        "state": "Failed",
+        "buildState": "Failed",
+        "number": 1009,
+        "buildNumber": 1009
+      },
+      {
+        "link": {
+          "href": "https://company.jira.com/builds/rest/api/latest/result/PRJ-PLN-1008",
+          "rel": "self"
+        },
+        "plan": {
+          "shortName": "Plan",
+          "shortKey": "PLN",
+          "type": "chain",
+          "enabled": true,
+          "link": {
+            "href": "https://company.jira.com/builds/rest/api/latest/plan/PRJ-PLN",
+            "rel": "self"
+          },
+          "key": "PRJ-PLN",
+          "name": "Project - Plan",
+          "planKey": {
+            "key": "PRJ-PLN"
+          }
+        },
+        "buildResultKey": "PRJ-PLN-1008",
+        "lifeCycleState": "Finished",
+        "id": 84935711,
+        "key": "PRJ-PLN-1008",
+        "planResultKey": {
+          "key": "PRJ-PLN-1008",
+          "entityKey": {
+            "key": "PRJ-PLN"
+          },
+          "resultNumber": 1008
+        },
+        "state": "Failed",
+        "buildState": "Failed",
+        "number": 1008,
+        "buildNumber": 1008
+      },
+      {
+        "link": {
+          "href": "https://company.jira.com/builds/rest/api/latest/result/PRJ-PLN-1006",
+          "rel": "self"
+        },
+        "plan": {
+          "shortName": "Plan",
+          "shortKey": "PLN",
+          "type": "chain",
+          "enabled": true,
+          "link": {
+            "href": "https://company.jira.com/builds/rest/api/latest/plan/PRJ-PLN",
+            "rel": "self"
+          },
+          "key": "PRJ-PLN",
+          "name": "Project - Plan",
+          "planKey": {
+            "key": "PRJ-PLN"
+          }
+        },
+        "buildResultKey": "PRJ-PLN-1006",
+        "lifeCycleState": "Finished",
+        "id": 84935541,
+        "key": "PRJ-PLN-1006",
+        "planResultKey": {
+          "key": "PRJ-PLN-1006",
+          "entityKey": {
+            "key": "PRJ-PLN"
+          },
+          "resultNumber": 1006
+        },
+        "state": "Failed",
+        "buildState": "Failed",
+        "number": 1006,
+        "buildNumber": 1006
+      }
+    ]
+  },
+  "expand": "results",
+  "link": {
+    "href": "https://company.jira.com/builds/rest/api/latest/result/PRJ-PLN",
+    "rel": "self"
+  }
+}

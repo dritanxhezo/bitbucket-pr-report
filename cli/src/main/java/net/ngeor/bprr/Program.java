@@ -45,7 +45,7 @@ public class Program {
                 handleBambooAverageBuildTime(httpClientFactory, programOptions);
                 break;
             default:
-                System.err.println("No command speciried");
+                System.err.println("No command specified");
                 break;
         }
     }
