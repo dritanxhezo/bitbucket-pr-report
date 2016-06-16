@@ -1,0 +1,102 @@
+{
+  "expand": "changes,metadata,plan,vcsRevisions,artifacts,comments,labels,jiraIssues,stages",
+  "link": {
+    "href": "https://company.jira.com/builds/rest/api/latest/result/PRJ-PLN-1031",
+    "rel": "self"
+  },
+  "plan": {
+    "shortName": "Plan",
+    "shortKey": "PLN",
+    "type": "chain",
+    "enabled": true,
+    "link": {
+      "href": "https://company.jira.com/builds/rest/api/latest/plan/PRJ-PLN",
+      "rel": "self"
+    },
+    "key": "PRJ-PLN",
+    "name": "Project - Plan",
+    "planKey": {
+      "key": "PRJ-PLN"
+    }
+  },
+  "planName": "Plan",
+  "projectName": "Project",
+  "buildResultKey": "PRJ-PLN-1031",
+  "lifeCycleState": "Finished",
+  "id": 86769949,
+  "buildStartedTime": "2016-06-15T16:34:24.016+02:00",
+  "prettyBuildStartedTime": "Wed, 15 Jun, 04:34 PM",
+  "buildCompletedTime": "2016-06-15T16:47:42.572+02:00",
+  "buildCompletedDate": "2016-06-15T16:47:42.572+02:00",
+  "prettyBuildCompletedTime": "Wed, 15 Jun, 04:47 PM",
+  "buildDurationInSeconds": 798,
+  "buildDuration": 798556,
+  "buildDurationDescription": "13 minutes",
+  "buildRelativeTime": "1 day ago",
+  "vcsRevisionKey": "3ebe884a66ff4d5d9cc3663e521f9741d8c11666",
+  "vcsRevisions": {
+    "size": 2,
+    "start-index": 0,
+    "max-result": 2
+  },
+  "buildTestSummary": "3016 passed",
+  "successfulTestCount": 2965,
+  "failedTestCount": 0,
+  "quarantinedTestCount": 0,
+  "skippedTestCount": 51,
+  "continuable": false,
+  "onceOff": false,
+  "restartable": false,
+  "notRunYet": false,
+  "finished": true,
+  "successful": true,
+  "buildReason": "Manual run by <a href=\"https://company.jira.com/builds/browse/user/john.doe\">John Doe</a>",
+  "reasonSummary": "Manual run by <a href=\"https://company.jira.com/builds/browse/user/john.doe\">John Doe</a>",
+  "artifacts": {
+    "size": 5,
+    "start-index": 0,
+    "max-result": 5
+  },
+  "comments": {
+    "size": 0,
+    "start-index": 0,
+    "max-result": 0
+  },
+  "labels": {
+    "size": 0,
+    "start-index": 0,
+    "max-result": 0
+  },
+  "jiraIssues": {
+    "size": 0,
+    "start-index": 0,
+    "max-result": 0
+  },
+  "stages": {
+    "size": 1,
+    "start-index": 0,
+    "max-result": 1
+  },
+  "changes": {
+    "size": 0,
+    "start-index": 0,
+    "max-result": 0
+  },
+  "metadata": {
+    "size": 5,
+    "start-index": 0,
+    "max-result": 5
+  },
+  "key": "PRJ-PLN-1031",
+  "planResultKey": {
+    "key": "PRJ-PLN-1031",
+    "entityKey": {
+      "key": "PRJ-PLN"
+    },
+    "resultNumber": 1031
+  },
+  "state": "Successful",
+  "buildState": "Successful",
+  "number": 1031,
+  "buildNumber": 1031
+}

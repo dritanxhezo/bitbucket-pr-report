@@ -15,14 +15,15 @@ public class BambooPlanResultsTest {
         BambooPlanResults.ResultsWrapper resultsWrapper = bambooPlanResults.getResults();
         assertNotNull(resultsWrapper);
 
-        BambooPlanResults.Result[] buildResults = resultsWrapper.getResult();
+        BambooBuildResult[] buildResults = resultsWrapper.getResult();
         assertNotNull(buildResults);
 
-        BambooPlanResults.Result firstBuildResult = buildResults[0];
+        BambooBuildResult firstBuildResult = buildResults[0];
         assertNotNull(firstBuildResult);
 
         assertEquals("PRJ-PLN-1031", firstBuildResult.getKey());
         assertEquals("Finished", firstBuildResult.getLifeCycleState());
         assertEquals("Successful", firstBuildResult.getState());
+        assertEquals("https://company.jira.com/builds/rest/api/latest/result/PRJ-PLN-1031", firstBuildResult.getLink().getHref());
     }
 }

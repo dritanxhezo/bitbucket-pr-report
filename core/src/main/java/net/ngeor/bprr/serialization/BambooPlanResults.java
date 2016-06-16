@@ -8,28 +8,10 @@ public class BambooPlanResults {
     }
 
     static class ResultsWrapper {
-        private Result[] result;
+        private BambooBuildResult[] result;
 
-        public Result[] getResult() {
+        public BambooBuildResult[] getResult() {
             return result;
-        }
-    }
-
-    static class Result {
-        private String key;
-        private String lifeCycleState;
-        private String state;
-
-        public String getKey() {
-            return key;
-        }
-
-        public String getLifeCycleState() {
-            return lifeCycleState;
-        }
-
-        public String getState() {
-            return state;
         }
     }
 }
