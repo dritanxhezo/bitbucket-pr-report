@@ -28,6 +28,7 @@ public class Program {
 
         HttpClientFactory httpClientFactory = new HttpClientFactoryImpl();
         RestClient bitbucketClient = new BitbucketClientImpl(httpClientFactory, secret);
+        RestClient bambooClient = new RestClientImpl(httpClientFactory, secret);
         PullRequestClient pullRequestClient = new PullRequestClientImpl(bitbucketClient);
         ResourceLoader resourceLoader = new ResourceLoaderImpl();
         TeamMapperImpl teamMapper = new TeamMapperImpl(resourceLoader);
@@ -42,7 +43,10 @@ public class Program {
                 handleMergedPullRequests(pullRequestClient, programOptions);
                 break;
             case BambooAverageBuildTime:
-                handleBambooAverageBuildTime(httpClientFactory, programOptions);
+                handleBambooAverageBuildTime(bambooClient, programOptions);
+                break;
+            case BambooLatestBuild:
+                handleBambooLatestBuild(bambooClient, programOptions);
                 break;
             default:
                 System.err.println("No command specified");
@@ -60,9 +64,13 @@ public class Program {
         handler.handle(pullRequestClient, programOptions, System.out);
     }
 
-    private static void handleBambooAverageBuildTime(HttpClientFactory httpClientFactory, ProgramOptions programOptions) throws IOException {
+    private static void handleBambooAverageBuildTime(RestClient restClient, ProgramOptions programOptions) throws IOException {
         BambooAverageBuildTimeHandler handler = new BambooAverageBuildTimeHandler();
-        RestClient restClient = new RestClientImpl(httpClientFactory, programOptions.getSecret());
+        handler.handle(restClient, programOptions, System.out);
+    }
+
+    private static void handleBambooLatestBuild(RestClient restClient, ProgramOptions programOptions) throws IOException {
+        BambooLatestBuildHandler handler = new BambooLatestBuildHandler();
         handler.handle(restClient, programOptions, System.out);
     }
 }

@@ -7,7 +7,7 @@ public class BambooPlanResults {
         return results;
     }
 
-    static class ResultsWrapper {
+    public static class ResultsWrapper {
         private BambooBuildResult[] result;
 
         public BambooBuildResult[] getResult() {

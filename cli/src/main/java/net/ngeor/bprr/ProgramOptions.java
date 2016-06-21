@@ -10,7 +10,8 @@ public class ProgramOptions {
     public enum Command {
         OpenPullRequests,
         MergedPullRequests,
-        BambooAverageBuildTime
+        BambooAverageBuildTime,
+        BambooLatestBuild
     }
 
     public ProgramOptions() {
