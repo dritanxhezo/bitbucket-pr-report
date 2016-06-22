@@ -2,6 +2,7 @@ package net.ngeor.bprr;
 
 import net.ngeor.bprr.serialization.BambooBuildResult;
 import net.ngeor.bprr.serialization.BambooPlanResults;
+import net.ngeor.bprr.serialization.Link;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -20,20 +21,24 @@ public class BambooLatestBuildHandlerTest {
         PrintStream out = mock(PrintStream.class);
         BambooPlanResults bambooPlanResults = mock(BambooPlanResults.class);
         BambooPlanResults.ResultsWrapper resultsWrapper = mock(BambooPlanResults.ResultsWrapper.class);
-        BambooBuildResult successfulBuild = mock(BambooBuildResult.class);
+        BambooBuildResult successfulBuildSummary = mock(BambooBuildResult.class);
+        BambooBuildResult successfulBuildDetails = mock(BambooBuildResult.class);
 
         BambooBuildResult result[] = new BambooBuildResult[] {
-            successfulBuild
+            successfulBuildSummary
         };
 
         when(programOptions.getUser()).thenReturn("company");
         when(programOptions.getRepository()).thenReturn("planKey");
         when(restClient.execute("https://company.jira.com/builds/rest/api/latest/result/planKey.json?os_authType=basic", BambooPlanResults.class))
                 .thenReturn(bambooPlanResults);
+        when(restClient.execute("https://whatever.json?os_authType=basic", BambooBuildResult.class))
+                .thenReturn(successfulBuildDetails);
         when(bambooPlanResults.getResults()).thenReturn(resultsWrapper);
         when(resultsWrapper.getResult()).thenReturn(result);
-        when(successfulBuild.getSuccessfulTestCount()).thenReturn(37);
-        when(successfulBuild.getSkippedTestCount()).thenReturn(17);
+        when(successfulBuildSummary.getLink()).thenReturn(new Link("https://whatever"));
+        when(successfulBuildDetails.getSuccessfulTestCount()).thenReturn(37);
+        when(successfulBuildDetails.getSkippedTestCount()).thenReturn(17);
 
         // act
         BambooLatestBuildHandler handler = new BambooLatestBuildHandler();

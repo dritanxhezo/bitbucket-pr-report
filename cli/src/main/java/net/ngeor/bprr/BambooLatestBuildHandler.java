@@ -15,9 +15,11 @@ public class BambooLatestBuildHandler {
         BambooPlanResults bambooPlanResuls = restClient.execute(url, BambooPlanResults.class);
         BambooPlanResults.ResultsWrapper resultsWrapper = bambooPlanResuls.getResults();
         BambooBuildResult[] buildResults = resultsWrapper.getResult();
-        BambooBuildResult buildResult = buildResults[0];
+        BambooBuildResult buildResultSummary = buildResults[0];
+        String buildResultDetailsUrl = buildResultSummary.getLink().getHref() + ".json?os_authType=basic";
+        BambooBuildResult buildResultDetails = restClient.execute(buildResultDetailsUrl, BambooBuildResult.class);
 
-        out.println(String.format(Locale.ROOT, "successfulTestCount %d", buildResult.getSuccessfulTestCount()));
-        out.println(String.format(Locale.ROOT, "skippedTestCount %d", buildResult.getSkippedTestCount()));
+        out.println(String.format(Locale.ROOT, "successfulTestCount %d", buildResultDetails.getSuccessfulTestCount()));
+        out.println(String.format(Locale.ROOT, "skippedTestCount %d", buildResultDetails.getSkippedTestCount()));
     }
 }
