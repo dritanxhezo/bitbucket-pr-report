@@ -19,4 +19,11 @@ public class BambooBuildResultTest {
         assertEquals(2965, bambooBuildResult.getSuccessfulTestCount());
         assertEquals(51, bambooBuildResult.getSkippedTestCount());
     }
+
+    @Test
+    public void shouldProvideLinkToLog() {
+        BambooBuildResult bambooBuildResult = TestData.load(BambooBuildResult.class, "Simple");
+        assertEquals("https://company.jira.com/builds/download/PRJ-PLN-JOB1/build_logs/PRJ-PLN-JOB1-1031.log",
+                bambooBuildResult.getLogFileUrl("JOB1"));
+    }
 }
