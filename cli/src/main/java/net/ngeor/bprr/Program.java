@@ -26,9 +26,9 @@ public class Program {
             return;
         }
 
-        HttpClientFactory httpClientFactory = new HttpClientFactoryImpl();
-        RestClient bitbucketClient = new BitbucketClientImpl(httpClientFactory, secret);
-        RestClient bambooClient = new RestClientImpl(httpClientFactory, secret);
+        SimpleHttpClient simpleHttpClient = new SimpleHttpClientImpl();
+        RestClient bitbucketClient = new BitbucketClientImpl(simpleHttpClient, secret);
+        RestClient bambooClient = new RestClientImpl(simpleHttpClient, secret);
         PullRequestClient pullRequestClient = new PullRequestClientImpl(bitbucketClient);
         ResourceLoader resourceLoader = new ResourceLoaderImpl();
         TeamMapperImpl teamMapper = new TeamMapperImpl(resourceLoader);

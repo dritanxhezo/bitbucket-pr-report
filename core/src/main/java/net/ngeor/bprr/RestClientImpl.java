@@ -3,38 +3,26 @@ package net.ngeor.bprr;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import org.apache.commons.io.IOUtils;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
 
-import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
 
 public class RestClientImpl implements RestClient {
-    private final HttpClientFactory httpClientFactory;
+    private final SimpleHttpClient simpleHttpClient;
     private final String secret;
 
-    public RestClientImpl(HttpClientFactory httpClientFactory, String secret) {
-        this.httpClientFactory = httpClientFactory;
+    public RestClientImpl(SimpleHttpClient simpleHttpClient, String secret) {
+        this.simpleHttpClient = simpleHttpClient;
         this.secret = secret;
     }
 
     @Override
-    public <E> E execute(Object resource, Class<E> responseType) throws IOException {
-        HttpClient httpClient = httpClientFactory.create();
-        try {
-            String url = createUrl(resource);
-            HttpGet httpGet = new HttpGet(url);
-            httpGet.addHeader("Authorization", "Basic " + secret);
-            HttpResponse httpResponse = httpClient.execute(httpGet);
-            if (httpResponse == null) {
-                throw new NullPointerException("Null HTTP response");
-            }
-
-            try {
-                InputStream content = httpResponse.getEntity().getContent();
-                String json = IOUtils.toString(content, "UTF-8");
+    public <E> E execute(Object resource, final Class<E> responseType) throws IOException {
+        String url = createUrl(resource);
+        return simpleHttpClient.load(url, secret, new InputStreamClient<E>() {
+            @Override
+            public E consume(InputStream inputStream) throws IOException {
+                String json = IOUtils.toString(inputStream, "UTF-8");
 
                 Gson gson = new Gson();
                 try {
@@ -42,22 +30,11 @@ public class RestClientImpl implements RestClient {
                 } catch (JsonSyntaxException ex) {
                     throw new RuntimeException("json error: " + json);
                 }
-            } finally {
-                safeClose(httpResponse);
             }
-        } finally {
-            safeClose(httpClient);
-        }
+        });
     }
 
     protected String createUrl(Object resource) {
         return resource.toString();
     }
-
-    private void safeClose(Object x) {
-        if (x instanceof Closeable) {
-            IOUtils.closeQuietly((Closeable) x);
-        }
-    }
-
 }

@@ -1,17 +1,11 @@
 package net.ngeor.bprr;
 
 import net.ngeor.bprr.serialization.PullRequest;
-import net.ngeor.testutil.HttpGetMatcher;
 import net.ngeor.util.ResourceLoaderImpl;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpUriRequest;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.runners.Enclosed;
 import org.junit.runner.RunWith;
-import org.mockito.Matchers;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,7 +17,6 @@ import java.util.TimeZone;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.mockito.Mockito.*;
 
 @RunWith(Enclosed.class)
 public class BitbucketClientImplTest {
@@ -35,8 +28,8 @@ public class BitbucketClientImplTest {
             // arrange
             InputStream responseStream = new ResourceLoaderImpl().getResourceAsStream("net/ngeor/bprr/serialization/PullRequestsSimple.json");
             URI expected = new URI("https://api.bitbucket.org/2.0/repositories/owner/repo_slug/pullrequests");
-            HttpClientFactory httpClientFactory = setupHttpClientFactory(responseStream, expected);
-            BitbucketClientImpl bitbucketClient = new BitbucketClientImpl(httpClientFactory, "some secret");
+            SimpleHttpClient simpleHttpClient = setupHttpClientFactory(responseStream, expected);
+            BitbucketClientImpl bitbucketClient = new BitbucketClientImpl(simpleHttpClient, "some secret");
 
             // act
             response = bitbucketClient.execute(
@@ -93,17 +86,16 @@ public class BitbucketClientImplTest {
             // arrange
             InputStream responseStream = new ResourceLoaderImpl().getResourceAsStream("net/ngeor/bprr/serialization/PullRequestsSimple.json");
             URI expected = new URI("https://api.bitbucket.org/2.0/repositories/owner/repo_slug/pullrequests");
-            HttpClientFactory httpClientFactory = setupHttpClientFactory(responseStream, expected);
-            BitbucketClientImpl bitbucketClient = new BitbucketClientImpl(httpClientFactory, "some secret");
+            SimpleHttpClient simpleHttpClient = setupHttpClientFactory(responseStream, expected);
+            BitbucketClientImpl bitbucketClient = new BitbucketClientImpl(simpleHttpClient, "some secret");
 
             // act
-            bitbucketClient.execute(
+            net.ngeor.bprr.serialization.PullRequests pullRequests = bitbucketClient.execute(
                     "repositories/owner/repo_slug/pullrequests",
                     net.ngeor.bprr.serialization.PullRequests.class);
 
             // assert
-            HttpClient httpClient = httpClientFactory.create();
-            verify(httpClient).execute(matchHttpGet(expected));
+            assertEquals(12, pullRequests.getSize());
         }
 
         @Test
@@ -111,39 +103,29 @@ public class BitbucketClientImplTest {
             // arrange
             InputStream responseStream = new ResourceLoaderImpl().getResourceAsStream("net/ngeor/bprr/serialization/PullRequestsSimple.json");
             URI expected = new URI("https://api.bitbucket.org/2.0/whatever");
-            HttpClientFactory httpClientFactory = setupHttpClientFactory(responseStream, expected);
-            BitbucketClientImpl bitbucketClient = new BitbucketClientImpl(httpClientFactory, "some secret");
+            SimpleHttpClient simpleHttpClient = setupHttpClientFactory(responseStream, expected);
+            BitbucketClientImpl bitbucketClient = new BitbucketClientImpl(simpleHttpClient, "some secret");
 
             // act
-            bitbucketClient.execute(
+            net.ngeor.bprr.serialization.PullRequests pullRequests = bitbucketClient.execute(
                     "https://api.bitbucket.org/2.0/whatever",
                     net.ngeor.bprr.serialization.PullRequests.class);
 
             // assert
-            HttpClient httpClient = httpClientFactory.create();
-            verify(httpClient).execute(matchHttpGet(expected));
+            assertEquals(12, pullRequests.getSize());
         }
     }
 
-    private static HttpClientFactory setupHttpClientFactory(InputStream responseStream, URI expectedURI) throws IOException {
+    private static SimpleHttpClient setupHttpClientFactory(final InputStream responseStream, final URI expectedURI) throws IOException {
         assertNotNull("null response stream!", responseStream);
-        HttpEntity httpEntity = mock(HttpEntity.class);
-        final HttpClient httpClient = mock(HttpClient.class);
-        HttpResponse httpResponse = mock(HttpResponse.class);
-        when(httpResponse.getEntity()).thenReturn(httpEntity);
-        when(httpEntity.getContent()).thenReturn(responseStream);
-        when(httpClient.execute(matchHttpGet(expectedURI))).thenReturn(httpResponse);
-        HttpClientFactory httpClientFactory = new HttpClientFactory() {
+        SimpleHttpClient simpleHttpClient = new SimpleHttpClient() {
             @Override
-            public HttpClient create() {
-                return httpClient;
+            public <E> E load(String url, String basicAuthenticationHeader, InputStreamClient<E> inputStreamClient) throws IOException {
+                assertEquals(url, expectedURI.toString());
+                assertEquals(basicAuthenticationHeader, "some secret");
+                return inputStreamClient.consume(responseStream);
             }
         };
-        return httpClientFactory;
+        return simpleHttpClient;
     }
-
-    private static HttpUriRequest matchHttpGet(URI expectedURI) {
-        return Matchers.argThat(new HttpGetMatcher(expectedURI));
-    }
-
 }

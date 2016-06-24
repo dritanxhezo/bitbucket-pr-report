@@ -24,11 +24,11 @@ class Factory {
     }
 
     public RestClient bitbucketClient() throws IOException {
-        return new BitbucketClientImpl(httpClientFactory(), settings().getSecret());
+        return new BitbucketClientImpl(simpleHttpClient(), settings().getSecret());
     }
 
-    public HttpClientFactory httpClientFactory() {
-        return new HttpClientFactoryImpl();
+    public SimpleHttpClient simpleHttpClient() {
+        return new SimpleHttpClientImpl();
     }
 
     public TeamMapper teamMapper() {

@@ -3,7 +3,6 @@ package net.ngeor.bprr;
 import net.ngeor.bprr.requests.PullRequestsRequest;
 import net.ngeor.bprr.serialization.PullRequest;
 import net.ngeor.bprr.serialization.PullRequests;
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.io.PrintStream;
