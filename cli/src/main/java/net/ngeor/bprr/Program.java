@@ -48,6 +48,9 @@ public class Program {
             case BambooLatestBuild:
                 handleBambooLatestBuild(bambooClient, programOptions);
                 break;
+            case BambooLatestBuildLog:
+                handleBambooLatestBuildLog(bambooClient, simpleHttpClient, programOptions);
+                break;
             default:
                 System.err.println("No command specified");
                 break;
@@ -72,5 +75,10 @@ public class Program {
     private static void handleBambooLatestBuild(RestClient restClient, ProgramOptions programOptions) throws IOException {
         BambooLatestBuildHandler handler = new BambooLatestBuildHandler();
         handler.handle(restClient, programOptions, System.out);
+    }
+
+    private static void handleBambooLatestBuildLog(RestClient restClient, SimpleHttpClient simpleHttpClient, ProgramOptions programOptions) throws IOException {
+        BambooLatestBuildLogHandler handler = new BambooLatestBuildLogHandler();
+        handler.handle(restClient, simpleHttpClient, programOptions, System.out);
     }
 }

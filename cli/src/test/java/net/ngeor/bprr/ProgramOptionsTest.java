@@ -102,4 +102,18 @@ public class ProgramOptionsTest {
         programOptions.parse();
         assertFalse(programOptions.isGroupByTeam());
     }
+
+    @Test
+    public void shouldParseJobNameWithShortOption() {
+        ProgramOptions programOptions = new ProgramOptions();
+        programOptions.parse("-j", "JOB12");
+        assertEquals("JOB12", programOptions.getJobName());
+    }
+
+    @Test
+    public void shouldParseJobNameWithLongOption() {
+        ProgramOptions programOptions = new ProgramOptions();
+        programOptions.parse("--job", "JOB4");
+        assertEquals("JOB4", programOptions.getJobName());
+    }
 }

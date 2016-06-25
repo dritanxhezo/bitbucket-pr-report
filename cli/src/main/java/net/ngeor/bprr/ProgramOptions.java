@@ -11,7 +11,8 @@ public class ProgramOptions {
         OpenPullRequests,
         MergedPullRequests,
         BambooAverageBuildTime,
-        BambooLatestBuild
+        BambooLatestBuild,
+        BambooLatestBuildLog
     }
 
     public ProgramOptions() {
@@ -22,6 +23,7 @@ public class ProgramOptions {
         options.addOption("r", "repository", true, "the repository slug");
         options.addOption("c", "command", true, "the command to run [ OpenPullRequests, MergedPullRequests, BambooAverageBuildTime ]");
         options.addOption("t", "team", false, "group pull requests by team");
+        options.addOption("j", "job", true, "the job name of a certain bamboo build");
     }
 
     public void printHelp() {
@@ -61,6 +63,10 @@ public class ProgramOptions {
         }
 
         return Command.valueOf(commandLine.getOptionValue("command"));
+    }
+
+    public String getJobName() {
+        return commandLine.getOptionValue("job");
     }
 
     public boolean isGroupByTeam() {
