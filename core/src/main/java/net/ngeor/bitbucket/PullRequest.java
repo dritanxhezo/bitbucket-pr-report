@@ -1,4 +1,4 @@
-package net.ngeor.bprr.serialization;
+package net.ngeor.bitbucket;
 
 import java.util.Date;
 

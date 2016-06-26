@@ -1,4 +1,4 @@
-package net.ngeor.bprr.serialization;
+package net.ngeor.bitbucket;
 
 public class Link {
     private String href;

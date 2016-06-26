@@ -1,6 +1,8 @@
-package net.ngeor.bprr.serialization;
+package net.ngeor.bamboo;
 
-public class BambooBuildResult {
+import net.ngeor.bitbucket.Link;
+
+public class BuildResult {
     private String key;
     private String lifeCycleState;
     private String state;

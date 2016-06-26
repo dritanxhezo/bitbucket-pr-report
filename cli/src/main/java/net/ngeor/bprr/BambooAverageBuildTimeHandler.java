@@ -1,6 +1,6 @@
 package net.ngeor.bprr;
 
-import net.ngeor.bprr.serialization.BambooPlan;
+import net.ngeor.bamboo.Plan;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -11,8 +11,8 @@ public class BambooAverageBuildTimeHandler {
         String company = programOptions.getUser();
         String planKey = programOptions.getRepository();
         String url = String.format("https://%s.jira.com/builds/rest/api/latest/plan/%s.json?os_authType=basic", company, planKey);
-        BambooPlan bambooPlan = restClient.execute(url, BambooPlan.class);
-        double timeInMinutes = bambooPlan.getAverageBuildTimeInSeconds() / 60.0;
+        Plan plan = restClient.execute(url, Plan.class);
+        double timeInMinutes = plan.getAverageBuildTimeInSeconds() / 60.0;
         out.println(String.format(Locale.ROOT, "%.2f", timeInMinutes));
     }
 }

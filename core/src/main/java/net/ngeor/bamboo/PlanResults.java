@@ -1,6 +1,6 @@
-package net.ngeor.bprr.serialization;
+package net.ngeor.bamboo;
 
-public class BambooPlanResults {
+public class PlanResults {
     private ResultsWrapper results;
 
     public ResultsWrapper getResults() {
@@ -8,9 +8,9 @@ public class BambooPlanResults {
     }
 
     public static class ResultsWrapper {
-        private BambooBuildResult[] result;
+        private BuildResult[] result;
 
-        public BambooBuildResult[] getResult() {
+        public BuildResult[] getResult() {
             return result;
         }
     }

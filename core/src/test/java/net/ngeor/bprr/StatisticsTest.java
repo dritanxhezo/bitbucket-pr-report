@@ -1,7 +1,7 @@
 package net.ngeor.bprr;
 
-import net.ngeor.bprr.serialization.Author;
-import net.ngeor.bprr.serialization.PullRequest;
+import net.ngeor.bitbucket.Author;
+import net.ngeor.bitbucket.PullRequest;
 import org.junit.Test;
 
 import java.util.Arrays;

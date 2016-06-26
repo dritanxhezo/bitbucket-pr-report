@@ -1,7 +1,7 @@
 package net.ngeor.bprr;
 
-import net.ngeor.bprr.requests.PullRequestsRequest;
-import net.ngeor.bprr.serialization.PullRequest;
+import net.ngeor.bitbucket.PullRequest;
+import net.ngeor.bitbucket.PullRequestsRequest;
 import net.ngeor.bprr.views.PullRequestsView;
 import net.ngeor.testutil.TestData;
 import net.ngeor.util.DateHelper;

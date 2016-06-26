@@ -1,6 +1,7 @@
 package net.ngeor.bprr;
 
 import org.apache.commons.cli.*;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
 public class ProgramOptions {
@@ -18,10 +19,10 @@ public class ProgramOptions {
     public ProgramOptions() {
         // create the options
         options = new Options();
+        options.addOption(new EnumOption<>("c", "command", "the command to run", Command.class));
         options.addOption("u", "user", true, "the user name that owns the repositories");
         options.addOption("s", "secret", true, "base64 encoded authentication token");
         options.addOption("r", "repository", true, "the repository slug");
-        options.addOption("c", "command", true, "the command to run [ OpenPullRequests, MergedPullRequests, BambooAverageBuildTime ]");
         options.addOption("t", "team", false, "group pull requests by team");
         options.addOption("j", "job", true, "the job name of a certain bamboo build");
     }
@@ -72,4 +73,13 @@ public class ProgramOptions {
     public boolean isGroupByTeam() {
         return commandLine.hasOption('t');
     }
+}
+
+class EnumOption<E extends Enum> extends Option {
+
+    public EnumOption(String opt, String longOpt, String description, Class<E> enumClass) throws IllegalArgumentException {
+        super(opt, longOpt, true /* hasArg */, description + ArrayUtils.toString(enumClass.getEnumConstants()));
+    }
+
+
 }

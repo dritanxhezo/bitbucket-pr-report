@@ -1,9 +1,9 @@
 package net.ngeor.bprr;
 
-import net.ngeor.bprr.requests.PullRequestsRequest;
-import net.ngeor.bprr.serialization.Author;
-import net.ngeor.bprr.serialization.PullRequest;
-import net.ngeor.bprr.serialization.PullRequests;
+import net.ngeor.bitbucket.Author;
+import net.ngeor.bitbucket.PullRequest;
+import net.ngeor.bitbucket.PullRequests;
+import net.ngeor.bitbucket.PullRequestsRequest;
 import org.junit.Test;
 
 import java.io.IOException;

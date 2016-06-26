@@ -1,8 +1,8 @@
 package net.ngeor.bprr;
 
-import net.ngeor.bprr.requests.PullRequestsRequest;
-import net.ngeor.bprr.serialization.PullRequest;
-import net.ngeor.bprr.serialization.PullRequests;
+import net.ngeor.bitbucket.PullRequest;
+import net.ngeor.bitbucket.PullRequests;
+import net.ngeor.bitbucket.PullRequestsRequest;
 
 import java.io.IOException;
 import java.io.PrintStream;

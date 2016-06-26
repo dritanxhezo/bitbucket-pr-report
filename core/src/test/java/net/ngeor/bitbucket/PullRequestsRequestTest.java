@@ -1,4 +1,4 @@
-package net.ngeor.bprr.requests;
+package net.ngeor.bitbucket;
 
 import net.ngeor.bprr.RepositoryDescriptor;
 import net.ngeor.util.DateHelper;

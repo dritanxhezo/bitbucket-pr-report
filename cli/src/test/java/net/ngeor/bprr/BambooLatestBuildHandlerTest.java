@@ -1,8 +1,8 @@
 package net.ngeor.bprr;
 
-import net.ngeor.bprr.serialization.BambooBuildResult;
-import net.ngeor.bprr.serialization.BambooPlanResults;
-import net.ngeor.bprr.serialization.Link;
+import net.ngeor.bamboo.BuildResult;
+import net.ngeor.bamboo.PlanResults;
+import net.ngeor.bitbucket.Link;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -17,22 +17,22 @@ public class BambooLatestBuildHandlerTest {
         RestClient restClient = mock(RestClient.class);
         ProgramOptions programOptions = mock(ProgramOptions.class);
         PrintStream out = mock(PrintStream.class);
-        BambooPlanResults bambooPlanResults = mock(BambooPlanResults.class);
-        BambooPlanResults.ResultsWrapper resultsWrapper = mock(BambooPlanResults.ResultsWrapper.class);
-        BambooBuildResult successfulBuildSummary = mock(BambooBuildResult.class);
-        BambooBuildResult successfulBuildDetails = mock(BambooBuildResult.class);
+        PlanResults planResults = mock(PlanResults.class);
+        PlanResults.ResultsWrapper resultsWrapper = mock(PlanResults.ResultsWrapper.class);
+        BuildResult successfulBuildSummary = mock(BuildResult.class);
+        BuildResult successfulBuildDetails = mock(BuildResult.class);
 
-        BambooBuildResult result[] = new BambooBuildResult[] {
+        BuildResult result[] = new BuildResult[] {
             successfulBuildSummary
         };
 
         when(programOptions.getUser()).thenReturn("company");
         when(programOptions.getRepository()).thenReturn("planKey");
-        when(restClient.execute("https://company.jira.com/builds/rest/api/latest/result/planKey.json?os_authType=basic", BambooPlanResults.class))
-                .thenReturn(bambooPlanResults);
-        when(restClient.execute("https://whatever.json?os_authType=basic", BambooBuildResult.class))
+        when(restClient.execute("https://company.jira.com/builds/rest/api/latest/result/planKey.json?os_authType=basic", PlanResults.class))
+                .thenReturn(planResults);
+        when(restClient.execute("https://whatever.json?os_authType=basic", BuildResult.class))
                 .thenReturn(successfulBuildDetails);
-        when(bambooPlanResults.getResults()).thenReturn(resultsWrapper);
+        when(planResults.getResults()).thenReturn(resultsWrapper);
         when(resultsWrapper.getResult()).thenReturn(result);
         when(successfulBuildSummary.getLink()).thenReturn(new Link("https://whatever"));
         when(successfulBuildDetails.getSuccessfulTestCount()).thenReturn(37);

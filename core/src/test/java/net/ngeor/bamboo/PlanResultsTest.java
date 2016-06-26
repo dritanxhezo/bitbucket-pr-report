@@ -1,4 +1,4 @@
-package net.ngeor.bprr.serialization;
+package net.ngeor.bamboo;
 
 import net.ngeor.testutil.TestData;
 import org.junit.Test;
@@ -6,19 +6,19 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-public class BambooPlanResultsTest {
+public class PlanResultsTest {
     @Test
     public void shouldRead() {
-        BambooPlanResults bambooPlanResults = TestData.load(BambooPlanResults.class, "Simple");
-        assertNotNull(bambooPlanResults);
+        PlanResults planResults = TestData.load(PlanResults.class, "Simple");
+        assertNotNull(planResults);
 
-        BambooPlanResults.ResultsWrapper resultsWrapper = bambooPlanResults.getResults();
+        PlanResults.ResultsWrapper resultsWrapper = planResults.getResults();
         assertNotNull(resultsWrapper);
 
-        BambooBuildResult[] buildResults = resultsWrapper.getResult();
+        BuildResult[] buildResults = resultsWrapper.getResult();
         assertNotNull(buildResults);
 
-        BambooBuildResult firstBuildResult = buildResults[0];
+        BuildResult firstBuildResult = buildResults[0];
         assertNotNull(firstBuildResult);
 
         assertEquals("PRJ-PLN-1031", firstBuildResult.getKey());

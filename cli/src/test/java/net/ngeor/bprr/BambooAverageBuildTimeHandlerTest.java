@@ -1,6 +1,6 @@
 package net.ngeor.bprr;
 
-import net.ngeor.bprr.serialization.BambooPlan;
+import net.ngeor.bamboo.Plan;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -15,13 +15,13 @@ public class BambooAverageBuildTimeHandlerTest {
         RestClient restClient = mock(RestClient.class);
         ProgramOptions programOptions = mock(ProgramOptions.class);
         PrintStream out = mock(PrintStream.class);
-        BambooPlan bambooPlan = mock(BambooPlan.class);
+        Plan plan = mock(Plan.class);
 
         when(programOptions.getUser()).thenReturn("company");
         when(programOptions.getRepository()).thenReturn("planKey");
-        when(restClient.execute("https://company.jira.com/builds/rest/api/latest/plan/planKey.json?os_authType=basic", BambooPlan.class))
-                .thenReturn(bambooPlan);
-        when(bambooPlan.getAverageBuildTimeInSeconds()).thenReturn(120.0);
+        when(restClient.execute("https://company.jira.com/builds/rest/api/latest/plan/planKey.json?os_authType=basic", Plan.class))
+                .thenReturn(plan);
+        when(plan.getAverageBuildTimeInSeconds()).thenReturn(120.0);
 
         // act
         BambooAverageBuildTimeHandler handler = new BambooAverageBuildTimeHandler();

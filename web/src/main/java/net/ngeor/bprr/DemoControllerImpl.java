@@ -1,8 +1,8 @@
 package net.ngeor.bprr;
 
-import net.ngeor.bprr.requests.PullRequestsRequest;
-import net.ngeor.bprr.serialization.Participant;
-import net.ngeor.bprr.serialization.PullRequest;
+import net.ngeor.bitbucket.Participant;
+import net.ngeor.bitbucket.PullRequest;
+import net.ngeor.bitbucket.PullRequestsRequest;
 import net.ngeor.bprr.views.PullRequestsView;
 import net.ngeor.util.DateHelper;
 import net.ngeor.util.LocalDateInterval;

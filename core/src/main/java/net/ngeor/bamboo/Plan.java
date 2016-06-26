@@ -1,6 +1,6 @@
-package net.ngeor.bprr.serialization;
+package net.ngeor.bamboo;
 
-public class BambooPlan {
+public class Plan {
     private double averageBuildTimeInSeconds;
 
     public double getAverageBuildTimeInSeconds() {

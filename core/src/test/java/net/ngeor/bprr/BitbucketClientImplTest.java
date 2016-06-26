@@ -1,6 +1,6 @@
 package net.ngeor.bprr;
 
-import net.ngeor.bprr.serialization.PullRequest;
+import net.ngeor.bitbucket.PullRequest;
 import net.ngeor.util.ResourceLoaderImpl;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,12 +21,12 @@ import static org.junit.Assert.assertNotNull;
 @RunWith(Enclosed.class)
 public class BitbucketClientImplTest {
     public static class PullRequests {
-        private net.ngeor.bprr.serialization.PullRequests response;
+        private net.ngeor.bitbucket.PullRequests response;
 
         @Before
         public void before() throws URISyntaxException, IOException {
             // arrange
-            InputStream responseStream = new ResourceLoaderImpl().getResourceAsStream("net/ngeor/bprr/serialization/PullRequestsSimple.json");
+            InputStream responseStream = new ResourceLoaderImpl().getResourceAsStream("net/ngeor/bitbucket/PullRequestsSimple.json");
             URI expected = new URI("https://api.bitbucket.org/2.0/repositories/owner/repo_slug/pullrequests");
             SimpleHttpClient simpleHttpClient = setupHttpClientFactory(responseStream, expected);
             BitbucketClientImpl bitbucketClient = new BitbucketClientImpl(simpleHttpClient, "some secret");
@@ -34,7 +34,7 @@ public class BitbucketClientImplTest {
             // act
             response = bitbucketClient.execute(
                     "repositories/owner/repo_slug/pullrequests",
-                    net.ngeor.bprr.serialization.PullRequests.class);
+                    net.ngeor.bitbucket.PullRequests.class);
         }
 
         @Test
@@ -84,15 +84,15 @@ public class BitbucketClientImplTest {
         @Test
         public void shouldUseRequestInTheURI() throws URISyntaxException, IOException {
             // arrange
-            InputStream responseStream = new ResourceLoaderImpl().getResourceAsStream("net/ngeor/bprr/serialization/PullRequestsSimple.json");
+            InputStream responseStream = new ResourceLoaderImpl().getResourceAsStream("net/ngeor/bitbucket/PullRequestsSimple.json");
             URI expected = new URI("https://api.bitbucket.org/2.0/repositories/owner/repo_slug/pullrequests");
             SimpleHttpClient simpleHttpClient = setupHttpClientFactory(responseStream, expected);
             BitbucketClientImpl bitbucketClient = new BitbucketClientImpl(simpleHttpClient, "some secret");
 
             // act
-            net.ngeor.bprr.serialization.PullRequests pullRequests = bitbucketClient.execute(
+            net.ngeor.bitbucket.PullRequests pullRequests = bitbucketClient.execute(
                     "repositories/owner/repo_slug/pullrequests",
-                    net.ngeor.bprr.serialization.PullRequests.class);
+                    net.ngeor.bitbucket.PullRequests.class);
 
             // assert
             assertEquals(12, pullRequests.getSize());
@@ -101,15 +101,15 @@ public class BitbucketClientImplTest {
         @Test
         public void shouldUseRequestAsIsIfItIsBitbucketUrl() throws URISyntaxException, IOException {
             // arrange
-            InputStream responseStream = new ResourceLoaderImpl().getResourceAsStream("net/ngeor/bprr/serialization/PullRequestsSimple.json");
+            InputStream responseStream = new ResourceLoaderImpl().getResourceAsStream("net/ngeor/bitbucket/PullRequestsSimple.json");
             URI expected = new URI("https://api.bitbucket.org/2.0/whatever");
             SimpleHttpClient simpleHttpClient = setupHttpClientFactory(responseStream, expected);
             BitbucketClientImpl bitbucketClient = new BitbucketClientImpl(simpleHttpClient, "some secret");
 
             // act
-            net.ngeor.bprr.serialization.PullRequests pullRequests = bitbucketClient.execute(
+            net.ngeor.bitbucket.PullRequests pullRequests = bitbucketClient.execute(
                     "https://api.bitbucket.org/2.0/whatever",
-                    net.ngeor.bprr.serialization.PullRequests.class);
+                    net.ngeor.bitbucket.PullRequests.class);
 
             // assert
             assertEquals(12, pullRequests.getSize());

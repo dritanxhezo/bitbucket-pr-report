@@ -1,7 +1,7 @@
 package net.ngeor.bprr;
 
-import net.ngeor.bprr.serialization.BambooBuildResult;
-import net.ngeor.bprr.serialization.BambooPlanResults;
+import net.ngeor.bamboo.BuildResult;
+import net.ngeor.bamboo.PlanResults;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -12,12 +12,12 @@ public class BambooLatestBuildHandler {
         String company = programOptions.getUser();
         String planKey = programOptions.getRepository();
         String url = String.format("https://%s.jira.com/builds/rest/api/latest/result/%s.json?os_authType=basic", company, planKey);
-        BambooPlanResults bambooPlanResuls = restClient.execute(url, BambooPlanResults.class);
-        BambooPlanResults.ResultsWrapper resultsWrapper = bambooPlanResuls.getResults();
-        BambooBuildResult[] buildResults = resultsWrapper.getResult();
-        BambooBuildResult buildResultSummary = buildResults[0];
+        PlanResults bambooPlanResuls = restClient.execute(url, PlanResults.class);
+        PlanResults.ResultsWrapper resultsWrapper = bambooPlanResuls.getResults();
+        BuildResult[] buildResults = resultsWrapper.getResult();
+        BuildResult buildResultSummary = buildResults[0];
         String buildResultDetailsUrl = buildResultSummary.getLink().getHref() + ".json?os_authType=basic";
-        BambooBuildResult buildResultDetails = restClient.execute(buildResultDetailsUrl, BambooBuildResult.class);
+        BuildResult buildResultDetails = restClient.execute(buildResultDetailsUrl, BuildResult.class);
 
         out.println(String.format(Locale.ROOT, "successfulTestCount %d", buildResultDetails.getSuccessfulTestCount()));
         out.println(String.format(Locale.ROOT, "skippedTestCount %d", buildResultDetails.getSkippedTestCount()));

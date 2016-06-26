@@ -1,6 +1,6 @@
 package net.ngeor.bprr;
 
-import net.ngeor.bprr.serialization.PullRequest;
+import net.ngeor.bitbucket.PullRequest;
 
 import java.util.ArrayList;
 import java.util.List;
