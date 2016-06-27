@@ -8,6 +8,14 @@ public class ProgramOptions {
     private final Options options;
     private CommandLine commandLine;
 
+    public int getStartDaysDiff() {
+        if (!commandLine.hasOption("start-days-diff")) {
+            return 0;
+        }
+
+        return Integer.parseInt(commandLine.getOptionValue("start-days-diff"));
+    }
+
     public enum Command {
         OpenPullRequests,
         MergedPullRequests,
@@ -25,6 +33,12 @@ public class ProgramOptions {
         options.addOption("r", "repository", true, "the repository slug");
         options.addOption("t", "team", false, "group pull requests by team");
         options.addOption("j", "job", true, "the job name of a certain bamboo build");
+
+        options.addOption(Option.builder()
+            .longOpt("start-days-diff")
+            .hasArg()
+            .desc("Number of days to subtract from current date")
+            .build());
     }
 
     public void printHelp() {
@@ -32,17 +46,10 @@ public class ProgramOptions {
         helpFormatter.printHelp("bprr", options);
     }
 
-    public boolean parse(String... args) {
+    public void parse(String... args) throws ParseException {
         // create the parser
         CommandLineParser commandLineParser = new DefaultParser();
-        try {
-            commandLine = commandLineParser.parse(options, args);
-        } catch (ParseException ex) {
-            System.err.println("Parsing failed. Reason: " + ex.getMessage());
-            return false;
-        }
-
-        return true;
+        commandLine = commandLineParser.parse(options, args);
     }
 
     public String getUser() {
@@ -78,8 +85,7 @@ public class ProgramOptions {
 class EnumOption<E extends Enum> extends Option {
 
     public EnumOption(String opt, String longOpt, String description, Class<E> enumClass) throws IllegalArgumentException {
-        super(opt, longOpt, true /* hasArg */, description + ArrayUtils.toString(enumClass.getEnumConstants()));
+        super(opt, longOpt, true /* hasArg */, description + " " + ArrayUtils.toString(enumClass.getEnumConstants()));
+        setRequired(true);
     }
-
-
 }

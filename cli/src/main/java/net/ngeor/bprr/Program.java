@@ -2,6 +2,7 @@ package net.ngeor.bprr;
 
 import net.ngeor.util.ResourceLoader;
 import net.ngeor.util.ResourceLoaderImpl;
+import org.apache.commons.cli.ParseException;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
@@ -14,7 +15,11 @@ public class Program {
         // java -cp "bprr-cli-1.0-SNAPSHOT.jar;*" net.ngeor.bprr.Program
 
         ProgramOptions programOptions = new ProgramOptions();
-        if (!programOptions.parse(args)){
+        try {
+            programOptions.parse(args);
+        } catch (ParseException ex) {
+            System.err.println(ex.getMessage());
+            programOptions.printHelp();
             return;
         }
 

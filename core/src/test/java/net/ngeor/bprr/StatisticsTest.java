@@ -15,9 +15,9 @@ public class StatisticsTest {
     @Test
     public void shouldCreateReportPerAuthor() {
         List<PullRequest> pullRequests = Arrays.asList(
-                mockPullRequest("ngeor"),
-                mockPullRequest("ngeor"),
-                mockPullRequest("test")
+            mockPullRequest("ngeor"),
+            mockPullRequest("ngeor"),
+            mockPullRequest("test")
         );
 
         Statistics statistics = new Statistics();
@@ -26,9 +26,9 @@ public class StatisticsTest {
         List<Statistic> result = statistics.countByAuthor(pullRequests);
 
         // assert
-        Statistic[] expected = new Statistic[] {
-                new Statistic("ngeor", 2),
-                new Statistic("test", 1)
+        Statistic[] expected = new Statistic[]{
+            new Statistic("ngeor", 2),
+            new Statistic("test", 1)
         };
 
         assertArrayEquals(expected, result.toArray());
@@ -37,10 +37,10 @@ public class StatisticsTest {
     @Test
     public void shouldCreateReportPerAuthorTeam() {
         List<PullRequest> pullRequests = Arrays.asList(
-                mockPullRequest("ngeor"),
-                mockPullRequest("ngeor"),
-                mockPullRequest("test1"),
-                mockPullRequest("test2")
+            mockPullRequest("ngeor"),
+            mockPullRequest("ngeor"),
+            mockPullRequest("test1"),
+            mockPullRequest("test2")
         );
 
         Statistics statistics = new Statistics();
@@ -53,9 +53,9 @@ public class StatisticsTest {
         List<Statistic> result = statistics.countByAuthorTeam(pullRequests, teamMapper);
 
         // assert
-        Statistic[] expected = new Statistic[] {
-                new Statistic("team1", 3),
-                new Statistic("team2", 1)
+        Statistic[] expected = new Statistic[]{
+            new Statistic("team1", 3),
+            new Statistic("team2", 1)
         };
 
         assertArrayEquals(expected, result.toArray());

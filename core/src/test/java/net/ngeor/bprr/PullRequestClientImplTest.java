@@ -99,9 +99,9 @@ public class PullRequestClientImplTest {
         PullRequests pullRequestsResponse = mock(PullRequests.class);
         PullRequest firstPullRequest = mock(PullRequest.class);
         PullRequest secondPullRequest = mock(PullRequest.class);
-        PullRequest[] partialResponses = new PullRequest[] {
-                mockResponse("http://first-pr"),
-                mockResponse("http://second-pr")
+        PullRequest[] partialResponses = new PullRequest[]{
+            mockResponse("http://first-pr"),
+            mockResponse("http://second-pr")
         };
         when(pullRequestsResponse.getValues()).thenReturn(partialResponses);
 
@@ -132,20 +132,20 @@ public class PullRequestClientImplTest {
         List<PullRequests> partialPullRequests = Arrays.asList(firstPage, secondPage);
 
         // detailed pull requests
-        PullRequest[] detailedPullRequests = new PullRequest[] {
-                mockResponse("pr1"),
-                mockResponse("pr2"),
-                mockResponse("pr3"),
-                mockResponse("pr4")
+        PullRequest[] detailedPullRequests = new PullRequest[]{
+            mockResponse("pr1"),
+            mockResponse("pr2"),
+            mockResponse("pr3"),
+            mockResponse("pr4")
         };
 
 
         PullRequestClient pullRequestClient = mock(PullRequestClientImpl.class);
         when(pullRequestClient.loadAllPages(pullRequestsRequest)).thenReturn(partialPullRequests);
         when(pullRequestClient.loadDetails(firstPage))
-                .thenReturn(Arrays.asList(detailedPullRequests[0], detailedPullRequests[1]));
+            .thenReturn(Arrays.asList(detailedPullRequests[0], detailedPullRequests[1]));
         when(pullRequestClient.loadDetails(secondPage))
-                .thenReturn(Arrays.asList(detailedPullRequests[2], detailedPullRequests[3]));
+            .thenReturn(Arrays.asList(detailedPullRequests[2], detailedPullRequests[3]));
 
         when(pullRequestClient.loadAllDetails(pullRequestsRequest)).thenCallRealMethod();
 

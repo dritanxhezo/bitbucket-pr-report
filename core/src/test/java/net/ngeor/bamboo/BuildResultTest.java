@@ -24,6 +24,6 @@ public class BuildResultTest {
     public void shouldProvideLinkToLog() {
         BuildResult buildResult = TestData.load(BuildResult.class, "Simple");
         assertEquals("https://company.jira.com/builds/download/PRJ-PLN-JOB1/build_logs/PRJ-PLN-JOB1-1031.log",
-                buildResult.getLogFileUrl("JOB1"));
+            buildResult.getLogFileUrl("JOB1"));
     }
 }

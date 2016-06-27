@@ -29,7 +29,7 @@ public class BambooLatestBuildLogHandlerTest {
         InputStream logFileAsInputStream = IOUtils.toInputStream(logFileContents, "UTF-8");
         SimpleHttpClient simpleHttpClient = setupHttpClientFactory(logFileAsInputStream, "https://company.jira.com/builds/download/PRJ-PLN-JOB1/build_logs/PRJ-PLN-JOB1-1090.log");
 
-        BuildResult result[] = new BuildResult[] {
+        BuildResult result[] = new BuildResult[]{
             successfulBuildSummary
         };
 
@@ -38,7 +38,7 @@ public class BambooLatestBuildLogHandlerTest {
         when(programOptions.getSecret()).thenReturn("some secret");
         when(programOptions.getJobName()).thenReturn("JOB1");
         when(restClient.execute("https://company.jira.com/builds/rest/api/latest/result/planKey.json?os_authType=basic", PlanResults.class))
-                .thenReturn(planResults);
+            .thenReturn(planResults);
         when(planResults.getResults()).thenReturn(resultsWrapper);
         when(resultsWrapper.getResult()).thenReturn(result);
         when(successfulBuildSummary.getLogFileUrl("JOB1")).thenReturn("https://company.jira.com/builds/download/PRJ-PLN-JOB1/build_logs/PRJ-PLN-JOB1-1090.log");

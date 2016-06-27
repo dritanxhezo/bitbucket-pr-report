@@ -33,8 +33,8 @@ public class BitbucketClientImplTest {
 
             // act
             response = bitbucketClient.execute(
-                    "repositories/owner/repo_slug/pullrequests",
-                    net.ngeor.bitbucket.PullRequests.class);
+                "repositories/owner/repo_slug/pullrequests",
+                net.ngeor.bitbucket.PullRequests.class);
         }
 
         @Test
@@ -91,8 +91,8 @@ public class BitbucketClientImplTest {
 
             // act
             net.ngeor.bitbucket.PullRequests pullRequests = bitbucketClient.execute(
-                    "repositories/owner/repo_slug/pullrequests",
-                    net.ngeor.bitbucket.PullRequests.class);
+                "repositories/owner/repo_slug/pullrequests",
+                net.ngeor.bitbucket.PullRequests.class);
 
             // assert
             assertEquals(12, pullRequests.getSize());
@@ -108,8 +108,8 @@ public class BitbucketClientImplTest {
 
             // act
             net.ngeor.bitbucket.PullRequests pullRequests = bitbucketClient.execute(
-                    "https://api.bitbucket.org/2.0/whatever",
-                    net.ngeor.bitbucket.PullRequests.class);
+                "https://api.bitbucket.org/2.0/whatever",
+                net.ngeor.bitbucket.PullRequests.class);
 
             // assert
             assertEquals(12, pullRequests.getSize());

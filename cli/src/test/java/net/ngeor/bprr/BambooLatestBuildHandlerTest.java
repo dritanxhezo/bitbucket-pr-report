@@ -22,16 +22,16 @@ public class BambooLatestBuildHandlerTest {
         BuildResult successfulBuildSummary = mock(BuildResult.class);
         BuildResult successfulBuildDetails = mock(BuildResult.class);
 
-        BuildResult result[] = new BuildResult[] {
+        BuildResult result[] = new BuildResult[]{
             successfulBuildSummary
         };
 
         when(programOptions.getUser()).thenReturn("company");
         when(programOptions.getRepository()).thenReturn("planKey");
         when(restClient.execute("https://company.jira.com/builds/rest/api/latest/result/planKey.json?os_authType=basic", PlanResults.class))
-                .thenReturn(planResults);
+            .thenReturn(planResults);
         when(restClient.execute("https://whatever.json?os_authType=basic", BuildResult.class))
-                .thenReturn(successfulBuildDetails);
+            .thenReturn(successfulBuildDetails);
         when(planResults.getResults()).thenReturn(resultsWrapper);
         when(resultsWrapper.getResult()).thenReturn(result);
         when(successfulBuildSummary.getLink()).thenReturn(new Link("https://whatever"));

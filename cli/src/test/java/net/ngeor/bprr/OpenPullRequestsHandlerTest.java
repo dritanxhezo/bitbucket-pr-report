@@ -25,8 +25,8 @@ public class OpenPullRequestsHandlerTest {
         when(programOptions.getUser()).thenReturn("user");
         RepositoryDescriptor repositoryDescriptor = new RepositoryDescriptor("user", "repository");
         PullRequestsRequest pullRequestsRequest = new PullRequestsRequest(
-                repositoryDescriptor,
-                PullRequestsRequest.State.Open);
+            repositoryDescriptor,
+            PullRequestsRequest.State.Open);
         PullRequests response = mock(PullRequests.class);
         when(response.getSize()).thenReturn(5);
         when(pullRequestClient.load(pullRequestsRequest)).thenReturn(response);
@@ -54,13 +54,13 @@ public class OpenPullRequestsHandlerTest {
 
         RepositoryDescriptor repositoryDescriptor = new RepositoryDescriptor("user", "repository");
         PullRequestsRequest pullRequestsRequest = new PullRequestsRequest(
-                repositoryDescriptor,
-                PullRequestsRequest.State.Open);
+            repositoryDescriptor,
+            PullRequestsRequest.State.Open);
 
         List<PullRequest> pullRequests = Arrays.asList(
-                stubPullRequest("ngeor"),
-                stubPullRequest("ngeor"),
-                stubPullRequest("testUser")
+            stubPullRequest("ngeor"),
+            stubPullRequest("ngeor"),
+            stubPullRequest("testUser")
         );
         when(pullRequestClient.loadAllDetails(pullRequestsRequest)).thenReturn(pullRequests);
 

@@ -43,9 +43,10 @@ public class PullRequest {
     public Links getLinks() {
         return links;
     }
-    
+
     public static class Links {
         private Link self;
+
         public Link getSelf() {
             return self;
         }

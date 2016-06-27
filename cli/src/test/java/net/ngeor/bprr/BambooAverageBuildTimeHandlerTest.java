@@ -20,7 +20,7 @@ public class BambooAverageBuildTimeHandlerTest {
         when(programOptions.getUser()).thenReturn("company");
         when(programOptions.getRepository()).thenReturn("planKey");
         when(restClient.execute("https://company.jira.com/builds/rest/api/latest/plan/planKey.json?os_authType=basic", Plan.class))
-                .thenReturn(plan);
+            .thenReturn(plan);
         when(plan.getAverageBuildTimeInSeconds()).thenReturn(120.0);
 
         // act

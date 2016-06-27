@@ -39,8 +39,8 @@ public class Statistic {
     @Override
     public String toString() {
         return "Statistic{" +
-                "username='" + username + '\'' +
-                ", count=" + count +
-                '}';
+            "username='" + username + '\'' +
+            ", count=" + count +
+            '}';
     }
 }

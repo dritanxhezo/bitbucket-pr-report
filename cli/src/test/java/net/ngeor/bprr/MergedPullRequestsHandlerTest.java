@@ -21,9 +21,9 @@ public class MergedPullRequestsHandlerTest {
         when(programOptions.getUser()).thenReturn("user");
         RepositoryDescriptor repositoryDescriptor = new RepositoryDescriptor("user", "repository");
         PullRequestsRequest pullRequestsRequest = new PullRequestsRequest(
-                repositoryDescriptor,
-                PullRequestsRequest.State.Merged,
-                new LocalDateInterval(DateHelper.utcToday(), DateHelper.utcToday().plusDays(1)));
+            repositoryDescriptor,
+            PullRequestsRequest.State.Merged,
+            new LocalDateInterval(DateHelper.utcToday(), DateHelper.utcToday().plusDays(1)));
         PullRequests response = mock(PullRequests.class);
         when(response.getSize()).thenReturn(5);
         when(pullRequestClient.load(pullRequestsRequest)).thenReturn(response);
@@ -34,5 +34,30 @@ public class MergedPullRequestsHandlerTest {
 
         // assert
         verify(out).println(5);
+    }
+
+    @Test
+    public void shouldUseStartDaysDiffParameter() throws IOException {
+        PullRequestClient pullRequestClient = mock(PullRequestClient.class);
+        ProgramOptions programOptions = mock(ProgramOptions.class);
+        PrintStream out = mock(PrintStream.class);
+        when(programOptions.getRepository()).thenReturn("repository");
+        when(programOptions.getUser()).thenReturn("user");
+        when(programOptions.getStartDaysDiff()).thenReturn(14);
+        RepositoryDescriptor repositoryDescriptor = new RepositoryDescriptor("user", "repository");
+        PullRequestsRequest pullRequestsRequest = new PullRequestsRequest(
+            repositoryDescriptor,
+            PullRequestsRequest.State.Merged,
+            new LocalDateInterval(DateHelper.utcToday().minusDays(14), DateHelper.utcToday().plusDays(1)));
+        PullRequests response = mock(PullRequests.class);
+        when(response.getSize()).thenReturn(17);
+        when(pullRequestClient.load(pullRequestsRequest)).thenReturn(response);
+
+        // act
+        MergedPullRequestsHandler handler = new MergedPullRequestsHandler();
+        handler.handle(pullRequestClient, programOptions, out);
+
+        // assert
+        verify(out).println(17);
     }
 }

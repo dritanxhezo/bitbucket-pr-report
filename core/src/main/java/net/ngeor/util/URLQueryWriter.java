@@ -16,8 +16,8 @@ public class URLQueryWriter {
         }
 
         stringBuilder.appendEncoded(key).appendEncoded(" ")
-                .appendEncoded(operand).appendEncoded(" ")
-                .appendEncoded(value);
+            .appendEncoded(operand).appendEncoded(" ")
+            .appendEncoded(value);
     }
 
 }

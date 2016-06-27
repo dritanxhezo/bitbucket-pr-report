@@ -12,9 +12,9 @@ public class MergedPullRequestsHandler {
     public void handle(PullRequestClient pullRequestClient, ProgramOptions programOptions, PrintStream out) throws IOException {
         RepositoryDescriptor repositoryDescriptor = new RepositoryDescriptor(programOptions.getUser(), programOptions.getRepository());
         PullRequestsRequest request = new PullRequestsRequest(
-                repositoryDescriptor,
-                PullRequestsRequest.State.Merged,
-                new LocalDateInterval(DateHelper.utcToday(), DateHelper.utcToday().plusDays(1)));
+            repositoryDescriptor,
+            PullRequestsRequest.State.Merged,
+            new LocalDateInterval(DateHelper.utcToday().minusDays(programOptions.getStartDaysDiff()), DateHelper.utcToday().plusDays(1)));
         PullRequests pullRequests = pullRequestClient.load(request);
 
         out.println(pullRequests.getSize());

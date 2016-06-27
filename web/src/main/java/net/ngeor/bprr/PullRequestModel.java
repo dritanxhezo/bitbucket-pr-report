@@ -148,16 +148,16 @@ public class PullRequestModel {
     @Override
     public String toString() {
         return "PullRequestModel{" +
-                "id=" + id +
-                ", description='" + description + '\'' +
-                ", state='" + state + '\'' +
-                ", author='" + author + '\'' +
-                ", authorTeam='" + authorTeam + '\'' +
-                ", reviewers=" + Arrays.toString(reviewers) +
-                ", reviewerTeams=" + Arrays.toString(reviewerTeams) +
-                ", createdOn=" + createdOn +
-                ", updatedOn=" + updatedOn +
-                '}';
+            "id=" + id +
+            ", description='" + description + '\'' +
+            ", state='" + state + '\'' +
+            ", author='" + author + '\'' +
+            ", authorTeam='" + authorTeam + '\'' +
+            ", reviewers=" + Arrays.toString(reviewers) +
+            ", reviewerTeams=" + Arrays.toString(reviewerTeams) +
+            ", createdOn=" + createdOn +
+            ", updatedOn=" + updatedOn +
+            '}';
     }
 
     public PullRequestModel withReviewers(String... reviewers) {
