@@ -6,6 +6,7 @@ import java.io.InputStream;
 /**
  * Represents a consumer of an InputStream.
  */
+@FunctionalInterface
 public interface InputStreamClient<E> {
     /**
      * Consumes the given InputStream.
