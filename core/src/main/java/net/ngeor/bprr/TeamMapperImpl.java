@@ -35,6 +35,10 @@ public class TeamMapperImpl implements TeamMapper {
 
     private void populateProperties(Properties properties) {
         InputStream in = resourceLoader.getResourceAsStream("net/ngeor/bprr/teams.properties");
+        if (in == null) {
+            // TODO: log warning?
+            return;
+        }
 
         try {
             properties.load(in);
