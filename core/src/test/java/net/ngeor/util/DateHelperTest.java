@@ -1,11 +1,10 @@
 package net.ngeor.util;
 
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.LocalDate;
 import org.junit.Test;
+import org.mockito.cglib.core.Local;
 
 import java.text.ParseException;
+import java.time.LocalDate;
 
 import static org.junit.Assert.assertEquals;
 
@@ -30,7 +29,7 @@ public class DateHelperTest {
 
     @Test
     public void utcToday_shouldReturnCurrentDate() {
-        LocalDate expected = new DateTime(DateTimeZone.UTC).toLocalDate();
+        LocalDate expected = LocalDate.now();
         LocalDate actual = DateHelper.utcToday();
         assertEquals(expected, actual);
     }

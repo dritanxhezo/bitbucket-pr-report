@@ -3,8 +3,9 @@ package net.ngeor.bitbucket;
 import net.ngeor.bprr.RepositoryDescriptor;
 import net.ngeor.util.DateHelper;
 import net.ngeor.util.LocalDateInterval;
-import org.joda.time.LocalDate;
 import org.junit.Test;
+
+import java.time.LocalDate;
 
 import static org.junit.Assert.assertEquals;
 
@@ -41,7 +42,7 @@ public class PullRequestsRequestTest {
 
     @Test
     public void shouldSetUpdatedOnUntilWhenDateIsTomorrow() {
-        LocalDate tomorrow = new LocalDate().plusDays(1);
+        LocalDate tomorrow = LocalDate.now().plusDays(1);
         LocalDateInterval updatedOn = new LocalDateInterval(null, tomorrow);
         PullRequestsRequest request = new PullRequestsRequest(new RepositoryDescriptor("ngeor", "bprr"), updatedOn);
         String url = request.toString();

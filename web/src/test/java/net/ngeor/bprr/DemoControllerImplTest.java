@@ -6,7 +6,6 @@ import net.ngeor.bprr.views.PullRequestsView;
 import net.ngeor.testutil.TestData;
 import net.ngeor.util.DateHelper;
 import net.ngeor.util.LocalDateInterval;
-import org.jetbrains.annotations.NotNull;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -176,12 +175,10 @@ public class DemoControllerImplTest {
         assertArrayEquals(expectedPullRequestModels, pullRequestModels);
     }
 
-    @NotNull
     private DemoControllerImpl createDefaultDemoController() {
         return new DemoControllerImpl(pullRequestClient, teamMapper);
     }
 
-    @NotNull
     private PullRequestsView createView() throws IOException {
         return createDefaultDemoController().createView(req);
     }

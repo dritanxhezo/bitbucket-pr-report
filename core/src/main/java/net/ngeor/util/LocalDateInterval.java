@@ -1,6 +1,6 @@
 package net.ngeor.util;
 
-import org.joda.time.LocalDate;
+import java.time.LocalDate;
 
 public class LocalDateInterval {
     private final LocalDate start;

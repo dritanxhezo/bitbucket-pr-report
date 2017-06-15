@@ -6,12 +6,11 @@ import net.ngeor.bitbucket.PullRequestsRequest;
 import net.ngeor.bprr.views.PullRequestsView;
 import net.ngeor.util.DateHelper;
 import net.ngeor.util.LocalDateInterval;
-import org.jetbrains.annotations.NotNull;
-import org.joda.time.LocalDate;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,7 +70,6 @@ class DemoControllerImpl implements DemoController {
         pullRequestModel.setReviewerTeams(reviewerTeams);
     }
 
-    @NotNull
     private PullRequestModelCollection loadPullRequests(RepositoryDescriptor repositoryDescriptor, LocalDateInterval updatedOn) throws IOException {
         // fetch pull requests
         PullRequestsRequest request = new PullRequestsRequest(repositoryDescriptor, PullRequestsRequest.State.Merged, updatedOn);

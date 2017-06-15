@@ -1,7 +1,5 @@
 package net.ngeor.util;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
@@ -12,7 +10,7 @@ public class URLStringBuilder implements Appendable {
         this(new StringBuilder());
     }
 
-    public URLStringBuilder(@NotNull StringBuilder backend) {
+    public URLStringBuilder(StringBuilder backend) {
         this.backend = backend;
     }
 

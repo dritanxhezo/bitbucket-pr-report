@@ -4,15 +4,15 @@ import net.ngeor.bprr.RepositoryDescriptor;
 import net.ngeor.util.LocalDateInterval;
 import net.ngeor.util.URLQueryWriter;
 import net.ngeor.util.URLStringBuilder;
-import org.jetbrains.annotations.NotNull;
-import org.joda.time.LocalDate;
+
+import java.time.LocalDate;
 
 public class PullRequestsRequest {
     private final RepositoryDescriptor repositoryDescriptor;
     private final State state;
     private final LocalDateInterval updatedOn;
 
-    public PullRequestsRequest(@NotNull RepositoryDescriptor repositoryDescriptor, State state, LocalDateInterval updatedOn) {
+    public PullRequestsRequest(RepositoryDescriptor repositoryDescriptor, State state, LocalDateInterval updatedOn) {
         if (repositoryDescriptor == null) {
             throw new IllegalArgumentException("repositoryDescriptor cannot be null");
         }
@@ -22,15 +22,15 @@ public class PullRequestsRequest {
         this.updatedOn = updatedOn;
     }
 
-    public PullRequestsRequest(@NotNull RepositoryDescriptor repositoryDescriptor) {
+    public PullRequestsRequest(RepositoryDescriptor repositoryDescriptor) {
         this(repositoryDescriptor, null, null);
     }
 
-    public PullRequestsRequest(@NotNull RepositoryDescriptor repositoryDescriptor, State state) {
+    public PullRequestsRequest(RepositoryDescriptor repositoryDescriptor, State state) {
         this(repositoryDescriptor, state, null);
     }
 
-    public PullRequestsRequest(@NotNull RepositoryDescriptor repositoryDescriptor, LocalDateInterval updatedOn) {
+    public PullRequestsRequest(RepositoryDescriptor repositoryDescriptor, LocalDateInterval updatedOn) {
         this(repositoryDescriptor, null, updatedOn);
     }
 
