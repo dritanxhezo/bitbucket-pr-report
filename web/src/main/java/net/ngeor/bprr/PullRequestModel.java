@@ -2,6 +2,7 @@ package net.ngeor.bprr;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * Pull request model.
@@ -137,33 +138,15 @@ public class PullRequestModel {
 
         PullRequestModel that = (PullRequestModel) o;
 
-        if (id != that.id) {
-            return false;
-        }
-        if (description != null ? !description.equals(that.description) : that.description != null) {
-            return false;
-        }
-        if (state != null ? !state.equals(that.state) : that.state != null) {
-            return false;
-        }
-        if (author != null ? !author.equals(that.author) : that.author != null) {
-            return false;
-        }
-        if (authorTeam != null ? !authorTeam.equals(that.authorTeam) : that.authorTeam != null) {
-            return false;
-        }
-        // Probably incorrect - comparing Object[] arrays with Arrays.equals
-        if (!Arrays.equals(reviewers, that.reviewers)) {
-            return false;
-        }
-        // Probably incorrect - comparing Object[] arrays with Arrays.equals
-        if (!Arrays.equals(reviewerTeams, that.reviewerTeams)) {
-            return false;
-        }
-        if (createdOn != null ? !createdOn.equals(that.createdOn) : that.createdOn != null) {
-            return false;
-        }
-        return updatedOn != null ? updatedOn.equals(that.updatedOn) : that.updatedOn == null;
+        return id == that.id
+            && Objects.equals(description, that.description)
+            && Objects.equals(state, that.state)
+            && Objects.equals(author, that.author)
+            && Objects.equals(authorTeam, that.authorTeam)
+            && Arrays.equals(reviewers, that.reviewers)
+            && Arrays.equals(reviewerTeams, that.reviewerTeams)
+            && Objects.equals(createdOn, that.createdOn)
+            && Objects.equals(updatedOn, that.updatedOn);
     }
 
     @Override
