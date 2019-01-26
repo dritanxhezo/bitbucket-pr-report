@@ -1,34 +1,39 @@
 package net.ngeor.bprr;
 
+import java.io.IOException;
+import java.io.PrintStream;
+import org.junit.jupiter.api.Test;
+
 import net.ngeor.bamboo.BuildResult;
 import net.ngeor.bamboo.PlanResults;
 import net.ngeor.bitbucket.Link;
-import org.junit.Test;
 
-import java.io.IOException;
-import java.io.PrintStream;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-import static org.mockito.Mockito.*;
-
+/**
+ * Unit tests for {@link BambooLatestBuildHandler}.
+ */
+@SuppressWarnings("checkstyle:MagicNumber")
 public class BambooLatestBuildHandlerTest {
     @Test
     public void shouldReportTestCount() throws IOException {
         // arrange
-        RestClient restClient = mock(RestClient.class);
-        ProgramOptions programOptions = mock(ProgramOptions.class);
-        PrintStream out = mock(PrintStream.class);
-        PlanResults planResults = mock(PlanResults.class);
+        RestClient restClient                     = mock(RestClient.class);
+        ProgramOptions programOptions             = mock(ProgramOptions.class);
+        PrintStream out                           = mock(PrintStream.class);
+        PlanResults planResults                   = mock(PlanResults.class);
         PlanResults.ResultsWrapper resultsWrapper = mock(PlanResults.ResultsWrapper.class);
-        BuildResult successfulBuildSummary = mock(BuildResult.class);
-        BuildResult successfulBuildDetails = mock(BuildResult.class);
+        BuildResult successfulBuildSummary        = mock(BuildResult.class);
+        BuildResult successfulBuildDetails        = mock(BuildResult.class);
 
-        BuildResult result[] = new BuildResult[]{
-            successfulBuildSummary
-        };
+        var result = new BuildResult[] {successfulBuildSummary};
 
         when(programOptions.getUser()).thenReturn("company");
         when(programOptions.getRepository()).thenReturn("planKey");
-        when(restClient.execute("https://company.jira.com/builds/rest/api/latest/result/planKey.json?os_authType=basic", PlanResults.class))
+        when(restClient.execute("https://company.jira.com/builds/rest/api/latest/result/planKey.json?os_authType=basic",
+                                PlanResults.class))
             .thenReturn(planResults);
         when(restClient.execute("https://whatever.json?os_authType=basic", BuildResult.class))
             .thenReturn(successfulBuildDetails);

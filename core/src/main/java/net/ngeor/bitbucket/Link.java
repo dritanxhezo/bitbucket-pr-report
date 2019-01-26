@@ -1,10 +1,12 @@
 package net.ngeor.bitbucket;
 
+/**
+ * Represents a link.
+ */
 public class Link {
     private String href;
 
     public Link() {
-
     }
 
     public Link(String href) {

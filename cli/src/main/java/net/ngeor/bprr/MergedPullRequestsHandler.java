@@ -1,20 +1,33 @@
 package net.ngeor.bprr;
 
+import java.io.IOException;
+import java.io.PrintStream;
+
 import net.ngeor.bitbucket.PullRequests;
 import net.ngeor.bitbucket.PullRequestsRequest;
 import net.ngeor.util.DateHelper;
 import net.ngeor.util.LocalDateInterval;
 
-import java.io.IOException;
-import java.io.PrintStream;
-
+/**
+ * Handles the merged pull requests command.
+ */
 public class MergedPullRequestsHandler {
-    public void handle(PullRequestClient pullRequestClient, ProgramOptions programOptions, PrintStream out) throws IOException {
-        RepositoryDescriptor repositoryDescriptor = new RepositoryDescriptor(programOptions.getUser(), programOptions.getRepository());
+    /**
+     * Handles the command.
+     * @param pullRequestClient
+     * @param programOptions
+     * @param out
+     * @throws IOException
+     */
+    public void handle(PullRequestClient pullRequestClient, ProgramOptions programOptions, PrintStream out)
+        throws IOException {
+        RepositoryDescriptor repositoryDescriptor =
+            new RepositoryDescriptor(programOptions.getUser(), programOptions.getRepository());
         PullRequestsRequest request = new PullRequestsRequest(
             repositoryDescriptor,
             PullRequestsRequest.State.Merged,
-            new LocalDateInterval(DateHelper.utcToday().minusDays(programOptions.getStartDaysDiff()), DateHelper.utcToday().plusDays(1)));
+            new LocalDateInterval(DateHelper.utcToday().minusDays(programOptions.getStartDaysDiff()),
+                                  DateHelper.utcToday().plusDays(1)));
         PullRequests pullRequests = pullRequestClient.load(request);
 
         out.println(pullRequests.getSize());

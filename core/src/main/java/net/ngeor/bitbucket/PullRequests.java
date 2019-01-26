@@ -1,5 +1,8 @@
 package net.ngeor.bitbucket;
 
+/**
+ * A collection of pull requests.
+ */
 public class PullRequests {
     private int page;
     private int size;

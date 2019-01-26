@@ -2,11 +2,17 @@ package net.ngeor.bitbucket;
 
 import java.util.Date;
 
+/**
+ * A pull request.
+ */
 public class PullRequest {
     private int id;
     private String description;
     private String state;
+
+    @SuppressWarnings("checkstyle:MemberName")
     private Date created_on;
+    @SuppressWarnings("checkstyle:MemberName")
     private Date updated_on;
     private Author author;
     private Participant[] participants;
@@ -44,6 +50,9 @@ public class PullRequest {
         return links;
     }
 
+    /**
+     * Links of a pull request.
+     */
     public static class Links {
         private Link self;
 

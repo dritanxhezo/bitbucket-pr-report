@@ -1,15 +1,18 @@
 package net.ngeor.testutil;
 
-import com.google.gson.Gson;
-
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-public class TestData {
+import com.google.gson.Gson;
+
+/**
+ * Helper for test data.
+ */
+public final class TestData {
+    private static final TestData INSTANCE = new TestData();
+
     private TestData() {
     }
-
-    private static final TestData INSTANCE = new TestData();
 
     public static <T> T load(Class<T> type, String suffix) {
         String name = '/' + type.getName().replace('.', '/') + suffix + ".json";
@@ -23,7 +26,7 @@ public class TestData {
         }
 
         InputStreamReader reader = new InputStreamReader(responseStream);
-        Gson gson = new Gson();
+        Gson gson                = new Gson();
         return gson.fromJson(reader, type);
     }
 }

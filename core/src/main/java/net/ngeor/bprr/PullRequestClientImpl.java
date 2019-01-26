@@ -1,14 +1,17 @@
 package net.ngeor.bprr;
 
-import net.ngeor.bitbucket.PullRequest;
-import net.ngeor.bitbucket.PullRequests;
-import net.ngeor.bitbucket.PullRequestsRequest;
-import org.apache.commons.lang3.StringUtils;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 
+import net.ngeor.bitbucket.PullRequest;
+import net.ngeor.bitbucket.PullRequests;
+import net.ngeor.bitbucket.PullRequestsRequest;
+
+/**
+ * Implementation of {@link PullRequestClient}.
+ */
 public class PullRequestClientImpl implements PullRequestClient {
     private final RestClient bitbucketClient;
 
@@ -24,12 +27,12 @@ public class PullRequestClientImpl implements PullRequestClient {
     @Override
     public List<PullRequests> loadAllPages(PullRequestsRequest request) throws IOException {
         List<PullRequests> result = new ArrayList<>();
-        PullRequests response = load(request);
+        PullRequests response     = load(request);
         result.add(response);
         String next = response.getNext();
         while (!StringUtils.isBlank(next)) {
             response = bitbucketClient.execute(next, PullRequests.class);
-            next = response.getNext();
+            next     = response.getNext();
             result.add(response);
         }
 
@@ -40,7 +43,7 @@ public class PullRequestClientImpl implements PullRequestClient {
     public List<PullRequest> loadDetails(PullRequests pullRequests) throws IOException {
         List<PullRequest> result = new ArrayList<>();
         for (PullRequest partialResponse : pullRequests.getValues()) {
-            String href = partialResponse.getLinks().getSelf().getHref();
+            String href              = partialResponse.getLinks().getSelf().getHref();
             PullRequest fullResponse = bitbucketClient.execute(href, PullRequest.class);
             result.add(fullResponse);
         }
@@ -51,7 +54,7 @@ public class PullRequestClientImpl implements PullRequestClient {
     @Override
     public List<PullRequest> loadAllDetails(PullRequestsRequest request) throws IOException {
         List<PullRequests> pullRequestsList = loadAllPages(request);
-        List<PullRequest> result = new ArrayList<>();
+        List<PullRequest> result            = new ArrayList<>();
         for (PullRequests pullRequests : pullRequestsList) {
             result.addAll(loadDetails(pullRequests));
         }

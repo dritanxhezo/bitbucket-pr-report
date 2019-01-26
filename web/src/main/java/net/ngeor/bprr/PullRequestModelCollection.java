@@ -5,9 +5,16 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * A collection of pull request models.
+ */
 public class PullRequestModelCollection implements Iterable<PullRequestModel> {
     private final ArrayList<PullRequestModel> pullRequestModels = new ArrayList<>();
 
+    /**
+     * Creates an instance of this class.
+     * @param pullRequestModels
+     */
     public PullRequestModelCollection(List<PullRequestModel> pullRequestModels) {
         if (pullRequestModels != null) {
             this.pullRequestModels.addAll(pullRequestModels);
@@ -16,6 +23,10 @@ public class PullRequestModelCollection implements Iterable<PullRequestModel> {
         }
     }
 
+    /**
+     * Gets the max reviewer count.
+     * @return
+     */
     public int getMaxReviewerCount() {
         int result = 0;
         for (PullRequestModel model : pullRequestModels) {

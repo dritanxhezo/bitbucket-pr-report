@@ -19,4 +19,3 @@ public interface SimpleHttpClient {
      */
     <E> E load(String url, String basicAuthenticationHeader, InputStreamClient<E> inputStreamClient) throws IOException;
 }
-

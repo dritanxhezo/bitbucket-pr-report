@@ -1,5 +1,8 @@
 package net.ngeor.bprr;
 
+/**
+ * Implementation of a bitbucket client.
+ */
 public class BitbucketClientImpl extends RestClientImpl {
     public BitbucketClientImpl(SimpleHttpClient simpleHttpClient, String secret) {
         super(simpleHttpClient, secret);

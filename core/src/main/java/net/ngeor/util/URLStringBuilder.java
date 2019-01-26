@@ -3,6 +3,9 @@ package net.ngeor.util;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
+/**
+ * Utility class for building URLs.
+ */
 public class URLStringBuilder implements Appendable {
     private final StringBuilder backend;
 

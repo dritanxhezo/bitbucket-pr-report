@@ -1,32 +1,37 @@
 package net.ngeor.bprr;
 
-import net.ngeor.bitbucket.Author;
-import net.ngeor.bitbucket.PullRequest;
-import net.ngeor.bitbucket.PullRequests;
-import net.ngeor.bitbucket.PullRequestsRequest;
-import org.junit.Test;
-
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.List;
+import org.junit.jupiter.api.Test;
 
-import static org.mockito.Mockito.*;
+import net.ngeor.bitbucket.Author;
+import net.ngeor.bitbucket.PullRequest;
+import net.ngeor.bitbucket.PullRequests;
+import net.ngeor.bitbucket.PullRequestsRequest;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+/**
+ * Unit tests for {@link OpenPullRequestsHandler}.
+ */
+@SuppressWarnings("checkstyle:MagicNumber")
 public class OpenPullRequestsHandlerTest {
     @Test
     public void shouldFetchOpenPullRequests() throws IOException {
         PullRequestClient pullRequestClient = mock(PullRequestClient.class);
-        ProgramOptions programOptions = mock(ProgramOptions.class);
-        PrintStream out = mock(PrintStream.class);
-        TeamMapper teamMapper = mock(TeamMapper.class);
+        ProgramOptions programOptions       = mock(ProgramOptions.class);
+        PrintStream out                     = mock(PrintStream.class);
+        TeamMapper teamMapper               = mock(TeamMapper.class);
 
         when(programOptions.getRepository()).thenReturn("repository");
         when(programOptions.getUser()).thenReturn("user");
         RepositoryDescriptor repositoryDescriptor = new RepositoryDescriptor("user", "repository");
-        PullRequestsRequest pullRequestsRequest = new PullRequestsRequest(
-            repositoryDescriptor,
-            PullRequestsRequest.State.Open);
+        PullRequestsRequest pullRequestsRequest =
+            new PullRequestsRequest(repositoryDescriptor, PullRequestsRequest.State.Open);
         PullRequests response = mock(PullRequests.class);
         when(response.getSize()).thenReturn(5);
         when(pullRequestClient.load(pullRequestsRequest)).thenReturn(response);
@@ -42,9 +47,9 @@ public class OpenPullRequestsHandlerTest {
     @Test
     public void shouldFetchOpenPullRequestsForTeam() throws IOException {
         PullRequestClient pullRequestClient = mock(PullRequestClient.class);
-        ProgramOptions programOptions = mock(ProgramOptions.class);
-        PrintStream out = mock(PrintStream.class);
-        TeamMapper teamMapper = mock(TeamMapper.class);
+        ProgramOptions programOptions       = mock(ProgramOptions.class);
+        PrintStream out                     = mock(PrintStream.class);
+        TeamMapper teamMapper               = mock(TeamMapper.class);
 
         when(programOptions.getRepository()).thenReturn("repository");
         when(programOptions.getUser()).thenReturn("user");
@@ -53,15 +58,11 @@ public class OpenPullRequestsHandlerTest {
         when(teamMapper.userToTeam("testUser")).thenReturn("otherTeam");
 
         RepositoryDescriptor repositoryDescriptor = new RepositoryDescriptor("user", "repository");
-        PullRequestsRequest pullRequestsRequest = new PullRequestsRequest(
-            repositoryDescriptor,
-            PullRequestsRequest.State.Open);
+        PullRequestsRequest pullRequestsRequest =
+            new PullRequestsRequest(repositoryDescriptor, PullRequestsRequest.State.Open);
 
-        List<PullRequest> pullRequests = Arrays.asList(
-            stubPullRequest("ngeor"),
-            stubPullRequest("ngeor"),
-            stubPullRequest("testUser")
-        );
+        List<PullRequest> pullRequests =
+            Arrays.asList(stubPullRequest("ngeor"), stubPullRequest("ngeor"), stubPullRequest("testUser"));
         when(pullRequestClient.loadAllDetails(pullRequestsRequest)).thenReturn(pullRequests);
 
         // act
@@ -75,9 +76,8 @@ public class OpenPullRequestsHandlerTest {
 
     private static PullRequest stubPullRequest(String authorUsername) {
         PullRequest result = mock(PullRequest.class);
-        Author author = new Author(authorUsername, "display name does not matter");
+        Author author      = new Author(authorUsername, "display name does not matter");
         when(result.getAuthor()).thenReturn(author);
         return result;
     }
-
 }

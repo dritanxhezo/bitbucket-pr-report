@@ -1,5 +1,8 @@
 package net.ngeor.bitbucket;
 
+/**
+ * Represents a participant in a PR.
+ */
 public class Participant {
     private boolean approved;
     private String role;
@@ -8,10 +11,16 @@ public class Participant {
     public Participant() {
     }
 
+    /**
+     * Creates an instance of this class.
+     * @param approved
+     * @param role
+     * @param user
+     */
     public Participant(boolean approved, String role, Author user) {
         this.approved = approved;
-        this.role = role;
-        this.user = user;
+        this.role     = role;
+        this.user     = user;
     }
 
     public boolean isApproved() {

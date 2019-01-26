@@ -1,11 +1,14 @@
 package net.ngeor.bprr.views;
 
-import net.ngeor.bprr.PullRequestModel;
-import net.ngeor.bprr.PullRequestModelCollection;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import net.ngeor.bprr.PullRequestModel;
+import net.ngeor.bprr.PullRequestModelCollection;
+
+/**
+ * View of pull requests.
+ */
 public class PullRequestsView {
     private PullRequestModelCollection pullRequests;
     private String formUrl;
@@ -21,6 +24,10 @@ public class PullRequestsView {
         this.pullRequests = pullRequests;
     }
 
+    /**
+     * Gets the statistics.
+     * @return
+     */
     public Statistics[] getStatistics() {
         List<Statistics> result = new ArrayList<>();
 
@@ -109,28 +116,37 @@ public class PullRequestsView {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         PullRequestsView that = (PullRequestsView) o;
 
-        if (pullRequests != null ? !pullRequests.equals(that.pullRequests) : that.pullRequests != null) return false;
-        if (formUrl != null ? !formUrl.equals(that.formUrl) : that.formUrl != null) return false;
-        if (repo != null ? !repo.equals(that.repo) : that.repo != null) return false;
-        if (updatedOnFrom != null ? !updatedOnFrom.equals(that.updatedOnFrom) : that.updatedOnFrom != null)
+        if (pullRequests != null ? !pullRequests.equals(that.pullRequests) : that.pullRequests != null) {
             return false;
+        }
+        if (formUrl != null ? !formUrl.equals(that.formUrl) : that.formUrl != null) {
+            return false;
+        }
+        if (repo != null ? !repo.equals(that.repo) : that.repo != null) {
+            return false;
+        }
+        if (updatedOnFrom != null ? !updatedOnFrom.equals(that.updatedOnFrom) : that.updatedOnFrom != null) {
+            return false;
+        }
         return updatedOnUntil != null ? updatedOnUntil.equals(that.updatedOnUntil) : that.updatedOnUntil == null;
-
     }
 
     @Override
     public int hashCode() {
         int result = pullRequests.hashCode();
-        result = 31 * result + (formUrl != null ? formUrl.hashCode() : 0);
-        result = 31 * result + (repo != null ? repo.hashCode() : 0);
-        result = 31 * result + (updatedOnFrom != null ? updatedOnFrom.hashCode() : 0);
-        result = 31 * result + (updatedOnUntil != null ? updatedOnUntil.hashCode() : 0);
+        result     = 31 * result + (formUrl != null ? formUrl.hashCode() : 0);
+        result     = 31 * result + (repo != null ? repo.hashCode() : 0);
+        result     = 31 * result + (updatedOnFrom != null ? updatedOnFrom.hashCode() : 0);
+        result     = 31 * result + (updatedOnUntil != null ? updatedOnUntil.hashCode() : 0);
         return result;
     }
-
 }

@@ -1,5 +1,12 @@
 package net.ngeor.bprr;
 
+import java.io.IOException;
+import java.text.ParseException;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+
 import net.ngeor.bitbucket.Participant;
 import net.ngeor.bitbucket.PullRequest;
 import net.ngeor.bitbucket.PullRequestsRequest;
@@ -7,25 +14,21 @@ import net.ngeor.bprr.views.PullRequestsView;
 import net.ngeor.util.DateHelper;
 import net.ngeor.util.LocalDateInterval;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.text.ParseException;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-
+/**
+ * Implementation of {@link DemoController}.
+ */
 class DemoControllerImpl implements DemoController {
     private final PullRequestClient pullRequestClient;
     private final TeamMapper teamMapper;
 
     DemoControllerImpl(PullRequestClient pullRequestClient, TeamMapper teamMapper) {
         this.pullRequestClient = pullRequestClient;
-        this.teamMapper = teamMapper;
+        this.teamMapper        = teamMapper;
     }
 
     @Override
     public PullRequestsView createView(HttpServletRequest req) throws IOException {
-        String fullRepoName = req.getParameter("repo");
+        String fullRepoName                       = req.getParameter("repo");
         RepositoryDescriptor repositoryDescriptor = RepositoryDescriptor.parse(fullRepoName);
 
         LocalDate updatedOnFrom;
@@ -61,7 +64,7 @@ class DemoControllerImpl implements DemoController {
 
     private void assignTeams(PullRequestModel pullRequestModel) {
         pullRequestModel.setAuthorTeam(teamMapper.userToTeam(pullRequestModel.getAuthor()));
-        String[] reviewers = pullRequestModel.getReviewers();
+        String[] reviewers     = pullRequestModel.getReviewers();
         String[] reviewerTeams = new String[reviewers.length];
         for (int i = 0; i < reviewers.length; i++) {
             reviewerTeams[i] = teamMapper.userToTeam(reviewers[i]);
@@ -70,9 +73,11 @@ class DemoControllerImpl implements DemoController {
         pullRequestModel.setReviewerTeams(reviewerTeams);
     }
 
-    private PullRequestModelCollection loadPullRequests(RepositoryDescriptor repositoryDescriptor, LocalDateInterval updatedOn) throws IOException {
+    private PullRequestModelCollection loadPullRequests(RepositoryDescriptor repositoryDescriptor,
+                                                        LocalDateInterval updatedOn) throws IOException {
         // fetch pull requests
-        PullRequestsRequest request = new PullRequestsRequest(repositoryDescriptor, PullRequestsRequest.State.Merged, updatedOn);
+        PullRequestsRequest request =
+            new PullRequestsRequest(repositoryDescriptor, PullRequestsRequest.State.Merged, updatedOn);
         List<PullRequest> pullRequests = pullRequestClient.loadAllDetails(request);
 
         // collect models here

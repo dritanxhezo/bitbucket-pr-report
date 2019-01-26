@@ -1,19 +1,24 @@
 package net.ngeor.bprr;
 
-import net.ngeor.bprr.views.PullRequestsView;
-import org.junit.Before;
-import org.junit.Test;
-
+import java.io.IOException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.mockito.Mockito.*;
+import net.ngeor.bprr.views.PullRequestsView;
 
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+/**
+ * Unit tests for {@link DemoServlet}.
+ */
 public class DemoServletTest {
     private HttpServletRequest req;
     private HttpServletResponse resp;
@@ -22,14 +27,14 @@ public class DemoServletTest {
     private RequestDispatcher requestDispatcher;
     private DemoController demoController;
 
-    @Before
+    @BeforeEach
     public void before() {
-        req = mock(HttpServletRequest.class);
-        resp = mock(HttpServletResponse.class);
-        servletConfig = mock(ServletConfig.class);
-        servletContext = mock(ServletContext.class);
+        req               = mock(HttpServletRequest.class);
+        resp              = mock(HttpServletResponse.class);
+        servletConfig     = mock(ServletConfig.class);
+        servletContext    = mock(ServletContext.class);
         requestDispatcher = mock(RequestDispatcher.class);
-        demoController = mock(DemoController.class);
+        demoController    = mock(DemoController.class);
 
         when(servletConfig.getServletContext()).thenReturn(servletContext);
         when(servletContext.getRequestDispatcher("/WEB-INF/demo.jsp")).thenReturn(requestDispatcher);

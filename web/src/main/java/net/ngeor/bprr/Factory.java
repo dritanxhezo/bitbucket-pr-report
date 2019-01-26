@@ -1,20 +1,23 @@
 package net.ngeor.bprr;
 
+import java.io.IOException;
+
 import net.ngeor.util.ResourceLoader;
 import net.ngeor.util.ResourceLoaderImpl;
-
-import java.io.IOException;
 
 /**
  * Provides concrete implementation for the interfaces of this package.
  */
-class Factory {
-    private Factory() {
+final class Factory {
+    public static final Factory INSTANCE = new Factory();
 
+    private Factory() {
     }
 
-    public static final Factory Instance = new Factory();
-
+    /**
+     * Creates the demo controller.
+     * @return
+     */
     public DemoController demoController() {
         try {
             return new DemoControllerImpl(pullRequestClient(), teamMapper());
@@ -31,6 +34,10 @@ class Factory {
         return new SimpleHttpClientImpl();
     }
 
+    /**
+     * Creates the team maper.
+     * @return
+     */
     public TeamMapper teamMapper() {
         TeamMapperImpl result = new TeamMapperImpl(resourceLoader());
         result.loadFromProperties();

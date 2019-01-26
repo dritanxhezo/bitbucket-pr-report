@@ -1,12 +1,5 @@
 package net.ngeor.bprr;
 
-import net.ngeor.bitbucket.PullRequest;
-import net.ngeor.util.ResourceLoaderImpl;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.experimental.runners.Enclosed;
-import org.junit.runner.RunWith;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -14,27 +7,42 @@ import java.net.URISyntaxException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import net.ngeor.bitbucket.PullRequest;
+import net.ngeor.util.ResourceLoaderImpl;
 
-@RunWith(Enclosed.class)
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+/**
+ * Unit tests for {@link BitbucketClientImpl}.
+ */
+@SuppressWarnings("checkstyle:MagicNumber")
 public class BitbucketClientImplTest {
-    public static class PullRequests {
+
+    /**
+     * Unit tests for pull requests.
+     */
+    @Nested
+    public class PullRequests {
         private net.ngeor.bitbucket.PullRequests response;
 
-        @Before
+        @BeforeEach
         public void before() throws URISyntaxException, IOException {
             // arrange
-            InputStream responseStream = new ResourceLoaderImpl().getResourceAsStream("net/ngeor/bitbucket/PullRequestsSimple.json");
+            InputStream responseStream =
+                new ResourceLoaderImpl().getResourceAsStream("net/ngeor/bitbucket/PullRequestsSimple.json");
             URI expected = new URI("https://api.bitbucket.org/2.0/repositories/owner/repo_slug/pullrequests");
-            SimpleHttpClient simpleHttpClient = setupHttpClientFactory(responseStream, expected);
+            SimpleHttpClient simpleHttpClient   = setupHttpClientFactory(responseStream, expected);
             BitbucketClientImpl bitbucketClient = new BitbucketClientImpl(simpleHttpClient, "some secret");
 
             // act
-            response = bitbucketClient.execute(
-                "repositories/owner/repo_slug/pullrequests",
-                net.ngeor.bitbucket.PullRequests.class);
+            response = bitbucketClient.execute("repositories/owner/repo_slug/pullrequests",
+                                               net.ngeor.bitbucket.PullRequests.class);
         }
 
         @Test
@@ -65,7 +73,7 @@ public class BitbucketClientImplTest {
 
         @Test
         public void shouldHaveCorrectCreatedOn() {
-            Date createdOn = response.getValues()[0].getCreatedOn();
+            Date createdOn    = response.getValues()[0].getCreatedOn();
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeZone(TimeZone.getTimeZone("UTC"));
             calendar.set(2013, Calendar.NOVEMBER, 5, 23, 59, 26);
@@ -76,23 +84,28 @@ public class BitbucketClientImplTest {
 
         @Test
         public void shouldHaveLinkToSelf() {
-            assertEquals("https://api.bitbucket.org/2.0/repositories/bitbucket/bitbucket/pullrequests/3767", response.getValues()[0].getLinks().getSelf().getHref());
+            assertEquals("https://api.bitbucket.org/2.0/repositories/bitbucket/bitbucket/pullrequests/3767",
+                         response.getValues()[0].getLinks().getSelf().getHref());
         }
     }
 
-    public static class URLHandling {
+    /**
+     * Unit tests for URLHandling.
+     */
+    @Nested
+    public class URLHandling {
         @Test
         public void shouldUseRequestInTheURI() throws URISyntaxException, IOException {
             // arrange
-            InputStream responseStream = new ResourceLoaderImpl().getResourceAsStream("net/ngeor/bitbucket/PullRequestsSimple.json");
+            InputStream responseStream =
+                new ResourceLoaderImpl().getResourceAsStream("net/ngeor/bitbucket/PullRequestsSimple.json");
             URI expected = new URI("https://api.bitbucket.org/2.0/repositories/owner/repo_slug/pullrequests");
-            SimpleHttpClient simpleHttpClient = setupHttpClientFactory(responseStream, expected);
+            SimpleHttpClient simpleHttpClient   = setupHttpClientFactory(responseStream, expected);
             BitbucketClientImpl bitbucketClient = new BitbucketClientImpl(simpleHttpClient, "some secret");
 
             // act
             net.ngeor.bitbucket.PullRequests pullRequests = bitbucketClient.execute(
-                "repositories/owner/repo_slug/pullrequests",
-                net.ngeor.bitbucket.PullRequests.class);
+                "repositories/owner/repo_slug/pullrequests", net.ngeor.bitbucket.PullRequests.class);
 
             // assert
             assertEquals(12, pullRequests.getSize());
@@ -101,26 +114,27 @@ public class BitbucketClientImplTest {
         @Test
         public void shouldUseRequestAsIsIfItIsBitbucketUrl() throws URISyntaxException, IOException {
             // arrange
-            InputStream responseStream = new ResourceLoaderImpl().getResourceAsStream("net/ngeor/bitbucket/PullRequestsSimple.json");
-            URI expected = new URI("https://api.bitbucket.org/2.0/whatever");
-            SimpleHttpClient simpleHttpClient = setupHttpClientFactory(responseStream, expected);
+            InputStream responseStream =
+                new ResourceLoaderImpl().getResourceAsStream("net/ngeor/bitbucket/PullRequestsSimple.json");
+            URI expected                        = new URI("https://api.bitbucket.org/2.0/whatever");
+            SimpleHttpClient simpleHttpClient   = setupHttpClientFactory(responseStream, expected);
             BitbucketClientImpl bitbucketClient = new BitbucketClientImpl(simpleHttpClient, "some secret");
 
             // act
             net.ngeor.bitbucket.PullRequests pullRequests = bitbucketClient.execute(
-                "https://api.bitbucket.org/2.0/whatever",
-                net.ngeor.bitbucket.PullRequests.class);
+                "https://api.bitbucket.org/2.0/whatever", net.ngeor.bitbucket.PullRequests.class);
 
             // assert
             assertEquals(12, pullRequests.getSize());
         }
     }
 
-    private static SimpleHttpClient setupHttpClientFactory(final InputStream responseStream, final URI expectedURI) throws IOException {
-        assertNotNull("null response stream!", responseStream);
+    private static SimpleHttpClient setupHttpClientFactory(final InputStream responseStream, final URI expectedURI) {
+        assertThat(responseStream).as("response stream").isNotNull();
         SimpleHttpClient simpleHttpClient = new SimpleHttpClient() {
             @Override
-            public <E> E load(String url, String basicAuthenticationHeader, InputStreamClient<E> inputStreamClient) throws IOException {
+            public <E> E load(String url, String basicAuthenticationHeader, InputStreamClient<E> inputStreamClient)
+                throws IOException {
                 assertEquals(url, expectedURI.toString());
                 assertEquals(basicAuthenticationHeader, "some secret");
                 return inputStreamClient.consume(responseStream);

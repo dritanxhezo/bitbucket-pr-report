@@ -1,5 +1,8 @@
 package net.ngeor.util;
 
+/**
+ * Utility class for building query strings.
+ */
 public class URLQueryWriter {
     private final URLStringBuilder stringBuilder;
     private boolean needsAnd;
@@ -8,6 +11,12 @@ public class URLQueryWriter {
         this.stringBuilder = stringBuilder;
     }
 
+    /**
+     * Writes the given key value.
+     * @param key The key
+     * @param operand The operand
+     * @param value The value
+     */
     public void write(String key, String operand, String value) {
         if (needsAnd) {
             stringBuilder.appendEncoded(" AND ");
@@ -15,9 +24,7 @@ public class URLQueryWriter {
             needsAnd = true;
         }
 
-        stringBuilder.appendEncoded(key).appendEncoded(" ")
-            .appendEncoded(operand).appendEncoded(" ")
-            .appendEncoded(value);
+        stringBuilder.appendEncoded(key).appendEncoded(" ").appendEncoded(operand).appendEncoded(" ").appendEncoded(
+            value);
     }
-
 }

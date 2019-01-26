@@ -1,4 +1,6 @@
 language: java
-jdk: oraclejdk8
+jdk: openjdk11
+script:
+  - mvn verify -B
 after_success:
-- mvn coveralls:report
+  - mvn coveralls:report

@@ -1,16 +1,30 @@
 package net.ngeor.bprr;
 
-import net.ngeor.bitbucket.PullRequest;
-import net.ngeor.bitbucket.PullRequests;
-import net.ngeor.bitbucket.PullRequestsRequest;
-
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.List;
 
+import net.ngeor.bitbucket.PullRequest;
+import net.ngeor.bitbucket.PullRequests;
+import net.ngeor.bitbucket.PullRequestsRequest;
+
+/**
+ * Handles open pull requests.
+ */
 public class OpenPullRequestsHandler {
-    public void handle(PullRequestClient pullRequestClient, ProgramOptions programOptions, PrintStream out, TeamMapper teamMapper) throws IOException {
-        RepositoryDescriptor repositoryDescriptor = new RepositoryDescriptor(programOptions.getUser(), programOptions.getRepository());
+    /**
+     * Handles the command.
+     * @param pullRequestClient
+     * @param programOptions
+     * @param out
+     * @param teamMapper
+     * @throws IOException
+     */
+    public void
+    handle(PullRequestClient pullRequestClient, ProgramOptions programOptions, PrintStream out, TeamMapper teamMapper)
+        throws IOException {
+        RepositoryDescriptor repositoryDescriptor =
+            new RepositoryDescriptor(programOptions.getUser(), programOptions.getRepository());
         PullRequestsRequest request = new PullRequestsRequest(repositoryDescriptor, PullRequestsRequest.State.Open);
 
         boolean isGroupByTeam = programOptions.isGroupByTeam();
@@ -18,9 +32,9 @@ public class OpenPullRequestsHandler {
             PullRequests pullRequests = pullRequestClient.load(request);
             out.println(pullRequests.getSize());
         } else {
-            Statistics statistics = new Statistics();
+            Statistics statistics          = new Statistics();
             List<PullRequest> pullRequests = pullRequestClient.loadAllDetails(request);
-            List<Statistic> statisticList = statistics.countByAuthorTeam(pullRequests, teamMapper);
+            List<Statistic> statisticList  = statistics.countByAuthorTeam(pullRequests, teamMapper);
             for (Statistic statistic : statisticList) {
                 out.println(String.format("%s %d", statistic.getUsername(), statistic.getCount()));
             }

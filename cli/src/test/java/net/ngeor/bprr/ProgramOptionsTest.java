@@ -1,10 +1,17 @@
 package net.ngeor.bprr;
 
 import org.apache.commons.cli.ParseException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/**
+ * Unit tests for {@link ProgramOptions}.
+ */
+@SuppressWarnings("checkstyle:MagicNumber")
 public class ProgramOptionsTest {
     @Test
     public void shouldParseUserWithShortOption() throws ParseException {
@@ -76,10 +83,10 @@ public class ProgramOptionsTest {
         assertEquals(ProgramOptions.Command.MergedPullRequests, programOptions.getCommand());
     }
 
-    @Test(expected = ParseException.class)
+    @Test
     public void shouldReturnNullCommandWhenOptionIsMissing() throws ParseException {
         ProgramOptions programOptions = new ProgramOptions();
-        programOptions.parse();
+        assertThatThrownBy(programOptions::parse).isInstanceOf(ParseException.class);
     }
 
     @Test

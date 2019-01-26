@@ -1,26 +1,34 @@
 package net.ngeor.bprr;
 
-import net.ngeor.util.ResourceLoader;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import net.ngeor.util.ResourceLoader;
+
+/**
+ * Implementation of settings.
+ */
 class SettingsImpl implements Settings {
     private final String user;
     private final String secret;
 
-    public SettingsImpl(ResourceLoader resourceLoader) throws IOException {
-        InputStream in = resourceLoader.getResourceAsStream("net/ngeor/bprr/bitbucket.properties");
+    /**
+     * Creates an instance of this class.
+     * @param resourceLoader
+     * @throws IOException
+     */
+    SettingsImpl(ResourceLoader resourceLoader) throws IOException {
+        InputStream in        = resourceLoader.getResourceAsStream("net/ngeor/bprr/bitbucket.properties");
         Properties properties = new Properties();
         properties.load(in);
         in.close();
-        this.user = properties.getProperty("user");
+        this.user   = properties.getProperty("user");
         this.secret = properties.getProperty("secret");
     }
 
-    public SettingsImpl(String user, String secret) {
-        this.user = user;
+    SettingsImpl(String user, String secret) {
+        this.user   = user;
         this.secret = secret;
     }
 

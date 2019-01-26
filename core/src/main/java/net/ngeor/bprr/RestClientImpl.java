@@ -1,18 +1,21 @@
 package net.ngeor.bprr;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
+import java.io.IOException;
 import org.apache.commons.io.IOUtils;
 
-import java.io.IOException;
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 
+/**
+ * Implementation of rest client.
+ */
 public class RestClientImpl implements RestClient {
     private final SimpleHttpClient simpleHttpClient;
     private final String secret;
 
     public RestClientImpl(SimpleHttpClient simpleHttpClient, String secret) {
         this.simpleHttpClient = simpleHttpClient;
-        this.secret = secret;
+        this.secret           = secret;
     }
 
     @Override

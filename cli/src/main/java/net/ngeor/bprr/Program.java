@@ -1,18 +1,29 @@
 package net.ngeor.bprr;
 
-import net.ngeor.util.ResourceLoader;
-import net.ngeor.util.ResourceLoaderImpl;
+import java.io.IOException;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.IOException;
+import net.ngeor.util.ResourceLoader;
+import net.ngeor.util.ResourceLoaderImpl;
 
-public class Program {
+/**
+ * Main program.
+ */
+public final class Program {
+    private Program() {
+    }
+
+    /**
+     * Main entrypoint.
+     * @param args
+     * @throws IOException
+     */
     public static void main(String[] args) throws IOException {
         // To run on *nix:
-        // java -cp "bprr-cli-1.0-SNAPSHOT.jar:*" net.ngeor.bprr.Program -u user -s secret -r repositorySlug
-        // To run on Windows:
-        // java -cp "bprr-cli-1.0-SNAPSHOT.jar;*" net.ngeor.bprr.Program
+        // java -cp "bprr-cli-1.0-SNAPSHOT.jar:*" net.ngeor.bprr.Program -u user -s
+        // secret -r repositorySlug To run on Windows: java -cp
+        // "bprr-cli-1.0-SNAPSHOT.jar;*" net.ngeor.bprr.Program
 
         ProgramOptions programOptions = new ProgramOptions();
         try {
@@ -23,20 +34,20 @@ public class Program {
             return;
         }
 
-        final String user = programOptions.getUser();
-        final String secret = programOptions.getSecret();
+        final String user           = programOptions.getUser();
+        final String secret         = programOptions.getSecret();
         final String repositorySlug = programOptions.getRepository();
         if (StringUtils.isBlank(user) || StringUtils.isBlank(secret) || StringUtils.isBlank(repositorySlug)) {
             programOptions.printHelp();
             return;
         }
 
-        SimpleHttpClient simpleHttpClient = new SimpleHttpClientImpl();
-        RestClient bitbucketClient = new BitbucketClientImpl(simpleHttpClient, secret);
-        RestClient bambooClient = new RestClientImpl(simpleHttpClient, secret);
+        SimpleHttpClient simpleHttpClient   = new SimpleHttpClientImpl();
+        RestClient bitbucketClient          = new BitbucketClientImpl(simpleHttpClient, secret);
+        RestClient bambooClient             = new RestClientImpl(simpleHttpClient, secret);
         PullRequestClient pullRequestClient = new PullRequestClientImpl(bitbucketClient);
-        ResourceLoader resourceLoader = new ResourceLoaderImpl();
-        TeamMapperImpl teamMapper = new TeamMapperImpl(resourceLoader);
+        ResourceLoader resourceLoader       = new ResourceLoaderImpl();
+        TeamMapperImpl teamMapper           = new TeamMapperImpl(resourceLoader);
         teamMapper.loadFromProperties();
 
         ProgramOptions.Command command = programOptions.getCommand();
@@ -62,27 +73,34 @@ public class Program {
         }
     }
 
-    private static void handleOpenPullRequests(PullRequestClient pullRequestClient, ProgramOptions programOptions, TeamMapper teamMapper) throws IOException {
+    private static void handleOpenPullRequests(PullRequestClient pullRequestClient,
+                                               ProgramOptions programOptions,
+                                               TeamMapper teamMapper) throws IOException {
         OpenPullRequestsHandler handler = new OpenPullRequestsHandler();
         handler.handle(pullRequestClient, programOptions, System.out, teamMapper);
     }
 
-    private static void handleMergedPullRequests(PullRequestClient pullRequestClient, ProgramOptions programOptions) throws IOException {
+    private static void handleMergedPullRequests(PullRequestClient pullRequestClient, ProgramOptions programOptions)
+        throws IOException {
         MergedPullRequestsHandler handler = new MergedPullRequestsHandler();
         handler.handle(pullRequestClient, programOptions, System.out);
     }
 
-    private static void handleBambooAverageBuildTime(RestClient restClient, ProgramOptions programOptions) throws IOException {
+    private static void handleBambooAverageBuildTime(RestClient restClient, ProgramOptions programOptions)
+        throws IOException {
         BambooAverageBuildTimeHandler handler = new BambooAverageBuildTimeHandler();
         handler.handle(restClient, programOptions, System.out);
     }
 
-    private static void handleBambooLatestBuild(RestClient restClient, ProgramOptions programOptions) throws IOException {
+    private static void handleBambooLatestBuild(RestClient restClient, ProgramOptions programOptions)
+        throws IOException {
         BambooLatestBuildHandler handler = new BambooLatestBuildHandler();
         handler.handle(restClient, programOptions, System.out);
     }
 
-    private static void handleBambooLatestBuildLog(RestClient restClient, SimpleHttpClient simpleHttpClient, ProgramOptions programOptions) throws IOException {
+    private static void handleBambooLatestBuildLog(RestClient restClient,
+                                                   SimpleHttpClient simpleHttpClient,
+                                                   ProgramOptions programOptions) throws IOException {
         BambooLatestBuildLogHandler handler = new BambooLatestBuildLogHandler();
         handler.handle(restClient, simpleHttpClient, programOptions, System.out);
     }

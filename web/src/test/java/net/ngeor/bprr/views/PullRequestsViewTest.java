@@ -1,4 +1,6 @@
 package net.ngeor.bprr.views;
 
-public class PullRequestsViewTest {
-}
+/**
+ * Unit tests for {@link PullRequestsView}.
+ */
+public class PullRequestsViewTest {}

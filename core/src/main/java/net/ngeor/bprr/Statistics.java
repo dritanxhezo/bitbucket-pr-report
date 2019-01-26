@@ -1,34 +1,48 @@
 package net.ngeor.bprr;
 
-import net.ngeor.bitbucket.PullRequest;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import net.ngeor.bitbucket.PullRequest;
+
+/**
+ * Gets statistics.
+ */
 public class Statistics {
+    /**
+     * PR count by author.
+     * @param pullRequests
+     * @return
+     */
     public List<Statistic> countByAuthor(List<PullRequest> pullRequests) {
-        List<Statistic> result = new ArrayList<>();
+        List<Statistic> result                         = new ArrayList<>();
         Map<String, List<PullRequest>> groupedByAuthor = groupByAuthor(pullRequests);
         for (Map.Entry<String, List<PullRequest>> mapEntry : groupedByAuthor.entrySet()) {
-            String username = mapEntry.getKey();
+            String username                        = mapEntry.getKey();
             List<PullRequest> pullRequestsOfAuthor = mapEntry.getValue();
-            Statistic statistic = new Statistic(username, pullRequestsOfAuthor.size());
+            Statistic statistic                    = new Statistic(username, pullRequestsOfAuthor.size());
             result.add(statistic);
         }
 
         return result;
     }
 
+    /**
+     * PR count per author's team.
+     * @param pullRequests
+     * @param teamMapper
+     * @return
+     */
     public List<Statistic> countByAuthorTeam(List<PullRequest> pullRequests, TeamMapper teamMapper) {
-        Map<String, List<PullRequest>> userMap = groupByAuthor(pullRequests);
+        Map<String, List<PullRequest>> userMap  = groupByAuthor(pullRequests);
         Map<String, List<PullRequest>> groupMap = groupByTeam(userMap, teamMapper);
-        List<Statistic> result = new ArrayList<>();
+        List<Statistic> result                  = new ArrayList<>();
         for (Map.Entry<String, List<PullRequest>> mapEntry : groupMap.entrySet()) {
-            String team = mapEntry.getKey();
+            String team                          = mapEntry.getKey();
             List<PullRequest> pullRequestsOfTeam = mapEntry.getValue();
-            Statistic statistic = new Statistic(team, pullRequestsOfTeam.size());
+            Statistic statistic                  = new Statistic(team, pullRequestsOfTeam.size());
             result.add(statistic);
         }
 
@@ -39,7 +53,7 @@ public class Statistics {
         Map<String, List<PullRequest>> result = new TreeMap<>();
         for (Map.Entry<String, List<PullRequest>> userEntry : userMap.entrySet()) {
             String username = userEntry.getKey();
-            String team = teamMapper.userToTeam(username);
+            String team     = teamMapper.userToTeam(username);
             List<PullRequest> teamPullRequests;
             if (result.containsKey(team)) {
                 teamPullRequests = result.get(team);

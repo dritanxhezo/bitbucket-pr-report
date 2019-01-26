@@ -1,5 +1,6 @@
 package net.ngeor.bprr;
 
-public interface TeamMapper {
-    String userToTeam(String user);
-}
+/**
+ * Maps a user to a team.
+ */
+public interface TeamMapper { String userToTeam(String user); }

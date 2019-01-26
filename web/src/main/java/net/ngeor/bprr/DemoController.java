@@ -1,11 +1,13 @@
 package net.ngeor.bprr;
 
+import java.io.IOException;
+import javax.servlet.http.HttpServletRequest;
+
 import net.ngeor.bprr.views.PullRequestsView;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-
+/**
+ * Demo controller.
+ */
 interface DemoController {
     PullRequestsView createView(HttpServletRequest req) throws IOException;
 }
-

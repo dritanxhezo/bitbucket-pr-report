@@ -2,6 +2,9 @@ package net.ngeor.util;
 
 import java.io.InputStream;
 
+/**
+ * Implementation of {@link ResourceLoader}.
+ */
 public class ResourceLoaderImpl implements ResourceLoader {
 
     @Override

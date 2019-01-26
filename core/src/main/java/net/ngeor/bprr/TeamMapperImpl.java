@@ -1,16 +1,20 @@
 package net.ngeor.bprr;
 
-import net.ngeor.util.ResourceLoader;
-import org.apache.commons.io.IOUtils;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
+import org.apache.commons.io.IOUtils;
 
+import net.ngeor.util.ResourceLoader;
+
+/**
+ * Implementation of team mapping.
+ */
 public class TeamMapperImpl implements TeamMapper {
     private final ResourceLoader resourceLoader;
-    private final HashMap<String, String> userToTeam = new HashMap<>();
+    private final Map<String, String> userToTeam = new HashMap<>();
 
     public TeamMapperImpl(ResourceLoader resourceLoader) {
         this.resourceLoader = resourceLoader;
@@ -20,6 +24,9 @@ public class TeamMapperImpl implements TeamMapper {
         userToTeam.put(user, team);
     }
 
+    /**
+     * Implementation of team mapper.
+     */
     public void loadFromProperties() {
         if (!userToTeam.isEmpty()) {
             return;
@@ -36,7 +43,6 @@ public class TeamMapperImpl implements TeamMapper {
     private void populateProperties(Properties properties) {
         InputStream in = resourceLoader.getResourceAsStream("net/ngeor/bprr/teams.properties");
         if (in == null) {
-            // TODO: log warning?
             return;
         }
 
