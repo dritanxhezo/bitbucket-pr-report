@@ -1,5 +1,6 @@
 package net.ngeor.bamboo;
 
+import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
 import net.ngeor.testutil.TestData;
@@ -10,9 +11,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 /**
  * Unit tests for {@link PlanResults}.
  */
-public class PlanResultsTest {
+class PlanResultsTest {
     @Test
-    public void shouldRead() {
+    void shouldRead() throws IOException {
         PlanResults planResults = TestData.load(PlanResults.class, "Simple");
         assertNotNull(planResults);
 

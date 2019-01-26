@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-import org.apache.commons.io.IOUtils;
 
 import net.ngeor.util.ResourceLoader;
 
@@ -27,7 +26,7 @@ public class TeamMapperImpl implements TeamMapper {
     /**
      * Implementation of team mapper.
      */
-    public void loadFromProperties() {
+    public void loadFromProperties() throws IOException {
         if (!userToTeam.isEmpty()) {
             return;
         }
@@ -40,18 +39,13 @@ public class TeamMapperImpl implements TeamMapper {
         }
     }
 
-    private void populateProperties(Properties properties) {
-        InputStream in = resourceLoader.getResourceAsStream("net/ngeor/bprr/teams.properties");
-        if (in == null) {
-            return;
-        }
+    private void populateProperties(Properties properties) throws IOException {
+        try (InputStream in = resourceLoader.getResourceAsStream("net/ngeor/bprr/teams.properties")) {
+            if (in == null) {
+                return;
+            }
 
-        try {
             properties.load(in);
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        } finally {
-            IOUtils.closeQuietly(in);
         }
     }
 

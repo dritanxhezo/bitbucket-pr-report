@@ -1,5 +1,6 @@
 package net.ngeor.bamboo;
 
+import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
 import net.ngeor.testutil.TestData;
@@ -11,9 +12,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * Unit tests for {@link BuildResult}.
  */
 @SuppressWarnings("checkstyle:MagicNumber")
-public class BuildResultTest {
+class BuildResultTest {
     @Test
-    public void shouldLoad() {
+    void shouldLoad() throws IOException {
         BuildResult buildResult = TestData.load(BuildResult.class, "Simple");
         assertNotNull(buildResult);
 
@@ -27,7 +28,7 @@ public class BuildResultTest {
     }
 
     @Test
-    public void shouldProvideLinkToLog() {
+    void shouldProvideLinkToLog() throws IOException {
         BuildResult buildResult = TestData.load(BuildResult.class, "Simple");
         assertEquals("https://company.jira.com/builds/download/PRJ-PLN-JOB1/build_logs/PRJ-PLN-JOB1-1031.log",
                      buildResult.getLogFileUrl("JOB1"));

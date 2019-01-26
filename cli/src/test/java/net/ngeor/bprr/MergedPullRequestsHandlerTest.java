@@ -5,7 +5,6 @@ import java.io.PrintStream;
 import org.junit.jupiter.api.Test;
 
 import net.ngeor.bitbucket.PullRequests;
-import net.ngeor.bitbucket.PullRequestsRequest;
 import net.ngeor.util.DateHelper;
 import net.ngeor.util.LocalDateInterval;
 
@@ -17,14 +16,14 @@ import static org.mockito.Mockito.when;
  * Unit tests for {@link MergedPullRequestsHandler}.
  */
 @SuppressWarnings("checkstyle:MagicNumber")
-public class MergedPullRequestsHandlerTest {
+class MergedPullRequestsHandlerTest {
     @Test
-    public void shouldFetchPullRequestsFromYesterday() throws IOException {
+    void shouldFetchPullRequestsFromYesterday() throws IOException {
         PullRequestClient pullRequestClient = mock(PullRequestClient.class);
         ProgramOptions programOptions       = mock(ProgramOptions.class);
         PrintStream out                     = mock(PrintStream.class);
         when(programOptions.getRepository()).thenReturn("repository");
-        when(programOptions.getUser()).thenReturn("user");
+        when(programOptions.getOwner()).thenReturn("user");
         RepositoryDescriptor repositoryDescriptor = new RepositoryDescriptor("user", "repository");
         PullRequestsRequest pullRequestsRequest =
             new PullRequestsRequest(repositoryDescriptor,
@@ -43,12 +42,12 @@ public class MergedPullRequestsHandlerTest {
     }
 
     @Test
-    public void shouldUseStartDaysDiffParameter() throws IOException {
+    void shouldUseStartDaysDiffParameter() throws IOException {
         PullRequestClient pullRequestClient = mock(PullRequestClient.class);
         ProgramOptions programOptions       = mock(ProgramOptions.class);
         PrintStream out                     = mock(PrintStream.class);
         when(programOptions.getRepository()).thenReturn("repository");
-        when(programOptions.getUser()).thenReturn("user");
+        when(programOptions.getOwner()).thenReturn("user");
         when(programOptions.getStartDaysDiff()).thenReturn(14);
         RepositoryDescriptor repositoryDescriptor = new RepositoryDescriptor("user", "repository");
         PullRequestsRequest pullRequestsRequest   = new PullRequestsRequest(

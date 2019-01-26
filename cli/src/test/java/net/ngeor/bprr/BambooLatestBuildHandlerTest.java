@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import net.ngeor.bamboo.BuildResult;
 import net.ngeor.bamboo.PlanResults;
 import net.ngeor.bitbucket.Link;
+import net.ngeor.http.JsonHttpClient;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -16,11 +17,11 @@ import static org.mockito.Mockito.when;
  * Unit tests for {@link BambooLatestBuildHandler}.
  */
 @SuppressWarnings("checkstyle:MagicNumber")
-public class BambooLatestBuildHandlerTest {
+class BambooLatestBuildHandlerTest {
     @Test
-    public void shouldReportTestCount() throws IOException {
+    void shouldReportTestCount() throws IOException {
         // arrange
-        RestClient restClient                     = mock(RestClient.class);
+        JsonHttpClient jsonHttpClient             = mock(JsonHttpClient.class);
         ProgramOptions programOptions             = mock(ProgramOptions.class);
         PrintStream out                           = mock(PrintStream.class);
         PlanResults planResults                   = mock(PlanResults.class);
@@ -30,12 +31,13 @@ public class BambooLatestBuildHandlerTest {
 
         var result = new BuildResult[] {successfulBuildSummary};
 
-        when(programOptions.getUser()).thenReturn("company");
+        when(programOptions.getOwner()).thenReturn("company");
         when(programOptions.getRepository()).thenReturn("planKey");
-        when(restClient.execute("https://company.jira.com/builds/rest/api/latest/result/planKey.json?os_authType=basic",
+        when(
+            jsonHttpClient.read("https://company.jira.com/builds/rest/api/latest/result/planKey.json?os_authType=basic",
                                 PlanResults.class))
             .thenReturn(planResults);
-        when(restClient.execute("https://whatever.json?os_authType=basic", BuildResult.class))
+        when(jsonHttpClient.read("https://whatever.json?os_authType=basic", BuildResult.class))
             .thenReturn(successfulBuildDetails);
         when(planResults.getResults()).thenReturn(resultsWrapper);
         when(resultsWrapper.getResult()).thenReturn(result);
@@ -45,7 +47,7 @@ public class BambooLatestBuildHandlerTest {
 
         // act
         BambooLatestBuildHandler handler = new BambooLatestBuildHandler();
-        handler.handle(restClient, programOptions, out);
+        handler.handle(jsonHttpClient, programOptions, out);
 
         // assert
         verify(out).println("successfulTestCount 37");

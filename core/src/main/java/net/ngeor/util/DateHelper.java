@@ -3,8 +3,6 @@ package net.ngeor.util;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
-import java.util.Date;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -17,10 +15,6 @@ public final class DateHelper {
 
     public static LocalDate localDate(int year, int month, int day) {
         return LocalDate.of(year, month, day);
-    }
-
-    public static Date utcDate(int year, int month, int day) {
-        return Date.from(DateHelper.localDate(year, month, day).atStartOfDay().toInstant(ZoneOffset.UTC));
     }
 
     /**

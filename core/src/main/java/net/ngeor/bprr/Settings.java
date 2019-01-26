@@ -4,7 +4,9 @@ package net.ngeor.bprr;
  * Settings.
  */
 public interface Settings {
-    String getUser();
+    String getOwner();
 
-    String getSecret();
+    String getUsername();
+
+    String getPassword();
 }

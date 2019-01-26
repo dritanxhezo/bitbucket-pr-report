@@ -6,7 +6,6 @@ import java.util.List;
 
 import net.ngeor.bitbucket.PullRequest;
 import net.ngeor.bitbucket.PullRequests;
-import net.ngeor.bitbucket.PullRequestsRequest;
 
 /**
  * Handles open pull requests.
@@ -24,7 +23,7 @@ public class OpenPullRequestsHandler {
     handle(PullRequestClient pullRequestClient, ProgramOptions programOptions, PrintStream out, TeamMapper teamMapper)
         throws IOException {
         RepositoryDescriptor repositoryDescriptor =
-            new RepositoryDescriptor(programOptions.getUser(), programOptions.getRepository());
+            new RepositoryDescriptor(programOptions.getOwner(), programOptions.getRepository());
         PullRequestsRequest request = new PullRequestsRequest(repositoryDescriptor, PullRequestsRequest.State.Open);
 
         boolean isGroupByTeam = programOptions.isGroupByTeam();

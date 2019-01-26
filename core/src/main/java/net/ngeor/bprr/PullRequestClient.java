@@ -5,7 +5,6 @@ import java.util.List;
 
 import net.ngeor.bitbucket.PullRequest;
 import net.ngeor.bitbucket.PullRequests;
-import net.ngeor.bitbucket.PullRequestsRequest;
 
 /**
  * A pull request client.
@@ -13,9 +12,9 @@ import net.ngeor.bitbucket.PullRequestsRequest;
 public interface PullRequestClient {
     PullRequests load(PullRequestsRequest request) throws IOException;
 
-    List<PullRequests> loadAllPages(PullRequestsRequest request) throws IOException;
+    List<PullRequest> loadAllPages(PullRequestsRequest request) throws IOException;
 
-    List<PullRequest> loadDetails(PullRequests pullRequests) throws IOException;
+    PullRequest loadDetails(PullRequest partialInstance) throws IOException;
 
     List<PullRequest> loadAllDetails(PullRequestsRequest request) throws IOException;
 }

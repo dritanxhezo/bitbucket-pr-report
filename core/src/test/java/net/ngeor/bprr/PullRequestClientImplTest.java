@@ -1,17 +1,21 @@
 package net.ngeor.bprr;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import net.ngeor.bitbucket.Link;
 import net.ngeor.bitbucket.PullRequest;
 import net.ngeor.bitbucket.PullRequests;
-import net.ngeor.bitbucket.PullRequestsRequest;
+import net.ngeor.http.JsonHttpClient;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -19,14 +23,24 @@ import static org.mockito.Mockito.when;
  * Unit tests for {@link PullRequestClientImpl}.
  */
 @SuppressWarnings("checkstyle:MagicNumber")
-public class PullRequestClientImplTest {
+class PullRequestClientImplTest {
+    @Mock
+    private JsonHttpClient bitbucketClient;
+
+    @InjectMocks
+    private PullRequestClientImpl pullRequestClient;
+
+    @BeforeEach
+    void beforeEach() {
+        MockitoAnnotations.initMocks(this);
+    }
+
     @Test
-    public void shouldFetchSinglePage() throws IOException {
-        RestClient bitbucketClient          = mock(RestClient.class);
-        PullRequestClient pullRequestClient = new PullRequestClientImpl(bitbucketClient);
-        PullRequestsRequest request         = new PullRequestsRequest(new RepositoryDescriptor("user", "repo"));
-        PullRequests expectedResponse       = mock(PullRequests.class);
-        when(bitbucketClient.execute(request, PullRequests.class)).thenReturn(expectedResponse);
+    void shouldFetchSinglePage() throws IOException {
+        PullRequestsRequest request   = new PullRequestsRequest(new RepositoryDescriptor("user", "repo"));
+        PullRequests expectedResponse = mock(PullRequests.class);
+        when(bitbucketClient.read("https://api.bitbucket.org/2.0/" + request, PullRequests.class))
+            .thenReturn(expectedResponse);
 
         // act
         PullRequests actualResponse = pullRequestClient.load(request);
@@ -36,129 +50,95 @@ public class PullRequestClientImplTest {
     }
 
     @Test
-    public void shouldFetchAllPages_singlePage() throws IOException {
-        RestClient bitbucketClient          = mock(RestClient.class);
-        PullRequestClient pullRequestClient = new PullRequestClientImpl(bitbucketClient);
-        PullRequestsRequest request         = new PullRequestsRequest(new RepositoryDescriptor("user", "repo"));
-        PullRequests expectedFirstResponse  = mock(PullRequests.class);
-        when(bitbucketClient.execute(request, PullRequests.class)).thenReturn(expectedFirstResponse);
+    void shouldFetchAllPages_singlePage() throws IOException {
+        PullRequestsRequest request        = new PullRequestsRequest(new RepositoryDescriptor("user", "repo"));
+        PullRequest justOne                = new PullRequest();
+        PullRequests expectedFirstResponse = new PullRequests(justOne);
+
+        when(bitbucketClient.read("https://api.bitbucket.org/2.0/" + request, PullRequests.class))
+            .thenReturn(expectedFirstResponse);
 
         // act
-        List<PullRequests> actualResponse = pullRequestClient.loadAllPages(request);
+        List<PullRequest> actualResponse = pullRequestClient.loadAllPages(request);
 
         // assert
-        assertEquals(1, actualResponse.size());
-        assertEquals(expectedFirstResponse, actualResponse.get(0));
+        assertThat(actualResponse).containsExactly(justOne);
     }
 
     @Test
-    public void shouldFetchAllPages_twoPages() throws IOException {
-        RestClient bitbucketClient          = mock(RestClient.class);
-        PullRequestClient pullRequestClient = new PullRequestClientImpl(bitbucketClient);
-        PullRequestsRequest request         = new PullRequestsRequest(new RepositoryDescriptor("user", "repo"));
-        PullRequests expectedFirstResponse  = mock(PullRequests.class);
-        when(expectedFirstResponse.getNext()).thenReturn("link to second request");
-        PullRequests expectedSecondResponse = mock(PullRequests.class);
-        when(bitbucketClient.execute(request, PullRequests.class)).thenReturn(expectedFirstResponse);
-        when(bitbucketClient.execute("link to second request", PullRequests.class)).thenReturn(expectedSecondResponse);
+    void shouldFetchAllPages_twoPages() throws IOException {
+        PullRequestsRequest request        = new PullRequestsRequest(new RepositoryDescriptor("user", "repo"));
+        PullRequest a                      = new PullRequest();
+        PullRequest b                      = new PullRequest();
+        PullRequests expectedFirstResponse = new PullRequests(a);
+        expectedFirstResponse.setNext("link to second request");
+
+        PullRequests expectedSecondResponse = new PullRequests(b);
+        when(bitbucketClient.read("https://api.bitbucket.org/2.0/" + request, PullRequests.class))
+            .thenReturn(expectedFirstResponse);
+        when(bitbucketClient.read("link to second request", PullRequests.class)).thenReturn(expectedSecondResponse);
 
         // act
-        List<PullRequests> actualResponse = pullRequestClient.loadAllPages(request);
+        List<PullRequest> actualResponse = pullRequestClient.loadAllPages(request);
 
         // assert
-        assertEquals(2, actualResponse.size());
-        assertEquals(expectedFirstResponse, actualResponse.get(0));
-        assertEquals(expectedSecondResponse, actualResponse.get(1));
+        assertThat(actualResponse).containsExactly(a, b);
     }
 
     @Test
-    public void shouldFetchAllPages_threePages() throws IOException {
-        RestClient bitbucketClient          = mock(RestClient.class);
-        PullRequestClient pullRequestClient = new PullRequestClientImpl(bitbucketClient);
-        PullRequestsRequest request         = new PullRequestsRequest(new RepositoryDescriptor("user", "repo"));
-        PullRequests expectedFirstResponse  = mock(PullRequests.class);
-        when(expectedFirstResponse.getNext()).thenReturn("link to second request");
-        PullRequests expectedSecondResponse = mock(PullRequests.class);
-        when(expectedSecondResponse.getNext()).thenReturn("link to third request");
-        PullRequests expectedThirdResponse = mock(PullRequests.class);
-        when(bitbucketClient.execute(request, PullRequests.class)).thenReturn(expectedFirstResponse);
-        when(bitbucketClient.execute("link to second request", PullRequests.class)).thenReturn(expectedSecondResponse);
-        when(bitbucketClient.execute("link to third request", PullRequests.class)).thenReturn(expectedThirdResponse);
+    void shouldFetchDetailsOfPullRequests() throws IOException {
+        PullRequest firstPullRequest = mock(PullRequest.class);
+        PullRequest partialResponse  = createPartialPullRequest("http://first-pr");
+
+        when(bitbucketClient.read("http://first-pr", PullRequest.class)).thenReturn(firstPullRequest);
 
         // act
-        List<PullRequests> actualResponse = pullRequestClient.loadAllPages(request);
+        PullRequest actual = pullRequestClient.loadDetails(partialResponse);
 
         // assert
-        assertEquals(3, actualResponse.size());
-        assertEquals(expectedFirstResponse, actualResponse.get(0));
-        assertEquals(expectedSecondResponse, actualResponse.get(1));
-        assertEquals(expectedThirdResponse, actualResponse.get(2));
+        assertThat(actual).isEqualTo(firstPullRequest);
     }
 
     @Test
-    public void shouldFetchDetailsOfPullRequests() throws IOException {
-        RestClient bitbucketClient          = mock(RestClient.class);
-        PullRequestClient pullRequestClient = new PullRequestClientImpl(bitbucketClient);
-        PullRequests pullRequestsResponse   = mock(PullRequests.class);
-        PullRequest firstPullRequest        = mock(PullRequest.class);
-        PullRequest secondPullRequest       = mock(PullRequest.class);
-        PullRequest[] partialResponses =
-            new PullRequest[] {mockResponse("http://first-pr"), mockResponse("http://second-pr")};
-        when(pullRequestsResponse.getValues()).thenReturn(partialResponses);
-
-        when(bitbucketClient.execute("http://first-pr", PullRequest.class)).thenReturn(firstPullRequest);
-        when(bitbucketClient.execute("http://second-pr", PullRequest.class)).thenReturn(secondPullRequest);
-
-        // act
-        List<PullRequest> pullRequests = pullRequestClient.loadDetails(pullRequestsResponse);
-
-        // assert
-        assertEquals(2, pullRequests.size());
-        assertEquals(firstPullRequest, pullRequests.get(0));
-        assertEquals(secondPullRequest, pullRequests.get(1));
-    }
-
-    @Test
-    public void shouldFetchDetailsOfAllPullRequests() throws IOException {
+    void shouldFetchDetailsOfAllPullRequests() throws IOException {
         // the initial request for the pull requests
-        PullRequestsRequest pullRequestsRequest = mock(PullRequestsRequest.class);
+        PullRequestsRequest pullRequestsRequest =
+            new PullRequestsRequest(new RepositoryDescriptor("acme", "project"), PullRequestsRequest.State.Declined);
 
-        // first page of partial results
-        PullRequests firstPage = mock(PullRequests.class);
+        PullRequest partial1 = createPartialPullRequest("http://full1");
+        PullRequest full1    = createPartialPullRequest("");
+        PullRequests page1   = new PullRequests(partial1);
+        page1.setNext("http://page2");
 
-        // second page of partial results
-        PullRequests secondPage = mock(PullRequests.class);
+        PullRequest partial2 = createPartialPullRequest("http://full2");
+        PullRequest full2    = createPartialPullRequest("");
+        PullRequests page2   = new PullRequests(partial2);
 
-        // partial results
-        List<PullRequests> partialPullRequests = Arrays.asList(firstPage, secondPage);
-
-        // detailed pull requests
-        PullRequest[] detailedPullRequests =
-            new PullRequest[] {mockResponse("pr1"), mockResponse("pr2"), mockResponse("pr3"), mockResponse("pr4")};
-
-        PullRequestClient pullRequestClient = mock(PullRequestClientImpl.class);
-        when(pullRequestClient.loadAllPages(pullRequestsRequest)).thenReturn(partialPullRequests);
-        when(pullRequestClient.loadDetails(firstPage))
-            .thenReturn(Arrays.asList(detailedPullRequests[0], detailedPullRequests[1]));
-        when(pullRequestClient.loadDetails(secondPage))
-            .thenReturn(Arrays.asList(detailedPullRequests[2], detailedPullRequests[3]));
-
-        when(pullRequestClient.loadAllDetails(pullRequestsRequest)).thenCallRealMethod();
+        doReturn(page1)
+            .when(bitbucketClient)
+            .read("https://api.bitbucket.org/2.0/repositories/acme/project/pullrequests?q=state+%3D+%22DECLINED%22",
+                  PullRequests.class);
+        doReturn(page2).when(bitbucketClient).read("http://page2", PullRequests.class);
+        doReturn(full1).when(bitbucketClient).read("http://full1", PullRequest.class);
+        doReturn(full2).when(bitbucketClient).read("http://full2", PullRequest.class);
 
         // act
         List<PullRequest> actualPullRequests = pullRequestClient.loadAllDetails(pullRequestsRequest);
 
         // assert
-        assertArrayEquals(detailedPullRequests, actualPullRequests.toArray());
+        assertThat(actualPullRequests).containsExactly(full1, full2);
     }
 
-    private static PullRequest mockResponse(String href) {
-        PullRequest response    = mock(PullRequest.class);
-        PullRequest.Links links = mock(PullRequest.Links.class);
-        Link selfLink           = mock(Link.class);
-        when(response.getLinks()).thenReturn(links);
-        when(links.getSelf()).thenReturn(selfLink);
-        when(selfLink.getHref()).thenReturn(href);
+    private static PullRequest createPartialPullRequest(String href) {
+        Link selfLink = new Link();
+        selfLink.setHref(href);
+
+        PullRequest.Links links = new PullRequest.Links();
+        links.setSelf(selfLink);
+
+        PullRequest response = new PullRequest();
+        response.setLinks(links);
+
         return response;
     }
 }

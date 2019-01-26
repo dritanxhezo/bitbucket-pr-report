@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import net.ngeor.bitbucket.Participant;
 import net.ngeor.bitbucket.PullRequest;
-import net.ngeor.bitbucket.PullRequestsRequest;
 import net.ngeor.bprr.views.PullRequestsView;
 import net.ngeor.util.DateHelper;
 import net.ngeor.util.LocalDateInterval;

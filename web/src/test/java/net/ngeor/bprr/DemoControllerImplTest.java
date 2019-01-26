@@ -1,15 +1,15 @@
 package net.ngeor.bprr;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import net.ngeor.bitbucket.PullRequest;
-import net.ngeor.bitbucket.PullRequestsRequest;
 import net.ngeor.bprr.views.PullRequestsView;
 import net.ngeor.testutil.TestData;
 import net.ngeor.util.DateHelper;
@@ -25,7 +25,7 @@ import static org.mockito.Mockito.when;
  * Unit tests for {@link DemoControllerImpl}.
  */
 @SuppressWarnings("checkstyle:MagicNumber")
-public class DemoControllerImplTest {
+class DemoControllerImplTest {
     private TeamMapper teamMapper;
     private PullRequestClient pullRequestClient;
     private HttpServletRequest req;
@@ -33,7 +33,7 @@ public class DemoControllerImplTest {
     private PullRequest secondWithParticipants;
 
     @BeforeEach
-    public void before() throws IOException {
+    void before() throws IOException {
         // arrange - create mocks
         teamMapper        = mock(TeamMapper.class);
         pullRequestClient = mock(PullRequestClient.class, RETURNS_SMART_NULLS);
@@ -48,11 +48,11 @@ public class DemoControllerImplTest {
         when(pullRequestClient.loadAllDetails(new PullRequestsRequest(new RepositoryDescriptor("currentUser", "repo"),
                                                                       PullRequestsRequest.State.Merged,
                                                                       new LocalDateInterval(null, null))))
-            .thenReturn(new ArrayList<PullRequest>());
+            .thenReturn(new ArrayList<>());
     }
 
     @Test
-    public void shouldSetFormUrl() throws IOException {
+    void shouldSetFormUrl() throws IOException {
         // act
         PullRequestsView view = createView();
 
@@ -61,7 +61,7 @@ public class DemoControllerImplTest {
     }
 
     @Test
-    public void shouldSetFullRepo() throws IOException {
+    void shouldSetFullRepo() throws IOException {
         // act
         PullRequestsView view = createView();
 
@@ -70,7 +70,7 @@ public class DemoControllerImplTest {
     }
 
     @Test
-    public void shouldSetUpdatedOnFrom() throws IOException {
+    void shouldSetUpdatedOnFrom() throws IOException {
         // arrange
         when(req.getParameter("updatedOnFrom")).thenReturn("2016-05-05");
         when(pullRequestClient.loadAllDetails(
@@ -87,7 +87,7 @@ public class DemoControllerImplTest {
     }
 
     @Test
-    public void shouldSetUpdatedOnFromFromMinDate() throws IOException {
+    void shouldSetUpdatedOnFromFromMinDate() throws IOException {
         // act
         PullRequestsView view = createView();
 
@@ -96,7 +96,7 @@ public class DemoControllerImplTest {
     }
 
     @Test
-    public void shouldSetUpdatedOnUntil() throws IOException {
+    void shouldSetUpdatedOnUntil() throws IOException {
         // arrange
         when(req.getParameter("updatedOnUntil")).thenReturn("2016-05-07");
         when(pullRequestClient.loadAllDetails(
@@ -113,7 +113,7 @@ public class DemoControllerImplTest {
     }
 
     @Test
-    public void shouldSetUpdatedOnUntilFromCurrentDate() throws IOException {
+    void shouldSetUpdatedOnUntilFromCurrentDate() throws IOException {
         // act
         PullRequestsView view = createView();
 
@@ -122,12 +122,12 @@ public class DemoControllerImplTest {
     }
 
     @Test
-    public void shouldLoadPullRequestsWhenThereIsOnlyOnePageOfResults() throws IOException {
+    void shouldLoadPullRequestsWhenThereIsOnlyOnePageOfResults() throws IOException {
         // arrange
         when(req.getParameter("updatedOnFrom")).thenReturn("2016-05-05");
 
-        Date dt1                                     = DateHelper.utcDate(2010, 6, 1);
-        Date dt2                                     = DateHelper.utcDate(2011, 7, 2);
+        LocalDateTime dt1                            = LocalDateTime.of(2010, Month.JUNE, 1, 0, 0);
+        LocalDateTime dt2                            = LocalDateTime.of(2011, Month.JULY, 2, 0, 0);
         PullRequestModel[] expectedPullRequestModels = new PullRequestModel[] {
             new PullRequestModel(1, "description 1", "OPEN", dt1, dt1, "mfrauenholtz", null, null),
             new PullRequestModel(2, "description 2", "OPEN", dt2, dt2, "ngeor", "ngeor", "reviewer 1")};
@@ -150,12 +150,12 @@ public class DemoControllerImplTest {
     }
 
     @Test
-    public void shouldUseTeamMapperToAssignTeams() throws IOException {
+    void shouldUseTeamMapperToAssignTeams() throws IOException {
         // arrange
         when(req.getParameter("updatedOnFrom")).thenReturn("2016-05-05");
 
-        Date dt1                                     = DateHelper.utcDate(2010, 6, 1);
-        Date dt2                                     = DateHelper.utcDate(2011, 7, 2);
+        LocalDateTime dt1                            = LocalDateTime.of(2010, Month.JUNE, 1, 0, 0);
+        LocalDateTime dt2                            = LocalDateTime.of(2011, Month.JULY, 2, 0, 0);
         PullRequestModel[] expectedPullRequestModels = new PullRequestModel[] {
             new PullRequestModel(1, "description 1", "OPEN", dt1, dt1, "mfrauenholtz", null, null),
             new PullRequestModel(2, "description 2", "OPEN", dt2, dt2, "ngeor", "ngeor", "reviewer 1")};

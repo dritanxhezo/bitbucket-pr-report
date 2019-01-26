@@ -10,8 +10,9 @@ import net.ngeor.util.ResourceLoader;
  * Implementation of settings.
  */
 class SettingsImpl implements Settings {
-    private final String user;
-    private final String secret;
+    private final String owner;
+    private final String username;
+    private final String password;
 
     /**
      * Creates an instance of this class.
@@ -23,22 +24,35 @@ class SettingsImpl implements Settings {
         Properties properties = new Properties();
         properties.load(in);
         in.close();
-        this.user   = properties.getProperty("user");
-        this.secret = properties.getProperty("secret");
+        this.owner    = properties.getProperty("owner");
+        this.username = properties.getProperty("username");
+        this.password = properties.getProperty("password");
     }
 
-    SettingsImpl(String user, String secret) {
-        this.user   = user;
-        this.secret = secret;
+    /**
+     * Creates an instance of this class.
+     * @param owner
+     * @param username
+     * @param password
+     */
+    SettingsImpl(String owner, String username, String password) {
+        this.owner    = owner;
+        this.username = username;
+        this.password = password;
     }
 
     @Override
-    public String getUser() {
-        return user;
+    public String getOwner() {
+        return owner;
     }
 
     @Override
-    public String getSecret() {
-        return secret;
+    public String getUsername() {
+        return username;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
     }
 }

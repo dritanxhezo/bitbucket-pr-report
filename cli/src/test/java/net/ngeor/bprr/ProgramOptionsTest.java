@@ -12,127 +12,141 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * Unit tests for {@link ProgramOptions}.
  */
 @SuppressWarnings("checkstyle:MagicNumber")
-public class ProgramOptionsTest {
+class ProgramOptionsTest {
     @Test
-    public void shouldParseUserWithShortOption() throws ParseException {
+    void shouldParseOwnerWithShortOption() throws ParseException {
+        ProgramOptions programOptions = new ProgramOptions();
+        programOptions.parse("-c", "OpenPullRequests", "-o", "ngeor");
+        assertEquals("ngeor", programOptions.getOwner());
+    }
+
+    @Test
+    void shouldParseOwnerWithLongOption() throws ParseException {
+        ProgramOptions programOptions = new ProgramOptions();
+        programOptions.parse("-c", "OpenPullRequests", "--owner", "ngeor");
+        assertEquals("ngeor", programOptions.getOwner());
+    }
+
+    @Test
+    void shouldParseUsernameWithShortOption() throws ParseException {
         ProgramOptions programOptions = new ProgramOptions();
         programOptions.parse("-c", "OpenPullRequests", "-u", "ngeor");
-        assertEquals("ngeor", programOptions.getUser());
+        assertEquals("ngeor", programOptions.getUsername());
     }
 
     @Test
-    public void shouldParseUserWithLongOption() throws ParseException {
+    void shouldParseUsernameWithLongOption() throws ParseException {
         ProgramOptions programOptions = new ProgramOptions();
-        programOptions.parse("-c", "OpenPullRequests", "--user", "ngeor");
-        assertEquals("ngeor", programOptions.getUser());
+        programOptions.parse("-c", "OpenPullRequests", "--username", "ngeor");
+        assertEquals("ngeor", programOptions.getUsername());
     }
 
     @Test
-    public void shouldParseSecretWithShortOption() throws ParseException {
+    void shouldParsePasswordWithShortOption() throws ParseException {
         ProgramOptions programOptions = new ProgramOptions();
-        programOptions.parse("-c", "OpenPullRequests", "-s", "confidential");
-        assertEquals("confidential", programOptions.getSecret());
+        programOptions.parse("-c", "OpenPullRequests", "-p", "confidential");
+        assertEquals("confidential", programOptions.getPassword());
     }
 
     @Test
-    public void shouldParseSecretWithLongOption() throws ParseException {
+    void shouldParsePasswordWithLongOption() throws ParseException {
         ProgramOptions programOptions = new ProgramOptions();
-        programOptions.parse("-c", "OpenPullRequests", "--secret", "confidential");
-        assertEquals("confidential", programOptions.getSecret());
+        programOptions.parse("-c", "OpenPullRequests", "--password", "confidential");
+        assertEquals("confidential", programOptions.getPassword());
     }
 
     @Test
-    public void shouldParseRepositoryWithShortOption() throws ParseException {
+    void shouldParseRepositoryWithShortOption() throws ParseException {
         ProgramOptions programOptions = new ProgramOptions();
         programOptions.parse("-c", "OpenPullRequests", "-r", "my repository");
         assertEquals("my repository", programOptions.getRepository());
     }
 
     @Test
-    public void shouldParseRepositoryWithLongOption() throws ParseException {
+    void shouldParseRepositoryWithLongOption() throws ParseException {
         ProgramOptions programOptions = new ProgramOptions();
         programOptions.parse("-c", "OpenPullRequests", "--repository", "my repository");
         assertEquals("my repository", programOptions.getRepository());
     }
 
     @Test
-    public void shouldParseOpenPullRequestsCommandWithShortOption() throws ParseException {
+    void shouldParseOpenPullRequestsCommandWithShortOption() throws ParseException {
         ProgramOptions programOptions = new ProgramOptions();
         programOptions.parse("-c", "OpenPullRequests");
         assertEquals(ProgramOptions.Command.OpenPullRequests, programOptions.getCommand());
     }
 
     @Test
-    public void shouldParseOpenPullRequestsCommandWithLongOption() throws ParseException {
+    void shouldParseOpenPullRequestsCommandWithLongOption() throws ParseException {
         ProgramOptions programOptions = new ProgramOptions();
         programOptions.parse("--command", "OpenPullRequests");
         assertEquals(ProgramOptions.Command.OpenPullRequests, programOptions.getCommand());
     }
 
     @Test
-    public void shouldParseMergedPullRequestsCommandWithShortOption() throws ParseException {
+    void shouldParseMergedPullRequestsCommandWithShortOption() throws ParseException {
         ProgramOptions programOptions = new ProgramOptions();
         programOptions.parse("-c", "MergedPullRequests");
         assertEquals(ProgramOptions.Command.MergedPullRequests, programOptions.getCommand());
     }
 
     @Test
-    public void shouldParseMergedPullRequestsCommandWithLongOption() throws ParseException {
+    void shouldParseMergedPullRequestsCommandWithLongOption() throws ParseException {
         ProgramOptions programOptions = new ProgramOptions();
         programOptions.parse("--command", "MergedPullRequests");
         assertEquals(ProgramOptions.Command.MergedPullRequests, programOptions.getCommand());
     }
 
     @Test
-    public void shouldReturnNullCommandWhenOptionIsMissing() throws ParseException {
+    void shouldReturnNullCommandWhenOptionIsMissing() throws ParseException {
         ProgramOptions programOptions = new ProgramOptions();
         assertThatThrownBy(programOptions::parse).isInstanceOf(ParseException.class);
     }
 
     @Test
-    public void shouldParseTeamWithShortOption() throws ParseException {
+    void shouldParseTeamWithShortOption() throws ParseException {
         ProgramOptions programOptions = new ProgramOptions();
         programOptions.parse("-c", "OpenPullRequests", "-t");
         assertTrue(programOptions.isGroupByTeam());
     }
 
     @Test
-    public void shouldParseTeamWithLongOption() throws ParseException {
+    void shouldParseTeamWithLongOption() throws ParseException {
         ProgramOptions programOptions = new ProgramOptions();
         programOptions.parse("-c", "OpenPullRequests", "--team");
         assertTrue(programOptions.isGroupByTeam());
     }
 
     @Test
-    public void shouldNotRequireTeamOption() throws ParseException {
+    void shouldNotRequireTeamOption() throws ParseException {
         ProgramOptions programOptions = new ProgramOptions();
         programOptions.parse("-c", "OpenPullRequests");
         assertFalse(programOptions.isGroupByTeam());
     }
 
     @Test
-    public void shouldParseJobNameWithShortOption() throws ParseException {
+    void shouldParseJobNameWithShortOption() throws ParseException {
         ProgramOptions programOptions = new ProgramOptions();
         programOptions.parse("-c", "OpenPullRequests", "-j", "JOB12");
         assertEquals("JOB12", programOptions.getJobName());
     }
 
     @Test
-    public void shouldParseJobNameWithLongOption() throws ParseException {
+    void shouldParseJobNameWithLongOption() throws ParseException {
         ProgramOptions programOptions = new ProgramOptions();
         programOptions.parse("-c", "OpenPullRequests", "--job", "JOB4");
         assertEquals("JOB4", programOptions.getJobName());
     }
 
     @Test
-    public void shouldParseStartDaysDiffWithLongOption() throws ParseException {
+    void shouldParseStartDaysDiffWithLongOption() throws ParseException {
         ProgramOptions programOptions = new ProgramOptions();
         programOptions.parse("-c", "OpenPullRequests", "--start-days-diff", "4");
         assertEquals(4, programOptions.getStartDaysDiff());
     }
 
     @Test
-    public void shouldReturnZeroWhenStartDaysDiffIsMissing() throws ParseException {
+    void shouldReturnZeroWhenStartDaysDiffIsMissing() throws ParseException {
         ProgramOptions programOptions = new ProgramOptions();
         programOptions.parse("-c", "OpenPullRequests");
         assertEquals(0, programOptions.getStartDaysDiff());

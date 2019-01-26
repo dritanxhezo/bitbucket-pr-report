@@ -1,9 +1,9 @@
 package net.ngeor.testutil;
 
+import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 
-import com.google.gson.Gson;
+import net.ngeor.json.ObjectMapperFactory;
 
 /**
  * Helper for test data.
@@ -14,19 +14,17 @@ public final class TestData {
     private TestData() {
     }
 
-    public static <T> T load(Class<T> type, String suffix) {
+    public static <T> T load(Class<T> type, String suffix) throws IOException {
         String name = '/' + type.getName().replace('.', '/') + suffix + ".json";
         return INSTANCE.fromTestData(name, type);
     }
 
-    private <T> T fromTestData(String name, Class<T> type) {
+    private <T> T fromTestData(String name, Class<T> type) throws IOException {
         InputStream responseStream = getClass().getResourceAsStream(name);
         if (responseStream == null) {
             throw new NullPointerException("Could not load resource " + name);
         }
 
-        InputStreamReader reader = new InputStreamReader(responseStream);
-        Gson gson                = new Gson();
-        return gson.fromJson(reader, type);
+        return ObjectMapperFactory.create().readValue(responseStream, type);
     }
 }

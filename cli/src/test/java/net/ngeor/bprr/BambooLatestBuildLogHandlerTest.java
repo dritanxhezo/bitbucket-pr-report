@@ -9,6 +9,8 @@ import org.junit.jupiter.api.Test;
 
 import net.ngeor.bamboo.BuildResult;
 import net.ngeor.bamboo.PlanResults;
+import net.ngeor.http.HttpClient;
+import net.ngeor.http.JsonHttpClient;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -19,11 +21,11 @@ import static org.mockito.Mockito.when;
  * Unit tests for {@link BambooLatestBuildHandler}.
  */
 @SuppressWarnings("checkstyle:MagicNumber")
-public class BambooLatestBuildLogHandlerTest {
+class BambooLatestBuildLogHandlerTest {
     @Test
-    public void shouldOutputLog() throws IOException {
+    void shouldOutputLog() throws IOException {
         // arrange
-        RestClient restClient                     = mock(RestClient.class);
+        JsonHttpClient jsonHttpClient             = mock(JsonHttpClient.class);
         ProgramOptions programOptions             = mock(ProgramOptions.class);
         ByteArrayOutputStream out                 = new ByteArrayOutputStream();
         PlanResults planResults                   = mock(PlanResults.class);
@@ -31,17 +33,19 @@ public class BambooLatestBuildLogHandlerTest {
         BuildResult successfulBuildSummary        = mock(BuildResult.class);
         String logFileContents                    = "This is the log file of the build";
         InputStream logFileAsInputStream          = IOUtils.toInputStream(logFileContents, "UTF-8");
-        SimpleHttpClient simpleHttpClient         = setupHttpClientFactory(
+        HttpClient simpleHttpClient               = setupHttpClientFactory(
             logFileAsInputStream,
             "https://company.jira.com/builds/download/PRJ-PLN-JOB1/build_logs/PRJ-PLN-JOB1-1090.log");
 
         var result = new BuildResult[] {successfulBuildSummary};
 
-        when(programOptions.getUser()).thenReturn("company");
+        when(programOptions.getOwner()).thenReturn("company");
         when(programOptions.getRepository()).thenReturn("planKey");
-        when(programOptions.getSecret()).thenReturn("some secret");
+        when(programOptions.getUsername()).thenReturn("some user");
+        when(programOptions.getPassword()).thenReturn("some secret");
         when(programOptions.getJobName()).thenReturn("JOB1");
-        when(restClient.execute("https://company.jira.com/builds/rest/api/latest/result/planKey.json?os_authType=basic",
+        when(
+            jsonHttpClient.read("https://company.jira.com/builds/rest/api/latest/result/planKey.json?os_authType=basic",
                                 PlanResults.class))
             .thenReturn(planResults);
         when(planResults.getResults()).thenReturn(resultsWrapper);
@@ -51,24 +55,18 @@ public class BambooLatestBuildLogHandlerTest {
 
         // act
         BambooLatestBuildLogHandler handler = new BambooLatestBuildLogHandler();
-        handler.handle(restClient, simpleHttpClient, programOptions, new PrintStream(out));
+        handler.handle(jsonHttpClient, simpleHttpClient, programOptions, new PrintStream(out));
 
         // assert
         String output = out.toString("UTF8");
         assertEquals(logFileContents, output);
     }
 
-    private static SimpleHttpClient setupHttpClientFactory(final InputStream responseStream, final String expectedURI) {
+    private static HttpClient setupHttpClientFactory(InputStream responseStream, String expectedURI)
+        throws IOException {
         assertThat(responseStream).as("response stream!").isNotNull();
-        SimpleHttpClient simpleHttpClient = new SimpleHttpClient() {
-            @Override
-            public <E> E load(String url, String basicAuthenticationHeader, InputStreamClient<E> inputStreamClient)
-                throws IOException {
-                assertEquals(expectedURI, url);
-                assertEquals(basicAuthenticationHeader, "some secret");
-                return inputStreamClient.consume(responseStream);
-            }
-        };
+        HttpClient simpleHttpClient = mock(HttpClient.class);
+        when(simpleHttpClient.read(expectedURI)).thenReturn(responseStream);
         return simpleHttpClient;
     }
 }

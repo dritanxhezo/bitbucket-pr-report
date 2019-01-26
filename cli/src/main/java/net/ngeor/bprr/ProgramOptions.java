@@ -24,8 +24,9 @@ public class ProgramOptions {
         // create the options
         options = new Options();
         options.addOption(new EnumOption<>("c", "command", "the command to run", Command.class));
-        options.addOption("u", "user", true, "the user name that owns the repositories");
-        options.addOption("s", "secret", true, "base64 encoded authentication token");
+        options.addOption("o", "owner", true, "the owner of the repositories");
+        options.addOption("u", "username", true, "username for authentication");
+        options.addOption("p", "password", true, "password for authentication");
         options.addOption("r", "repository", true, "the repository slug");
         options.addOption("t", "team", false, "group pull requests by team");
         options.addOption("j", "job", true, "the job name of a certain bamboo build");
@@ -89,12 +90,16 @@ public class ProgramOptions {
         commandLine                         = commandLineParser.parse(options, args);
     }
 
-    public String getUser() {
-        return commandLine.getOptionValue("user");
+    public String getOwner() {
+        return commandLine.getOptionValue("owner");
     }
 
-    public String getSecret() {
-        return commandLine.getOptionValue("secret");
+    public String getUsername() {
+        return commandLine.getOptionValue("username");
+    }
+
+    public String getPassword() {
+        return commandLine.getOptionValue("password");
     }
 
     public String getRepository() {

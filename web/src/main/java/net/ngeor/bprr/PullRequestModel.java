@@ -1,7 +1,7 @@
 package net.ngeor.bprr;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -15,8 +15,8 @@ public class PullRequestModel {
     private String authorTeam;
     private String[] reviewers;
     private String[] reviewerTeams;
-    private Date createdOn;
-    private Date updatedOn;
+    private LocalDateTime createdOn;
+    private LocalDateTime updatedOn;
 
     public PullRequestModel() {
     }
@@ -42,8 +42,8 @@ public class PullRequestModel {
     public PullRequestModel(int id,
                             String description,
                             String state,
-                            Date createdOn,
-                            Date updatedOn,
+                            LocalDateTime createdOn,
+                            LocalDateTime updatedOn,
                             String author,
                             String... reviewers) {
         this.id          = id;
@@ -111,19 +111,19 @@ public class PullRequestModel {
         this.reviewerTeams = reviewerTeams;
     }
 
-    public Date getCreatedOn() {
+    public LocalDateTime getCreatedOn() {
         return createdOn;
     }
 
-    public void setCreatedOn(Date createdOn) {
+    public void setCreatedOn(LocalDateTime createdOn) {
         this.createdOn = createdOn;
     }
 
-    public Date getUpdatedOn() {
+    public LocalDateTime getUpdatedOn() {
         return updatedOn;
     }
 
-    public void setUpdatedOn(Date updatedOn) {
+    public void setUpdatedOn(LocalDateTime updatedOn) {
         this.updatedOn = updatedOn;
     }
 
@@ -138,15 +138,10 @@ public class PullRequestModel {
 
         PullRequestModel that = (PullRequestModel) o;
 
-        return id == that.id
-            && Objects.equals(description, that.description)
-            && Objects.equals(state, that.state)
-            && Objects.equals(author, that.author)
-            && Objects.equals(authorTeam, that.authorTeam)
-            && Arrays.equals(reviewers, that.reviewers)
-            && Arrays.equals(reviewerTeams, that.reviewerTeams)
-            && Objects.equals(createdOn, that.createdOn)
-            && Objects.equals(updatedOn, that.updatedOn);
+        return id == that.id && Objects.equals(description, that.description) && Objects.equals(state, that.state)
+            && Objects.equals(author, that.author) && Objects.equals(authorTeam, that.authorTeam)
+            && Arrays.equals(reviewers, that.reviewers) && Arrays.equals(reviewerTeams, that.reviewerTeams)
+            && Objects.equals(createdOn, that.createdOn) && Objects.equals(updatedOn, that.updatedOn);
     }
 
     @Override

@@ -2,6 +2,10 @@ package net.ngeor.bprr;
 
 import java.io.IOException;
 
+import net.ngeor.http.HttpClient;
+import net.ngeor.http.HttpClientImpl;
+import net.ngeor.http.JsonHttpClient;
+import net.ngeor.http.JsonHttpClientImpl;
 import net.ngeor.util.ResourceLoader;
 import net.ngeor.util.ResourceLoaderImpl;
 
@@ -26,19 +30,19 @@ final class Factory {
         }
     }
 
-    public RestClient bitbucketClient() throws IOException {
-        return new BitbucketClientImpl(simpleHttpClient(), settings().getSecret());
+    public JsonHttpClient bitbucketClient() throws IOException {
+        return new JsonHttpClientImpl(simpleHttpClient());
     }
 
-    public SimpleHttpClient simpleHttpClient() {
-        return new SimpleHttpClientImpl();
+    public HttpClient simpleHttpClient() throws IOException {
+        return new HttpClientImpl(settings().getUsername(), settings().getPassword());
     }
 
     /**
      * Creates the team maper.
      * @return
      */
-    public TeamMapper teamMapper() {
+    public TeamMapper teamMapper() throws IOException {
         TeamMapperImpl result = new TeamMapperImpl(resourceLoader());
         result.loadFromProperties();
         return result;

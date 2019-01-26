@@ -1,8 +1,7 @@
-package net.ngeor.bitbucket;
+package net.ngeor.bprr;
 
 import java.time.LocalDate;
 
-import net.ngeor.bprr.RepositoryDescriptor;
 import net.ngeor.util.LocalDateInterval;
 import net.ngeor.util.URLQueryWriter;
 import net.ngeor.util.URLStringBuilder;

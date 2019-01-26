@@ -1,6 +1,9 @@
 package net.ngeor.bitbucket;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * A pull request.
@@ -10,10 +13,12 @@ public class PullRequest {
     private String description;
     private String state;
 
-    @SuppressWarnings("checkstyle:MemberName")
-    private Date created_on;
-    @SuppressWarnings("checkstyle:MemberName")
-    private Date updated_on;
+    @JsonProperty("created_on")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSz")
+    private LocalDateTime createdOn;
+    @JsonProperty("updated_on")
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSz")
+    private LocalDateTime updatedOn;
     private Author author;
     private Participant[] participants;
     private Links links;
@@ -38,16 +43,20 @@ public class PullRequest {
         return participants;
     }
 
-    public Date getCreatedOn() {
-        return created_on;
+    public LocalDateTime getCreatedOn() {
+        return createdOn;
     }
 
-    public Date getUpdatedOn() {
-        return updated_on;
+    public LocalDateTime getUpdatedOn() {
+        return updatedOn;
     }
 
     public Links getLinks() {
         return links;
+    }
+
+    public void setLinks(Links links) {
+        this.links = links;
     }
 
     /**
@@ -58,6 +67,10 @@ public class PullRequest {
 
         public Link getSelf() {
             return self;
+        }
+
+        public void setSelf(Link self) {
+            this.self = self;
         }
     }
 }
