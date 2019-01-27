@@ -15,10 +15,7 @@ public class PullRequestsRequest {
     private final LocalDateInterval updatedOn;
 
     /**
-     * Creeates an instance of this class.
-     * @param repositoryDescriptor
-     * @param state
-     * @param updatedOn
+     * Creates an instance of this class.
      */
     public PullRequestsRequest(RepositoryDescriptor repositoryDescriptor, State state, LocalDateInterval updatedOn) {
         if (repositoryDescriptor == null) {
