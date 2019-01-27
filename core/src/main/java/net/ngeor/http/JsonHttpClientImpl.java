@@ -2,6 +2,7 @@ package net.ngeor.http;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Objects;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.ngeor.json.ObjectMapperFactory;
@@ -28,5 +29,24 @@ public class JsonHttpClientImpl implements JsonHttpClient {
         try (InputStream inputStream = simpleHttpClient.read(url)) {
             return this.objectMapper.readValue(inputStream, responseType);
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        JsonHttpClientImpl that = (JsonHttpClientImpl) o;
+        return simpleHttpClient.equals(that.simpleHttpClient);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(simpleHttpClient);
     }
 }

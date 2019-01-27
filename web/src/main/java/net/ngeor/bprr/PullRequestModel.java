@@ -2,7 +2,6 @@ package net.ngeor.bprr;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Objects;
 
 /**
  * Pull request model.
@@ -19,9 +18,6 @@ public class PullRequestModel {
     private LocalDateTime updatedOn;
 
     public PullRequestModel() {
-    }
-
-    public PullRequestModel(PullRequestModel other) {
     }
 
     public PullRequestModel(int id) {
@@ -128,37 +124,6 @@ public class PullRequestModel {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
-        PullRequestModel that = (PullRequestModel) o;
-
-        return id == that.id && Objects.equals(description, that.description) && Objects.equals(state, that.state)
-            && Objects.equals(author, that.author) && Objects.equals(authorTeam, that.authorTeam)
-            && Arrays.equals(reviewers, that.reviewers) && Arrays.equals(reviewerTeams, that.reviewerTeams)
-            && Objects.equals(createdOn, that.createdOn) && Objects.equals(updatedOn, that.updatedOn);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id;
-        result     = 31 * result + (description != null ? description.hashCode() : 0);
-        result     = 31 * result + (state != null ? state.hashCode() : 0);
-        result     = 31 * result + (author != null ? author.hashCode() : 0);
-        result     = 31 * result + (authorTeam != null ? authorTeam.hashCode() : 0);
-        result     = 31 * result + Arrays.hashCode(reviewers);
-        result     = 31 * result + Arrays.hashCode(reviewerTeams);
-        result     = 31 * result + (createdOn != null ? createdOn.hashCode() : 0);
-        result     = 31 * result + (updatedOn != null ? updatedOn.hashCode() : 0);
-        return result;
-    }
-
-    @Override
     public String toString() {
         return "PullRequestModel{"
             + "id=" + id + ", description='" + description + '\'' + ", state='" + state + '\'' + ", author='" + author
@@ -173,9 +138,8 @@ public class PullRequestModel {
      * @return
      */
     @SuppressWarnings("checkstyle:HiddenField")
-    public PullRequestModel withReviewers(String... reviewers) {
-        PullRequestModel clone = new PullRequestModel(this);
-        clone.reviewers        = reviewers;
-        return clone;
+    public PullRequestModel reviewers(String... reviewers) {
+        this.reviewers = reviewers;
+        return this;
     }
 }

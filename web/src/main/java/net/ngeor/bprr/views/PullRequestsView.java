@@ -42,7 +42,7 @@ public class PullRequestsView {
             }
         }
 
-        return result.toArray(new Statistics[result.size()]);
+        return result.toArray(new Statistics[0]);
     }
 
     private void increaseReviewers(List<Statistics> result, String reviewerTeam) {
@@ -112,41 +112,5 @@ public class PullRequestsView {
 
     public void setUpdatedOnUntil(String updatedOnUntil) {
         this.updatedOnUntil = updatedOnUntil;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-
-        PullRequestsView that = (PullRequestsView) o;
-
-        if (pullRequests != null ? !pullRequests.equals(that.pullRequests) : that.pullRequests != null) {
-            return false;
-        }
-        if (formUrl != null ? !formUrl.equals(that.formUrl) : that.formUrl != null) {
-            return false;
-        }
-        if (repo != null ? !repo.equals(that.repo) : that.repo != null) {
-            return false;
-        }
-        if (updatedOnFrom != null ? !updatedOnFrom.equals(that.updatedOnFrom) : that.updatedOnFrom != null) {
-            return false;
-        }
-        return updatedOnUntil != null ? updatedOnUntil.equals(that.updatedOnUntil) : that.updatedOnUntil == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = pullRequests.hashCode();
-        result     = 31 * result + (formUrl != null ? formUrl.hashCode() : 0);
-        result     = 31 * result + (repo != null ? repo.hashCode() : 0);
-        result     = 31 * result + (updatedOnFrom != null ? updatedOnFrom.hashCode() : 0);
-        result     = 31 * result + (updatedOnUntil != null ? updatedOnUntil.hashCode() : 0);
-        return result;
     }
 }

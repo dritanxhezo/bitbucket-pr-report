@@ -181,4 +181,10 @@ public class Repository {
             + ",full_name = '" + fullName + '\'' + ",size = '" + size + '\'' + ",created_on = '" + createdOn + '\''
             + ",name = '" + name + '\'' + ",scm = '" + scm + '\'' + ",slug = '" + slug + '\'' + "}";
     }
+
+    @SuppressWarnings("checkstyle:HiddenField")
+    public Repository name(String name) {
+        this.name = name;
+        return this;
+    }
 }

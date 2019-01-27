@@ -69,6 +69,6 @@ public class PullRequestModelCollection implements Iterable<PullRequestModel> {
     }
 
     public PullRequestModel[] toArray() {
-        return pullRequestModels.toArray(new PullRequestModel[pullRequestModels.size()]);
+        return pullRequestModels.toArray(new PullRequestModel[0]);
     }
 }

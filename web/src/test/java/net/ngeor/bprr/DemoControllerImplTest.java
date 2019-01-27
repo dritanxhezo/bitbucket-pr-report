@@ -15,7 +15,7 @@ import net.ngeor.testutil.TestData;
 import net.ngeor.util.DateHelper;
 import net.ngeor.util.LocalDateInterval;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.RETURNS_SMART_NULLS;
 import static org.mockito.Mockito.mock;
@@ -145,8 +145,7 @@ class DemoControllerImplTest {
         PullRequestsView view = createView();
 
         // assert
-        PullRequestModel[] pullRequestModels = view.getPullRequests().toArray();
-        assertArrayEquals(expectedPullRequestModels, pullRequestModels);
+        assertThat(view.getPullRequests().toArray()).extracting(PullRequestModel::getId).containsExactly(1, 2);
     }
 
     @Test
@@ -177,8 +176,7 @@ class DemoControllerImplTest {
         PullRequestsView view = createView();
 
         // assert
-        PullRequestModel[] pullRequestModels = view.getPullRequests().toArray();
-        assertArrayEquals(expectedPullRequestModels, pullRequestModels);
+        assertThat(view.getPullRequests().toArray()).extracting(PullRequestModel::getId).containsExactly(1, 2);
     }
 
     private DemoControllerImpl createDefaultDemoController() {

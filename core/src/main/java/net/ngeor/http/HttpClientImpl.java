@@ -6,6 +6,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.Objects;
 import javax.net.ssl.HttpsURLConnection;
 
 /**
@@ -44,5 +45,24 @@ public class HttpClientImpl implements HttpClient {
         }
 
         return httpsURLConnection.getInputStream();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        HttpClientImpl that = (HttpClientImpl) o;
+        return authorizationHeader.equals(that.authorizationHeader);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(authorizationHeader);
     }
 }

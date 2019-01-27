@@ -4,16 +4,8 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
          http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
-    <display-name>Bitbucket Pull Requests Reports</display-name>
-
-    <servlet>
-        <servlet-name>Demo</servlet-name>
-        <servlet-class>net.ngeor.bprr.DemoServlet</servlet-class>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>Demo</servlet-name>
-        <url-pattern>/demo</url-pattern>
-    </servlet-mapping>
-
+  <display-name>Bitbucket Pull Requests Reports</display-name>
+  <welcome-file-list>
+    <welcome-file>index</welcome-file>
+  </welcome-file-list>
 </web-app>

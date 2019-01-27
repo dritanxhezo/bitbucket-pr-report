@@ -71,4 +71,16 @@ public class Repositories implements Paginated<Repository> {
             + "next = '" + next + '\'' + ",size = '" + size + '\'' + ",values = '" + values + '\'' + ",page = '" + page
             + '\'' + ",pagelen = '" + pagelen + '\'' + "}";
     }
+
+    @SuppressWarnings("checkstyle:HiddenField")
+    public Repositories values(List<Repository> values) {
+        this.values = values;
+        return this;
+    }
+
+    @SuppressWarnings("checkstyle:HiddenField")
+    public Repositories next(String next) {
+        this.next = next;
+        return this;
+    }
 }

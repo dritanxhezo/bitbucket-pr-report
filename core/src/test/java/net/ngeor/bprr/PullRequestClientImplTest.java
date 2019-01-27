@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import net.ngeor.bitbucket.Link;
+import net.ngeor.bitbucket.Links;
 import net.ngeor.bitbucket.PullRequest;
 import net.ngeor.bitbucket.PullRequests;
 import net.ngeor.http.JsonHttpClient;
@@ -130,15 +131,10 @@ class PullRequestClientImplTest {
     }
 
     private static PullRequest createPartialPullRequest(String href) {
-        Link selfLink = new Link();
-        selfLink.setHref(href);
+        Link selfLink = new Link(href);
 
-        PullRequest.Links links = new PullRequest.Links();
-        links.setSelf(selfLink);
+        Links links = new Links().self(selfLink);
 
-        PullRequest response = new PullRequest();
-        response.setLinks(links);
-
-        return response;
+        return new PullRequest().links(links);
     }
 }

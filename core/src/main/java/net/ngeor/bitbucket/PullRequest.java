@@ -59,18 +59,9 @@ public class PullRequest {
         this.links = links;
     }
 
-    /**
-     * Links of a pull request.
-     */
-    public static class Links {
-        private Link self;
-
-        public Link getSelf() {
-            return self;
-        }
-
-        public void setSelf(Link self) {
-            this.self = self;
-        }
+    @SuppressWarnings("checkstyle:HiddenField")
+    public PullRequest links(Links links) {
+        this.links = links;
+        return this;
     }
 }

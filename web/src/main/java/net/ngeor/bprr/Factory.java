@@ -1,6 +1,8 @@
 package net.ngeor.bprr;
 
 import java.io.IOException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import net.ngeor.http.HttpClient;
 import net.ngeor.http.HttpClientImpl;
@@ -12,30 +14,19 @@ import net.ngeor.util.ResourceLoaderImpl;
 /**
  * Provides concrete implementation for the interfaces of this package.
  */
-final class Factory {
+class Factory {
     public static final Factory INSTANCE = new Factory();
-
-    private Factory() {
-    }
 
     /**
      * Creates the demo controller.
      * @return
      */
-    public DemoController demoController() {
+    public DemoController demoController(HttpServletRequest request) {
         try {
-            return new DemoControllerImpl(pullRequestClient(), teamMapper());
+            return new DemoControllerImpl(pullRequestClient(request), teamMapper());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public JsonHttpClient bitbucketClient() throws IOException {
-        return new JsonHttpClientImpl(simpleHttpClient());
-    }
-
-    public HttpClient simpleHttpClient() throws IOException {
-        return new HttpClientImpl(settings().getUsername(), settings().getPassword());
     }
 
     /**
@@ -56,7 +47,33 @@ final class Factory {
         return new ResourceLoaderImpl();
     }
 
-    public PullRequestClient pullRequestClient() throws IOException {
-        return new PullRequestClientImpl(bitbucketClient());
+    public PullRequestClient pullRequestClient(HttpServletRequest request) {
+        return new PullRequestClientImpl(jsonHttpClient(request));
+    }
+
+    /**
+     * Creates the HTTP client.
+     * @param request The request holds the credentials in the session.
+     * @return An instance of the HTTP client.
+     */
+    public HttpClient httpClient(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        String username     = (String) session.getAttribute("username");
+        String password     = (String) session.getAttribute("password");
+        return new HttpClientImpl(username, password);
+    }
+
+    public JsonHttpClient jsonHttpClient(HttpServletRequest request) {
+        return new JsonHttpClientImpl(httpClient(request));
+    }
+
+    /**
+     * Creates the Bitbucket client.
+     * @param request The request holds the owner in the session.
+     */
+    public BitbucketClient bitbucketClient(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        String owner        = (String) session.getAttribute("owner");
+        return new BitbucketClient(jsonHttpClient(request), owner);
     }
 }

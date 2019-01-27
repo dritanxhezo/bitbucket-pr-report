@@ -11,20 +11,16 @@ import javax.servlet.http.HttpServletResponse;
  * Demo servlet.
  */
 public class DemoServlet extends HttpServlet {
-    private final DemoController controller;
+    private Factory factory = Factory.INSTANCE;
 
-    public DemoServlet() {
-        this(Factory.INSTANCE.demoController());
-    }
-
-    public DemoServlet(DemoController controller) {
-        super();
-        this.controller = controller;
+    void setFactory(Factory factory) {
+        this.factory = factory;
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setAttribute("view", this.controller.createView(req));
+        DemoController controller = factory.demoController(req);
+        req.setAttribute("view", controller.createView(req));
 
         RequestDispatcher requestDispatcher = getServletContext().getRequestDispatcher("/WEB-INF/demo.jsp");
         requestDispatcher.forward(req, resp);
