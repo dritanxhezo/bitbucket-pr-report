@@ -16,9 +16,9 @@
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <checkstyle.version>8.16</checkstyle.version>
+    <checkstyle.version>8.18</checkstyle.version>
     <maven.checkstyle.plugin.version>3.0.0</maven.checkstyle.plugin.version>
-    <checkstyle.rules.version>2.0.0</checkstyle.rules.version>
+    <checkstyle.rules.version>3.0.0</checkstyle.rules.version>
     <!-- todo improve limits -->
     <jacoco.unit-tests.limit.instruction-ratio>50%</jacoco.unit-tests.limit.instruction-ratio>
     <jacoco.unit-tests.limit.branch-ratio>29%</jacoco.unit-tests.limit.branch-ratio>
