@@ -1,2 +1,0 @@
-user=user whose repositories will be fetched
-secret=base 64 encoded username password
